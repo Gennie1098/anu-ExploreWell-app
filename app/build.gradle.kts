@@ -12,12 +12,12 @@ tasks {
 
 android {
     namespace = "com.anu.gp24s1"
-    compileSdk = 34
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "com.anu.gp24s1"
-        minSdk = 19
-        targetSdk = 34
+        minSdk = 29
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
         multiDexEnabled = true
@@ -45,12 +45,12 @@ android {
 }
 
 dependencies {
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("androidx.arch.core:core-runtime:2.2.0")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+    implementation("androidx.appcompat:appcompat:1.5.1")
+    implementation("androidx.arch.core:core-runtime:2.1.0")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
+    implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
-    implementation("com.google.android.material:material:1.11.0")
+    implementation("com.google.android.material:material:1.4.0")
 
     implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
     implementation("com.google.firebase:firebase-database")
