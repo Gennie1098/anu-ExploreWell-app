@@ -1,5 +1,17 @@
-The first meeting!
+[Group 6]
 
+## Team Meeting [1] - Week [teaching break] - [01-04-2024] (15:00-16:30)
+**Absent:** None
+<br>
+**Lead/scribe:** Lachlan Stewart
+
+## Agreed Procedure
+The first meeting! We didn't have a clear procedure in place for the first meeting, just meeting each other and discussing ideas.
+
+## Agenda Items
+Nil
+
+## Meeting Minutes
 Qihua suggests an idea for the app as follows:
 
 [15:19] Qihua Huang
@@ -40,8 +52,8 @@ We have expressed our general plan for work allocation, that we will allocate in
 - Share if you are struggling on a particular thing
 - Make sure to communicate whether you will be unavailable in the future.
 
-Thi Cam Tu Phan volunteered to do the next meeting minutes (making sure that everyone gets a chance).
 
+## Action Items
 Project Timeline as of first meeting:
 - idea by 3/4
 - finalize idea 5/4
@@ -49,3 +61,6 @@ Project Timeline as of first meeting:
 - 1 week for design 
 - 4 weeks for implemetation and testing
 - 1 week for presentation
+
+## Scribe Rotation
+Thi Cam Tu Phan volunteered to do the next meeting minutes (making sure that everyone gets a chance).
