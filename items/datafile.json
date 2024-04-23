@@ -1,0 +1,128 @@
+{
+    "user": {
+        "ncuiwhcr9ur": {
+            "username": "comp2100@anu.edu.au",
+            "password": "comp2100",
+            "location": "ACT",
+            "passion": "hiking",
+            "avatar":"./images/imaga1.png",
+            "ownPosts": {
+                "mxi2hd932dnde": true
+            },
+            "followingPosts": {
+                "mxi2hd932dnde": true,
+                "miewhfodf32in": true
+            }
+        },
+        "nc29ujd3nic": {
+            "username": "comp6442@anu.edu.au",
+            "password": "comp6442",
+            "location": "NSW",
+            "passion": "camping",
+            "avatar":"./images/imaga2.png",
+            "ownPosts": {
+                "miewhfodf32in": true
+            },
+            "followingPosts": {
+                "miewhfodf32in": true,
+                "mxi2hd932dnde": true
+            }
+        }
+    },
+    "post": {
+        "mxi2hd932dnde": {
+            "title": "Camping at Woods Reserve",
+            "content": "Come camp with me and my dog at Woods Reserve. It is less than an hour away from ANU and you can combine it with climbing at Snake Rock and potentially the trip to Square Rock. Perfect if you have new gear to test out or if you never camped before (like my dog Dyson). ",
+            "tag": "camping",
+            "location": "ACT",
+            "authorKey": "ncuiwhcr9ur",
+            "publishTime": "2024-04-20 00:07:29",
+            "followerNumber": 5,
+            "commentsNumber":2,
+            "followers": {
+                "ncuiwhcr9ur": true,
+                "nc29ujd3nic": true,
+                "nciuweh29hd": true,
+                "ncnuh8ej91h": true,
+                "ndbc2u8bccd": true
+            },
+            "comments": {
+                "axioce2h9d2": true,
+                "adnieuwnudow": true
+            }
+        },
+        "miewhfodf32in": {
+            "title": "SEA KAYAKING ( FOR REAL! )",
+            "content": "We'll paddle/sail between Wonboyn and Eden, (or Merimbula if we're keen), depending on wind and wave forecasts. This trip is only for experienced sea kayakers, who have paddled with me before and who have completed the rolling sessions at Qbyn pool. The ocean off Green Cape is notoriously lumpy and bumpy, and there's no safe landings for long stretches of cliffline that we'll paddle past. Because of the speed difference between the doubles and the singles when they're under sail, we're only taking the doubles on this trip (hence the limit of 6 people). We're camping at Bittangabee and Mowarry beach along the way. We can discuss logistics online. ",
+            "tag": "kayaking",
+            "location": "ACT",
+            "authorKey": "nc29ujd3nic",
+            "publishTime": "2024-04-19 18:39:23",
+            "followerNumber": 3,
+            "commentsNumber":2,
+            "followers": {
+                "ncuiwhcr9ur": true,
+                "nc29ujd3nic": true,
+                "ncnd239nd3d": true
+            },
+            "comment": {
+                "acn3encow2": true,
+                "anxci2ed3t": true
+            }
+        }
+    },
+    "comments": {
+        "axioce2h9d2": {
+            "content": "I want to attend this activity!",
+            "postKey": "mxi2hd932dnde",
+            "authorKey": "ncnwn3cocsd",
+            "commentTime": "2024-04-20 00:16:33"
+        },
+        "adnieuwnudow": {
+            "content": "How many people will attend it?",
+            "postKey": "mxi2hd932dnde",
+            "authorKey": "nc29ujd3nic",
+            "commentTime": "2024-04-21 12:17:13"
+        },
+        "acn3encow2": {
+            "content": "When is trip?",
+            "postKey": "miewhfodf32in",
+            "authorKey": "ncnwoincsk2",
+            "commentTime": "2024-04-20 00:19:43"
+        },
+        "anxci2ed3t": {
+            "content": "Experience required?",
+            "postKey": "miewhfodf32in",
+            "authorKey": "ncuiwhcr9ur",
+            "commentTime": "2024-04-20 22:39:21"
+        }
+    },
+    "tag": {
+        "hiking": {
+            "tagname": "hiking",
+            "posts": {
+                "ncuiwhcr9ur": true
+            }
+        },
+        "camping": {
+            "tagname": "camping",
+            "posts": {
+                "nc29ujd3nic": true
+            }
+        }
+    },
+    "location": {
+        "ACT": {
+            "locationName": "ACT",
+            "posts": {
+                "ncuiwhcr9ur": true
+            }
+        },
+        "NSW": {
+            "locationName": "NSW",
+            "posts": {
+                "nc29ujd3nic": true
+            }
+        }
+    }
+}
