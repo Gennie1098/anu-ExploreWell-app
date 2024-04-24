@@ -161,15 +161,68 @@ public class Post {
         return left_height - right_height;
     }
 
-    public void leftRotation() throws NullPointerException {
+    /**
+     * Left AVL tree rotation
+     * @author  u7284324    Lachlan Stewart
+     *
+     * @throws  NullPointerException    If there is no right node
+     * */
+    private void leftRotation() throws NullPointerException {
+
+        if (rightNode == null) { throw new NullPointerException("Left rotation without a right node"); }
+
+        Post rightleft = rightNode.leftNode;
+        rightNode.setLeftNode(this);
+        setRightNode(rightleft);
 
     }
 
-    public void rightRotation() {
+    /**
+     * Right AVL tree rotation
+     * @author  u7284324    Lachlan Stewart
+     *
+     * @throws  NullPointerException    If there is no left node
+     * */
+    private void rightRotation() {
+
+        if (leftNode == null) { throw new NullPointerException("Right rotation without a left node"); }
+
+        Post leftright = leftNode.rightNode;
+        leftNode.setRightNode(this);
+        setLeftNode(leftright);
 
     }
 
-    public void insert(Post newPost) {
+    public void insert(Post newPost) throws Exception {
+
+        if (newPost.getTitle().equals(title)) {
+            throw new Exception("Post already exists");
+        }
+
+        if (newPost.getTitle().compareTo(title) < 0) {
+            // belongs to the left
+            if (leftNode == null) {
+                leftNode = newPost;
+            } else {
+                leftNode.insert(newPost);
+            }
+        } else {
+            // belongs to the right
+            if (rightNode == null) {
+                rightNode = newPost;
+            } else {
+                rightNode.insert(newPost);
+            }
+        }
+
+        // now that the post is inserted, check balance
+        int balance = getBalanceFactor();
+
+        if (balance < -1) {
+             // some right rotation is in order
+        } else if (balance > 1) {
+            // some left rotation is in order
+        }
 
     }
 
