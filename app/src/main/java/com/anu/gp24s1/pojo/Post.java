@@ -135,17 +135,33 @@ public class Post {
         return null;
     }
 
-    public int getHeight()
+    /**
+     * Binary Tree Height
+     * @author  u7284324    Lachlan Stewart
+     *
+     * @return the height of the node, zero if leaf
+     * */
+    private int getHeight()
     {
-        return 0;
+        int left_height = leftNode == null ? 0 : leftNode.getHeight();
+        int right_height = rightNode == null ? 0 : rightNode.getHeight();
+        return left_height == 0 && right_height == 0 ? 0 : 1 + Math.max(left_height, right_height);
     }
 
-    public int getBalanceFactor()
+    /**
+     * Binary Tree Balance Factor
+     * @author  u7284324    Lachlan Stewart
+     *
+     * @return the height of the left node minus the height of the right node
+     * */
+    private int getBalanceFactor()
     {
-        return 0;
+        int left_height = leftNode == null ? 0 : leftNode.getHeight();
+        int right_height = rightNode == null ? 0 : rightNode.getHeight();
+        return left_height - right_height;
     }
 
-    public void leftRotation() {
+    public void leftRotation() throws NullPointerException {
 
     }
 
