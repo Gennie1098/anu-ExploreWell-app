@@ -21,7 +21,7 @@ public class Post {
 
     private String authorKey;
 
-    private int followingNumer;
+    private int followingNumber;
 
     private List<String> followers;
 
@@ -90,12 +90,12 @@ public class Post {
         this.authorKey = authorKey;
     }
 
-    public int getFollowingNumer() {
-        return followingNumer;
+    public int getFollowingNumber() {
+        return followingNumber;
     }
 
-    public void setFollowingNumer(int followingNumer) {
-        this.followingNumer = followingNumer;
+    public void setFollowingNumber(int followingNumber) {
+        this.followingNumber = followingNumber;
     }
 
     public List<String> getFollowers() {
@@ -157,7 +157,26 @@ public class Post {
 
     }
 
+    /**
+     * Implements binary search
+     * @author  u7284324    Lachlan Stewart
+     *
+     * @param   title       the title of a Post that is being searched for
+     * @return              the Post with this title, if it exists, else null
+     * */
     public Post search(String title) {
-        return null;
+
+        if (title.equals(this.title)) {
+            // found it
+            return this;
+        }
+
+        if (title.compareTo(this.title) < 0) {
+            // title < this.title
+            return this.leftNode == null ? null : leftNode.search(title);
+        } else {
+            // title > this.title
+            return this.leftNode == null ? null : leftNode.search(title);
+        }
     }
 }
