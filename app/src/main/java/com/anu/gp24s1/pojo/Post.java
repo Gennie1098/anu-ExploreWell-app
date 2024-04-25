@@ -193,11 +193,13 @@ public class Post {
 
     }
 
+    /**
+     * AVL Insertion with balancing
+     *
+     * @param   newPost     The post to be added to the tree
+     * @throws  Exception   The post may already exist
+     * */
     public void insert(Post newPost) throws Exception {
-
-        if (newPost.getTitle().equals(title)) {
-            throw new Exception("Post already exists");
-        }
 
         if (newPost.getTitle().compareTo(title) < 0) {
             // belongs to the left
@@ -206,13 +208,15 @@ public class Post {
             } else {
                 leftNode.insert(newPost);
             }
-        } else {
+        } else if (newPost.getTitle().compareTo(title) > 0) {
             // belongs to the right
             if (rightNode == null) {
                 rightNode = newPost;
             } else {
                 rightNode.insert(newPost);
             }
+        } else {
+            throw new Exception("Post already exists");
         }
 
         // now that the post is inserted, check balance
@@ -220,10 +224,27 @@ public class Post {
 
         if (balance < -1) {
              // some right rotation is in order
+            int balanceleft = leftNode.getBalanceFactor();
+            if (balanceleft > 0) {
+                // left right rotation
+                leftNode.leftRotation();
+                rightRotation();
+            } else {
+                // right right rotation
+                rightRotation();
+            }
         } else if (balance > 1) {
             // some left rotation is in order
+            int balanceright = rightNode.getBalanceFactor();
+            if (balanceright < 0) {
+                // right left rotation
+                rightNode.rightRotation();
+                leftRotation();
+            } else {
+                // left left rotation
+                leftRotation();
+            }
         }
-
     }
 
     /**
