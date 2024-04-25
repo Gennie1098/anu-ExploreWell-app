@@ -2,6 +2,9 @@ package com.anu.gp24s1.pojo.vo;
 
 import java.util.Date;
 
+/**
+ * View object of comment, define how to show a comment
+ */
 public class CommentVo {
 
     private String content;

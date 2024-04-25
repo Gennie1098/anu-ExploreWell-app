@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface UserDao {
 
-    public String getUserName(String userKey);
+    public String getUsername(String userKey);
 
     public String getAvatar(String userKey);
 

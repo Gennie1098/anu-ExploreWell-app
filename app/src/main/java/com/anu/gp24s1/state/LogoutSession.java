@@ -5,6 +5,9 @@ import com.anu.gp24s1.pojo.vo.UserVo;
 
 import java.util.List;
 
+/**
+ * Represents a session when the user is logged out.
+ */
 public class LogoutSession extends UserState{
     public LogoutSession(UserSession userSession) {
         super(userSession);

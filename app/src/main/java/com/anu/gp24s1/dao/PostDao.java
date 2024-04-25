@@ -6,10 +6,6 @@ import java.util.List;
 
 public interface PostDao {
 
-    public void getGroupsByTag();
-
-    public void getGroupsByLocation();
-
     public List<PostVo> getRecommendationByTag(String tag);
 
     public List<PostVo> getRecommendationByLocation(String location);

@@ -5,17 +5,34 @@ import com.anu.gp24s1.pojo.vo.UserVo;
 
 import java.util.List;
 
+/**
+ *  Represents a session for the current user
+ *  Manages the state of the user session and provide operations for the user
+ */
 public class UserSession {
 
+    //current user state of this session
     private UserState userState;
 
+    //the key of current user
     private String userKey;
 
+    /**
+     * Initializes the user session with a default state of LogoutSession
+     * @author Qinjue Wu
+     */
     public UserSession() {
+        UserState defaultState = new LogoutSession(this);
+        changeState(defaultState);
     }
 
-    public void changeState(){
-
+    /**
+     * Changes the state of the user session
+     * @param state
+     * @author Qinjue Wu
+     */
+    public void changeState(UserState state){
+        userState = state;
     }
 
     public boolean login(String username, String password) {

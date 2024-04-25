@@ -2,6 +2,9 @@ package com.anu.gp24s1.pojo.vo;
 
 import java.util.List;
 
+/**
+ * View object of user, define how to show a user's profile
+ */
 public class UserVo {
 
     private String username;

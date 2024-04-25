@@ -5,10 +5,19 @@ import com.anu.gp24s1.pojo.vo.UserVo;
 
 import java.util.List;
 
+/**
+ * Represents the state of a user session, and define the common behavior of all user states.
+ */
 public abstract class UserState {
 
+    //the context associate with this state
     private UserSession userSession;
 
+    /**
+     * Construct a UserState object, and initialize the user session associated with this state.
+     * @param userSession
+     * @author Qinjue Wu
+     */
     public UserState(UserSession userSession) {
         this.userSession = userSession;
     }

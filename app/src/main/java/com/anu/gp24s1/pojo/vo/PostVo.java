@@ -5,6 +5,9 @@ import com.anu.gp24s1.pojo.Comment;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * View object of post, define how to show a post
+ */
 public class PostVo {
 
     private String title;
