@@ -26,7 +26,7 @@ public class PostVo {
 
     private String authorAvatar;
 
-    private int followingNumber;
+    private int followerNumber;
 
     private int commentsNumber;
 
@@ -99,12 +99,12 @@ public class PostVo {
         this.authorAvatar = authorAvatar;
     }
 
-    public int getFollowingNumber() {
-        return followingNumber;
+    public int getFollowerNumber() {
+        return followerNumber;
     }
 
-    public void setFollowingNumber(int followingNumber) {
-        this.followingNumber = followingNumber;
+    public void setFollowerNumber(int followerNumber) {
+        this.followerNumber = followerNumber;
     }
 
     public int getCommentsNumber() {

@@ -24,7 +24,7 @@ public class Post {
 
     private String authorKey;
 
-    private int followingNumber;
+    private int followerNumber;
 
     private int commentsNumber;
 
@@ -95,12 +95,12 @@ public class Post {
         this.authorKey = authorKey;
     }
 
-    public int getFollowingNumber() {
-        return followingNumber;
+    public int getFollowerNumber() {
+        return followerNumber;
     }
 
-    public void setFollowingNumber(int followingNumer) {
-        this.followingNumber = followingNumer;
+    public void setFollowerNumber(int followerNumber) {
+        this.followerNumber = followerNumber;
     }
 
     public List<String> getFollowers() {

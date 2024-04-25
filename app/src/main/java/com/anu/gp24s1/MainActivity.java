@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.anu.gp24s1.dao.CommentDao;
+import com.anu.gp24s1.dao.CommentDaoImpl;
 import com.anu.gp24s1.dao.PostDao;
 import com.anu.gp24s1.dao.PostDaoImpl;
 import com.anu.gp24s1.dao.UserDao;
@@ -22,9 +24,6 @@ public class  MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UserDao userDao = null;
-        userDao = UserDaoImpl.getInstance();
-        System.out.println("username: "+userDao.getUsername("12dQPJwEe1eVg5LGZHCmxVR7yAzW"));
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);

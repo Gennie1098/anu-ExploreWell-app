@@ -6,6 +6,7 @@ import com.anu.gp24s1.pojo.Post;
 import com.anu.gp24s1.pojo.User;
 import com.anu.gp24s1.pojo.vo.PostVo;
 import com.anu.gp24s1.utils.DBConnector;
+import com.anu.gp24s1.utils.TypeConvert;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -52,9 +53,9 @@ public class PostDaoImpl implements PostDao{
                         post.setContent(snapshot.child("content").getValue(String.class));
                         post.setTag(snapshot.child("tag").getValue(String.class));
                         post.setLocation(snapshot.child("location").getValue(String.class));
-                        post.setPublishTime(snapshot.child("publishTime").getValue(Date.class));
+                        post.setPublishTime(TypeConvert.strToDate(snapshot.child("publishTime").getValue(String.class)));
                         post.setAuthorKey(snapshot.child("authorKey").getValue(String.class));
-                        post.setFollowingNumber(snapshot.child("followingNumber").getValue(Integer.class));
+                        post.setFollowerNumber(snapshot.child("followerNumber").getValue(Integer.class));
                         HashMap<String,Boolean> followersMap = (HashMap<String,Boolean>) snapshot.child("followers").getValue();
                         if(followersMap != null)
                         {
@@ -82,7 +83,16 @@ public class PostDaoImpl implements PostDao{
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        postsGroupByTag.put(snapshot.getKey(),(List<String>) snapshot.child("posts").getValue());
+                        HashMap<String,Boolean> postsMap = (HashMap<String,Boolean>) snapshot.child("posts").getValue();
+                        if(postsMap != null)
+                        {
+                            List<String> postsList = new ArrayList<>(postsMap.keySet());
+                            postsGroupByTag.put(snapshot.getKey(),postsList);
+                        }
+                        else
+                        {
+                            postsGroupByTag.put(snapshot.getKey(),null);
+                        }
                     }
                 }
 
@@ -96,7 +106,16 @@ public class PostDaoImpl implements PostDao{
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        postsGroupsByLocation.put(snapshot.getKey(),(List<String>) snapshot.child("posts").getValue());
+                        HashMap<String,Boolean> postsMap = (HashMap<String,Boolean>) snapshot.child("posts").getValue();
+                        if(postsMap != null)
+                        {
+                            List<String> postsList = new ArrayList<>(postsMap.keySet());
+                            postsGroupsByLocation.put(snapshot.getKey(),postsList);
+                        }
+                        else
+                        {
+                            postsGroupsByLocation.put(snapshot.getKey(),null);
+                        }
                     }
                 }
 

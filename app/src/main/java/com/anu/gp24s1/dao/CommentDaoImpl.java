@@ -6,6 +6,7 @@ import com.anu.gp24s1.pojo.Comment;
 import com.anu.gp24s1.pojo.User;
 import com.anu.gp24s1.pojo.vo.CommentVo;
 import com.anu.gp24s1.utils.DBConnector;
+import com.anu.gp24s1.utils.TypeConvert;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -45,7 +46,7 @@ public class CommentDaoImpl implements CommentDao{
                         comment.setPostKey(snapshot.child("postKey").getValue(String.class));
                         comment.setAuthorKey(snapshot.child("authorKey").getValue(String.class));
                         comment.setContent(snapshot.child("content").getValue(String.class));
-                        comment.setCommentTime(snapshot.child("commentTime").getValue(Date.class));
+                        comment.setCommentTime(TypeConvert.strToDate(snapshot.child("commentTime").getValue(String.class)));
                         comments.put(comment.getCommentKey(),comment);
                     }
                 }
