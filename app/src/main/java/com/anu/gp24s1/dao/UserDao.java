@@ -2,6 +2,7 @@ package com.anu.gp24s1.dao;
 
 import com.anu.gp24s1.pojo.vo.UserVo;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface UserDao {

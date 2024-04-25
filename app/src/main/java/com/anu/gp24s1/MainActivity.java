@@ -22,6 +22,9 @@ public class  MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UserDao userDao = null;
+        userDao = UserDaoImpl.getInstance();
+        System.out.println("username: "+userDao.getUsername("12dQPJwEe1eVg5LGZHCmxVR7yAzW"));
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);

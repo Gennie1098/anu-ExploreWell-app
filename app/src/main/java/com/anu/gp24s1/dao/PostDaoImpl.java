@@ -11,32 +11,36 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 public class PostDaoImpl implements PostDao{
 
-    private PostDaoImpl instance;
+    private static PostDaoImpl instance;
 
     private Post rootPost;
 
-    private HashMap<String,Post> posts;
+    private static HashMap<String,Post> posts;
 
-    private HashMap<String,List<String>> postsGroupByTag;
+    private static HashMap<String,List<String>> postsGroupByTag;
 
-    private HashMap<String,List<String>> postsGroupsByLocation;
+    private static HashMap<String,List<String>> postsGroupsByLocation;
+
+    private PostDaoImpl(){};
 
     /**
      * Using singleton design pattern to ensure only get all posts,tags,locations data once.
      * @return instance
      * @author Qinjue Wu
      */
-    public PostDaoImpl getInstance() {
+    public static PostDaoImpl getInstance() {
         if(instance == null)
         {
-            DBConnector connector = new DBConnector().getInstance();
-            DatabaseReference postReference = connector.getDatabase().child("post");
+            instance = new PostDaoImpl();
+            posts = new HashMap<String,Post>();
+            DatabaseReference postReference = DBConnector.getInstance().getDatabase().child("post");
             postReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -51,9 +55,19 @@ public class PostDaoImpl implements PostDao{
                         post.setPublishTime(snapshot.child("publishTime").getValue(Date.class));
                         post.setAuthorKey(snapshot.child("authorKey").getValue(String.class));
                         post.setFollowingNumber(snapshot.child("followingNumber").getValue(Integer.class));
-                        post.setFollowers((List<String>) snapshot.child("followers").getValue());
+                        HashMap<String,Boolean> followersMap = (HashMap<String,Boolean>) snapshot.child("followers").getValue();
+                        if(followersMap != null)
+                        {
+                            List<String> followersList = new ArrayList<>(followersMap.keySet());
+                            post.setFollowers(followersList);
+                        }
                         post.setCommentsNumber(snapshot.child("commentsNumber").getValue(Integer.class));
-                        post.setComments((List<String>) snapshot.child("comments").getValue());
+                        HashMap<String,Boolean> commentsMap = (HashMap<String,Boolean>) snapshot.child("comments").getValue();
+                        if(commentsMap != null)
+                        {
+                            List<String> commentsList = new ArrayList<>(commentsMap.keySet());
+                            post.setComments(commentsList);
+                        }
                         posts.put(post.getPostKey(),post);
                     }
                 }
@@ -63,7 +77,7 @@ public class PostDaoImpl implements PostDao{
                     posts = null;
                 }
             });
-            DatabaseReference tagReference = connector.getDatabase().child("tag");
+            DatabaseReference tagReference = DBConnector.getInstance().getDatabase().child("tag");
             tagReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -77,7 +91,7 @@ public class PostDaoImpl implements PostDao{
                     postsGroupByTag = null;
                 }
             });
-            DatabaseReference locationReference = connector.getDatabase().child("location");
+            DatabaseReference locationReference = DBConnector.getInstance().getDatabase().child("location");
             locationReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

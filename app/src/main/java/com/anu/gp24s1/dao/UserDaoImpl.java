@@ -14,25 +14,29 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 public class UserDaoImpl implements UserDao{
 
-    private UserDaoImpl instance;
+    private static UserDaoImpl instance;
 
-    private HashMap<String, User> users;
+    private static HashMap<String, User> users;
 
+    private UserDaoImpl(){};
     /**
      * Using singleton design pattern to ensure only get all users' information data once.
      * @return instance
      * @author Qinjue Wu
      */
-    public UserDaoImpl getInstance() {
+    public static UserDaoImpl getInstance() {
         if(instance == null)
         {
-            DBConnector connector = new DBConnector().getInstance();
-            DatabaseReference userReference = connector.getDatabase().child("users");
+            instance = new UserDaoImpl();
+            users = new HashMap<String,User>();
+            DatabaseReference userReference = DBConnector.getInstance().getDatabase().child("user");
             userReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -44,8 +48,18 @@ public class UserDaoImpl implements UserDao{
                         user.setAvatar(snapshot.child("avatar").getValue(String.class));
                         user.setLocation(snapshot.child("location").getValue(String.class));
                         user.setPassion(snapshot.child("passion").getValue(String.class));
-                        user.setOwnPosts((List<String>) snapshot.child("ownPosts").getValue());
-                        user.setFollowingPosts((List<String>) snapshot.child("followingPosts").getValue());
+                        HashMap<String,Boolean> ownPostsMap = (HashMap<String,Boolean>) snapshot.child("ownPosts").getValue();
+                        if(ownPostsMap != null)
+                        {
+                            List<String> ownPostsList = new ArrayList<>(ownPostsMap.keySet());
+                            user.setOwnPosts(ownPostsList);
+                        }
+                        HashMap<String,Boolean> followingPostsMap = (HashMap<String,Boolean>) snapshot.child("followingPosts").getValue();
+                        if(followingPostsMap != null)
+                        {
+                            List<String> followingPostsList = new ArrayList<>(followingPostsMap.keySet());
+                            user.setFollowingPosts(followingPostsList);
+                        }
                         users.put(user.getUserKey(),user);
                     }
                 }
@@ -68,7 +82,7 @@ public class UserDaoImpl implements UserDao{
      */
     @Override
     public String getUsername(String userKey) {
-        if(users != null)
+        if(users != null && users.containsKey(userKey))
         {
             return users.get(userKey).getUsername();
         }
@@ -86,7 +100,7 @@ public class UserDaoImpl implements UserDao{
      */
     @Override
     public String getAvatar(String userKey) {
-        if(users != null)
+        if(users != null && users.containsKey(userKey))
         {
             return users.get(userKey).getAvatar();
         }

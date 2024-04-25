@@ -8,19 +8,23 @@ import com.google.firebase.database.FirebaseDatabase;
  */
 public class DBConnector {
 
-    private DBConnector instance;
+    private static DBConnector instance;
 
     private DatabaseReference database;
+
+    private DBConnector(){
+        database = FirebaseDatabase.getInstance().getReference().child("users");
+    };
 
     /**
      * if haven't connect with the database, then build connection
      * @return instance
      * @author Qinjue Wu
      */
-    public DBConnector getInstance() {
+    public static DBConnector getInstance() {
         if(instance == null)
         {
-            database = FirebaseDatabase.getInstance().getReference();
+            instance = new DBConnector();
         }
         return instance;
     }
