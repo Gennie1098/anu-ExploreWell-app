@@ -5,6 +5,9 @@ import com.anu.gp24s1.pojo.vo.PostVo;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Represents a post made by a user in the system.
+ */
 public class Post {
 
     private String postKey;
@@ -21,7 +24,9 @@ public class Post {
 
     private String authorKey;
 
-    private int followingNumber;
+    private int followerNumber;
+
+    private int commentsNumber;
 
     private List<String> followers;
 
@@ -90,12 +95,12 @@ public class Post {
         this.authorKey = authorKey;
     }
 
-    public int getFollowingNumber() {
-        return followingNumber;
+    public int getFollowerNumber() {
+        return followerNumber;
     }
 
-    public void setFollowingNumber(int followingNumber) {
-        this.followingNumber = followingNumber;
+    public void setFollowerNumber(int followerNumber) {
+        this.followerNumber = followerNumber;
     }
 
     public List<String> getFollowers() {
@@ -104,6 +109,14 @@ public class Post {
 
     public void setFollowers(List<String> followers) {
         this.followers = followers;
+    }
+
+    public int getCommentsNumber() {
+        return commentsNumber;
+    }
+
+    public void setCommentsNumber(int commentsNumber) {
+        this.commentsNumber = commentsNumber;
     }
 
     public List<String> getComments() {

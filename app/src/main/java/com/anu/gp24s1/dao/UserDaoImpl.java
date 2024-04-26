@@ -1,39 +1,149 @@
 package com.anu.gp24s1.dao;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
 import com.anu.gp24s1.pojo.User;
 import com.anu.gp24s1.pojo.vo.UserVo;
+import com.anu.gp24s1.utils.DBConnector;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 public class UserDaoImpl implements UserDao{
 
-    private UserDaoImpl instance;
+    private static UserDaoImpl instance;
 
-    private HashMap<String, User> users;
+    private static HashMap<String, User> users;
 
-    public UserDaoImpl getInstance() {
+    private UserDaoImpl(){};
+    /**
+     * Using singleton design pattern to ensure only get all users' information data once.
+     * @return instance
+     * @author Qinjue Wu
+     */
+    public static UserDaoImpl getInstance() {
+        if(instance == null)
+        {
+            instance = new UserDaoImpl();
+            users = new HashMap<String,User>();
+            DatabaseReference userReference = DBConnector.getInstance().getDatabase().child("user");
+            userReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        //create new User object and set values then put it into the hashmap
+                        User user = new User();
+                        user.setUserKey(snapshot.getKey());
+                        user.setUsername(snapshot.child("username").getValue(String.class));
+                        user.setAvatar(snapshot.child("avatar").getValue(String.class));
+                        user.setLocation(snapshot.child("location").getValue(String.class));
+                        user.setPassion(snapshot.child("passion").getValue(String.class));
+                        HashMap<String,Boolean> ownPostsMap = (HashMap<String,Boolean>) snapshot.child("ownPosts").getValue();
+                        if(ownPostsMap != null)
+                        {
+                            List<String> ownPostsList = new ArrayList<>(ownPostsMap.keySet());
+                            user.setOwnPosts(ownPostsList);
+                        }
+                        HashMap<String,Boolean> followingPostsMap = (HashMap<String,Boolean>) snapshot.child("followingPosts").getValue();
+                        if(followingPostsMap != null)
+                        {
+                            List<String> followingPostsList = new ArrayList<>(followingPostsMap.keySet());
+                            user.setFollowingPosts(followingPostsList);
+                        }
+                        users.put(user.getUserKey(),user);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    users = null;
+                }
+
+            });
+        }
         return instance;
     }
 
+    /**
+     * Using userKey to get username from the hashmap.
+     * @param userKey
+     * @return username
+     * @author Qinjue Wu
+     */
     @Override
-    public String getUserName(String userKey) {
-        return null;
+    public String getUsername(String userKey) {
+        if(users != null && users.containsKey(userKey))
+        {
+            return users.get(userKey).getUsername();
+        }
+        else
+        {
+            return null;
+        }
     }
 
+    /**
+     * Using userKey to get user's avatar from the hashmap.
+     * @param userKey
+     * @return avatar
+     * @author Qinjue Wu
+     */
     @Override
     public String getAvatar(String userKey) {
-        return null;
+        if(users != null && users.containsKey(userKey))
+        {
+            return users.get(userKey).getAvatar();
+        }
+        else
+        {
+            return null;
+        }
     }
 
+    /**
+     * Using userKey to get user's passion from the hashmap.
+     * @param userKey
+     * @return passion
+     * @author Qinjue Wu
+     */
     @Override
     public String getPassion(String userKey) {
-        return null;
+        if(users != null)
+        {
+            return users.get(userKey).getPassion();
+        }
+        else
+        {
+            return null;
+        }
     }
 
+    /**
+     * Using userKey to get user's location from the hashmap.
+     * @param userKey
+     * @return location
+     * @author Qinjue Wu
+     */
     @Override
     public String getLocation(String userKey) {
-        return null;
+        if(users != null)
+        {
+            return users.get(userKey).getLocation();
+        }
+        else
+        {
+            return null;
+        }
     }
 
     @Override

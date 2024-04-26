@@ -2,11 +2,12 @@ package com.anu.gp24s1.dao;
 
 import com.anu.gp24s1.pojo.vo.UserVo;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface UserDao {
 
-    public String getUserName(String userKey);
+    public String getUsername(String userKey);
 
     public String getAvatar(String userKey);
 

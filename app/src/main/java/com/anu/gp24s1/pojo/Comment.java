@@ -4,6 +4,9 @@ import com.anu.gp24s1.pojo.vo.CommentVo;
 
 import java.util.Date;
 
+/**
+ * Represents a comment made on a post in the system.
+ */
 public class Comment {
     private String commentKey;
 

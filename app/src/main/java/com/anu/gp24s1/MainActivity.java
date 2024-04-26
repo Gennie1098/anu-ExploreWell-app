@@ -7,6 +7,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.anu.gp24s1.dao.CommentDao;
+import com.anu.gp24s1.dao.CommentDaoImpl;
+import com.anu.gp24s1.dao.PostDao;
+import com.anu.gp24s1.dao.PostDaoImpl;
+import com.anu.gp24s1.dao.UserDao;
+import com.anu.gp24s1.dao.UserDaoImpl;
 import com.anu.gp24s1.databinding.ActivityMainBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 

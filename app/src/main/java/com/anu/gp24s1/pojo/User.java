@@ -4,6 +4,9 @@ import com.anu.gp24s1.pojo.vo.UserVo;
 
 import java.util.List;
 
+/**
+ * Represents a user in the system.
+ */
 public class User {
 
     private String userKey;
