@@ -21,7 +21,7 @@ public class Post {
 
     private String authorKey;
 
-    private int followingNumer;
+    private int followingNumber;
 
     private List<String> followers;
 
@@ -90,12 +90,12 @@ public class Post {
         this.authorKey = authorKey;
     }
 
-    public int getFollowingNumer() {
-        return followingNumer;
+    public int getFollowingNumber() {
+        return followingNumber;
     }
 
-    public void setFollowingNumer(int followingNumer) {
-        this.followingNumer = followingNumer;
+    public void setFollowingNumber(int followingNumber) {
+        this.followingNumber = followingNumber;
     }
 
     public List<String> getFollowers() {
@@ -135,29 +135,138 @@ public class Post {
         return null;
     }
 
-    public int getHeight()
+    /**
+     * Binary Tree Height
+     * @author  u7284324    Lachlan Stewart
+     *
+     * @return the height of the node, zero if leaf
+     * */
+    private int getHeight()
     {
-        return 0;
+        int left_height = leftNode == null ? 0 : leftNode.getHeight();
+        int right_height = rightNode == null ? 0 : rightNode.getHeight();
+        return left_height == 0 && right_height == 0 ? 0 : 1 + Math.max(left_height, right_height);
     }
 
-    public int getBalanceFactor()
+    /**
+     * Binary Tree Balance Factor
+     * @author  u7284324    Lachlan Stewart
+     *
+     * @return the height of the left node minus the height of the right node
+     * */
+    private int getBalanceFactor()
     {
-        return 0;
+        int left_height = leftNode == null ? 0 : leftNode.getHeight();
+        int right_height = rightNode == null ? 0 : rightNode.getHeight();
+        return left_height - right_height;
     }
 
-    public void leftRotation() {
+    /**
+     * Left AVL tree rotation
+     * @author  u7284324    Lachlan Stewart
+     *
+     * @throws  NullPointerException    If there is no right node
+     * */
+    private void leftRotation() throws NullPointerException {
+
+        if (rightNode == null) { throw new NullPointerException("Left rotation without a right node"); }
+
+        Post rightleft = rightNode.leftNode;
+        rightNode.setLeftNode(this);
+        setRightNode(rightleft);
 
     }
 
-    public void rightRotation() {
+    /**
+     * Right AVL tree rotation
+     * @author  u7284324    Lachlan Stewart
+     *
+     * @throws  NullPointerException    If there is no left node
+     * */
+    private void rightRotation() {
+
+        if (leftNode == null) { throw new NullPointerException("Right rotation without a left node"); }
+
+        Post leftright = leftNode.rightNode;
+        leftNode.setRightNode(this);
+        setLeftNode(leftright);
 
     }
 
-    public void insert(Post newPost) {
+    /**
+     * AVL Insertion with balancing
+     *
+     * @param   newPost     The post to be added to the tree
+     * @throws  Exception   The post may already exist
+     * */
+    public void insert(Post newPost) throws Exception {
 
+        if (newPost.getTitle().compareTo(title) < 0) {
+            // belongs to the left
+            if (leftNode == null) {
+                leftNode = newPost;
+            } else {
+                leftNode.insert(newPost);
+            }
+        } else if (newPost.getTitle().compareTo(title) > 0) {
+            // belongs to the right
+            if (rightNode == null) {
+                rightNode = newPost;
+            } else {
+                rightNode.insert(newPost);
+            }
+        } else {
+            throw new Exception("Post already exists");
+        }
+
+        // now that the post is inserted, check balance
+        int balance = getBalanceFactor();
+
+        if (balance < -1) {
+             // some right rotation is in order
+            int balanceleft = leftNode.getBalanceFactor();
+            if (balanceleft > 0) {
+                // left right rotation
+                leftNode.leftRotation();
+                rightRotation();
+            } else {
+                // right right rotation
+                rightRotation();
+            }
+        } else if (balance > 1) {
+            // some left rotation is in order
+            int balanceright = rightNode.getBalanceFactor();
+            if (balanceright < 0) {
+                // right left rotation
+                rightNode.rightRotation();
+                leftRotation();
+            } else {
+                // left left rotation
+                leftRotation();
+            }
+        }
     }
 
+    /**
+     * Implements binary search
+     * @author  u7284324    Lachlan Stewart
+     *
+     * @param   title       the title of a Post that is being searched for
+     * @return              the Post with this title, if it exists, else null
+     * */
     public Post search(String title) {
-        return null;
+
+        if (title.equals(this.title)) {
+            // found it
+            return this;
+        }
+
+        if (title.compareTo(this.title) < 0) {
+            // title < this.title
+            return this.leftNode == null ? null : leftNode.search(title);
+        } else {
+            // title > this.title
+            return this.leftNode == null ? null : leftNode.search(title);
+        }
     }
 }
