@@ -13,12 +13,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 public class PostDaoImpl implements PostDao{
 
+    private static final int RECOMMENDATION_NUMBER = 3;
     private static PostDaoImpl instance;
 
     private Post rootPost;
@@ -27,12 +29,14 @@ public class PostDaoImpl implements PostDao{
 
     private static HashMap<String,List<String>> postsGroupByTag;
 
+    private static HashMap<String,List<String>> postsGroupByLocation;
     private static HashMap<String,List<String>> postsGroupsByLocation;
 
     private PostDaoImpl(){};
 
     /**
      * Using singleton design pattern to ensure only get all posts,tags,locations data once.
+     * @return instance PostDaoImpl
      * @return instance
      * @author Qinjue Wu
      */
@@ -110,10 +114,12 @@ public class PostDaoImpl implements PostDao{
                         if(postsMap != null)
                         {
                             List<String> postsList = new ArrayList<>(postsMap.keySet());
+                            postsGroupByLocation.put(snapshot.getKey(),postsList);
                             postsGroupsByLocation.put(snapshot.getKey(),postsList);
                         }
                         else
                         {
+                            postsGroupByLocation.put(snapshot.getKey(),null);
                             postsGroupsByLocation.put(snapshot.getKey(),null);
                         }
                     }
@@ -121,6 +127,7 @@ public class PostDaoImpl implements PostDao{
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
+                    postsGroupByLocation = null;
                     postsGroupsByLocation = null;
                 }
             });
@@ -128,13 +135,69 @@ public class PostDaoImpl implements PostDao{
         return instance;
     }
 
+    /**
+     * Given the passion tag of the user, and recommend corresponding posts to users by the number of followers.
+     * @param tag String
+     * @return List<Post>
+     * @author Qinjue Wu
+     */
     @Override
-    public List<PostVo> getRecommendationByTag(String tag) {
+    public List<Post> getRecommendationByTag(String tag) {
+        if(postsGroupByTag.containsKey(tag))
+        {
+            List<String> postKeyList = postsGroupByTag.get(tag);
+            if(postKeyList == null)
+            {
+                return null;
+            }
+            List<Post> sortPosts = sortPostsByfollowerNum(getPostList(postKeyList));
+            int postsNum = sortPosts.size();
+            if(RECOMMENDATION_NUMBER < postsNum)
+            {
+                return sortPosts.subList(0,RECOMMENDATION_NUMBER);
+            }
+            else if(postsNum == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return sortPosts.subList(0,postsNum);
+            }
+        }
         return null;
     }
 
+    /**
+     * Given the location of the user, and recommend corresponding posts to users by the number of followers.
+     * @param location String
+     * @return List<Post>
+     * @author Qinjue Wu
+     */
     @Override
-    public List<PostVo> getRecommendationByLocation(String location) {
+    public List<Post> getRecommendationByLocation(String location) {
+        if(postsGroupByLocation.containsKey(location))
+        {
+            List<String> postKeyList = postsGroupByLocation.get(location);
+            if(postKeyList == null)
+            {
+                return null;
+            }
+            List<Post> sortPosts = sortPostsByfollowerNum(getPostList(postKeyList));
+            int postsNum = sortPosts.size();
+            if(RECOMMENDATION_NUMBER < postsNum)
+            {
+                return sortPosts.subList(0,RECOMMENDATION_NUMBER);
+            }
+            else if(postsNum == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return sortPosts.subList(0,postsNum);
+            }
+        }
         return null;
     }
 
@@ -159,17 +222,68 @@ public class PostDaoImpl implements PostDao{
     }
 
     @Override
-    public List<PostVo> getGroupsOfPosts(List<String> postKeyList) {
+    public List<String> getGroupsOfPosts(List<String> postKeyList) {
         return null;
     }
 
     @Override
-    public List<PostVo> getFollowingPostsByLocation(String location, List<String> postKeyList) {
+    public List<Post> getFollowingPostsByLocation(String location, List<String> postKeyList) {
         return null;
     }
 
     @Override
-    public List<PostVo> searchPosts(String searchWords) {
+    public List<Post> searchPosts(String searchWords) {
         return null;
+    }
+
+    /**
+     * Convert a list of Post objects to PostVo objects
+     * @param postsList List<Post>
+     * @param userKey String
+     * @return List<PostVo>
+     * @author Qinjue Wu
+     */
+    @Override
+    public List<PostVo> viewListOfPosts(List<Post> postsList, String userKey) {
+        List<PostVo> postVoList = new ArrayList<>();
+        for (Post post : postsList) {
+            postVoList.add(post.toPostVo(userKey));
+        }
+        return postVoList;
+    }
+
+    /**
+     * From a list of keys of posts to get corresponding post objetcs.
+     * @param postKeyList List<String>
+     * @return postsList List<Post>
+     * @author Qinjue Wu
+     */
+    public List<Post> getPostList(List<String> postKeyList) {
+        List<Post> postsList = new ArrayList<>();
+        for(String postKey : postKeyList)
+        {
+            if(posts.containsKey(postKey))
+            {
+                postsList.add(posts.get(postKey));
+            }
+        }
+        return postsList;
+    }
+
+    /**
+     * Sort a lists of posts according to the number of their followers in descending order.
+     * @param posts List<Post>
+     * @return posts List<Post>
+     * @author Qinjue Wu
+     */
+    public List<Post> sortPostsByfollowerNum(List<Post> posts) {
+        Comparator<Post> comparatorPost = new Comparator<Post>() {
+            @Override
+            public int compare(Post o1, Post o2) {
+                return o2.getFollowerNumber() - o1.getFollowerNumber();
+            }
+        };
+        posts.sort(comparatorPost);
+        return posts;
     }
 }

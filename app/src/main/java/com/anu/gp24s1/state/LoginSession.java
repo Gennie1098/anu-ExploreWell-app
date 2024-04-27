@@ -1,5 +1,9 @@
 package com.anu.gp24s1.state;
 
+import com.anu.gp24s1.dao.PostDao;
+import com.anu.gp24s1.dao.PostDaoImpl;
+import com.anu.gp24s1.dao.UserDao;
+import com.anu.gp24s1.dao.UserDaoImpl;
 import com.anu.gp24s1.pojo.vo.PostVo;
 import com.anu.gp24s1.pojo.vo.UserVo;
 
@@ -25,12 +29,20 @@ public class LoginSession extends UserState{
 
     @Override
     public List<PostVo> getRecommendationByTag() {
-        return null;
+        UserDao userDao = UserDaoImpl.getInstance();
+        String userKey = getUserSession().getUserKey();
+        String passion = userDao.getPassion(userKey);
+        PostDao postDao = PostDaoImpl.getInstance();
+        return postDao.viewListOfPosts(postDao.getRecommendationByTag(passion),userKey);
     }
 
     @Override
     public List<PostVo> getRecommendationByLocation() {
-        return null;
+        UserDao userDao = UserDaoImpl.getInstance();
+        String userKey = getUserSession().getUserKey();
+        String location = userDao.getLocation(userKey);
+        PostDao postDao = PostDaoImpl.getInstance();
+        return postDao.viewListOfPosts(postDao.getRecommendationByLocation(location),userKey);
     }
 
     @Override
@@ -58,9 +70,18 @@ public class LoginSession extends UserState{
         return false;
     }
 
+    /**
+     * Find all posts followed by the current user,
+     * and group these posts by location, then return the group locations.
+     * @return locations List<String>
+     * @author Qinjue Wu
+     */
     @Override
     public List<String> viewFollowingGroups() {
-        return null;
+        String userKey = getUserSession().getUserKey();
+        UserDao userDao = UserDaoImpl.getInstance();
+        PostDao postDao = PostDaoImpl.getInstance();
+        return postDao.getGroupsOfPosts(userDao.getFollowingPosts(userKey));
     }
 
     @Override
