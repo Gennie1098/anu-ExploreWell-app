@@ -148,9 +148,21 @@ public class PostDaoImpl implements PostDao{
         return false;
     }
 
+    /**
+     * Get the corresponding post information according to the postkey
+     * and convert it into a post instance using post.toPostVo
+     * @author  u7793565    Qihua Huang
+     *
+     * @return PostVo
+     * */
     @Override
     public PostVo viewPost(String postKey, String userKey) {
-        return null;
+        Post post = posts.get(postKey);
+        if (post == null) {
+            // if post or key does not exist
+            throw new IllegalArgumentException("Post with key " + postKey + " does not exist.");
+        }
+        return post.toPostVo(userKey);
     }
 
     @Override

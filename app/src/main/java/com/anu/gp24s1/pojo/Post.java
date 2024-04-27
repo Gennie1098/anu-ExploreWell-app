@@ -1,5 +1,9 @@
 package com.anu.gp24s1.pojo;
 
+import com.anu.gp24s1.dao.CommentDao;
+import com.anu.gp24s1.dao.CommentDaoImpl;
+import com.anu.gp24s1.dao.UserDao;
+import com.anu.gp24s1.dao.UserDaoImpl;
 import com.anu.gp24s1.pojo.vo.PostVo;
 
 import java.util.Date;
@@ -143,9 +147,35 @@ public class Post {
         this.rightNode = rightNode;
     }
 
-    public PostVo toPostVo()
+    /**
+     * Get the data related to the post and create an instance to return
+     * @author  u7793565    Qihua Huang
+     *
+     * @return PostVo
+     * */
+    public PostVo toPostVo(String userKey)
     {
-        return null;
+        PostVo postVo = new PostVo();
+        postVo.setTitle(title);
+        postVo.setContent(content);
+        postVo.setTag(tag);
+        postVo.setLocation(location);
+        postVo.setPublishTime(publishTime);
+        postVo.setFollowerNumber(followerNumber);
+        postVo.setCommentsNumber(commentsNumber);
+
+        if (followers.contains(userKey)){
+            postVo.setFollowing(true);
+        }
+
+        // Through the design pattern of singleton, getInstance will not read repeatedly.
+        UserDao userDao = UserDaoImpl.getInstance();
+        postVo.setAuthorName(userDao.getUsername(authorKey));
+        postVo.setAuthorAvatar(userDao.getAvatar(authorKey));
+        CommentDao commentDao = CommentDaoImpl.getInstance();
+        postVo.setComments(commentDao.viewComments(postKey));
+
+        return postVo;
     }
 
     /**
