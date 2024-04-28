@@ -1,5 +1,11 @@
 package com.anu.gp24s1.state;
 
+import com.anu.gp24s1.dao.PostDao;
+import com.anu.gp24s1.dao.PostDaoImpl;
+import com.anu.gp24s1.dao.UserDao;
+import com.anu.gp24s1.dao.UserDaoImpl;
+import com.anu.gp24s1.pojo.Post;
+import com.anu.gp24s1.pojo.User;
 import com.anu.gp24s1.pojo.vo.PostVo;
 import com.anu.gp24s1.pojo.vo.UserVo;
 
@@ -33,9 +39,18 @@ public class LoginSession extends UserState{
         return null;
     }
 
+    /**
+     * Retrieve the information of user according to the user key
+     * @return the UserVo object containing the details of the user, or null
+     * @author  u7793565    Qihua Huang
+     * */
     @Override
     public UserVo getProfile() {
-        return null;
+        UserDao userDao = UserDaoImpl.getInstance();
+        // TODO: don't know how to get current user key
+        User user = new User();
+        String userKey = user.getUserKey();
+        return userDao.getProfile(userKey);
     }
 
     @Override
@@ -43,14 +58,38 @@ public class LoginSession extends UserState{
         return false;
     }
 
+    /**
+     * Record the actions of users following posts by its key.
+     * @param postKey
+     * @return whether the operation is successful or not
+     * @author  u7793565    Qihua Huang
+     * */
     @Override
     public boolean followPost(String postKey) {
-        return false;
+        PostDao postDao = PostDaoImpl.getInstance();
+        UserDao userDao = UserDaoImpl.getInstance();
+        // TODO: don't know how to get current user key
+        User user = new User();
+        String userKey = user.getUserKey();
+        boolean result1 = postDao.followPost(postKey, userKey);
+        boolean result2 = userDao.addFollowingPost(userKey, postKey);
+        return result1 && result2;
     }
 
+    /**
+     * Retrieve the details of the post by the given post key
+     * @param postKey
+     * @return the PostVo object containing the details of the post, or null
+     * @author  u7793565    Qihua Huang
+     * */
     @Override
     public PostVo viewPost(String postKey) {
-        return null;
+        PostDao postDao = PostDaoImpl.getInstance();
+        UserDao userDao = UserDaoImpl.getInstance();
+        // TODO: don't know how to get current user key
+        User user = new User();
+        String userKey = user.getUserKey();
+        return postDao.viewPost(postKey, userKey);
     }
 
     @Override

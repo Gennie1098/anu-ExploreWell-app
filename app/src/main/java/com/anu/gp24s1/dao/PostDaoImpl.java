@@ -17,30 +17,33 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-public class PostDaoImpl implements PostDao{
+public class PostDaoImpl implements PostDao {
 
     private static PostDaoImpl instance;
 
     private Post rootPost;
 
-    private static HashMap<String,Post> posts;
+    private static HashMap<String, Post> posts;
 
-    private static HashMap<String,List<String>> postsGroupByTag;
+    private static HashMap<String, List<String>> postsGroupByTag;
 
-    private static HashMap<String,List<String>> postsGroupsByLocation;
+    private static HashMap<String, List<String>> postsGroupsByLocation;
 
-    private PostDaoImpl(){};
+    private PostDaoImpl() {
+    }
+
+    ;
 
     /**
      * Using singleton design pattern to ensure only get all posts,tags,locations data once.
+     *
      * @return instance
      * @author Qinjue Wu
      */
     public static PostDaoImpl getInstance() {
-        if(instance == null)
-        {
+        if (instance == null) {
             instance = new PostDaoImpl();
-            posts = new HashMap<String,Post>();
+            posts = new HashMap<String, Post>();
             DatabaseReference postReference = DBConnector.getInstance().getDatabase().child("post");
             postReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -56,20 +59,18 @@ public class PostDaoImpl implements PostDao{
                         post.setPublishTime(TypeConvert.strToDate(snapshot.child("publishTime").getValue(String.class)));
                         post.setAuthorKey(snapshot.child("authorKey").getValue(String.class));
                         post.setFollowerNumber(snapshot.child("followerNumber").getValue(Integer.class));
-                        HashMap<String,Boolean> followersMap = (HashMap<String,Boolean>) snapshot.child("followers").getValue();
-                        if(followersMap != null)
-                        {
+                        HashMap<String, Boolean> followersMap = (HashMap<String, Boolean>) snapshot.child("followers").getValue();
+                        if (followersMap != null) {
                             List<String> followersList = new ArrayList<>(followersMap.keySet());
                             post.setFollowers(followersList);
                         }
                         post.setCommentsNumber(snapshot.child("commentsNumber").getValue(Integer.class));
-                        HashMap<String,Boolean> commentsMap = (HashMap<String,Boolean>) snapshot.child("comments").getValue();
-                        if(commentsMap != null)
-                        {
+                        HashMap<String, Boolean> commentsMap = (HashMap<String, Boolean>) snapshot.child("comments").getValue();
+                        if (commentsMap != null) {
                             List<String> commentsList = new ArrayList<>(commentsMap.keySet());
                             post.setComments(commentsList);
                         }
-                        posts.put(post.getPostKey(),post);
+                        posts.put(post.getPostKey(), post);
                     }
                 }
 
@@ -83,15 +84,12 @@ public class PostDaoImpl implements PostDao{
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        HashMap<String,Boolean> postsMap = (HashMap<String,Boolean>) snapshot.child("posts").getValue();
-                        if(postsMap != null)
-                        {
+                        HashMap<String, Boolean> postsMap = (HashMap<String, Boolean>) snapshot.child("posts").getValue();
+                        if (postsMap != null) {
                             List<String> postsList = new ArrayList<>(postsMap.keySet());
-                            postsGroupByTag.put(snapshot.getKey(),postsList);
-                        }
-                        else
-                        {
-                            postsGroupByTag.put(snapshot.getKey(),null);
+                            postsGroupByTag.put(snapshot.getKey(), postsList);
+                        } else {
+                            postsGroupByTag.put(snapshot.getKey(), null);
                         }
                     }
                 }
@@ -106,15 +104,12 @@ public class PostDaoImpl implements PostDao{
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        HashMap<String,Boolean> postsMap = (HashMap<String,Boolean>) snapshot.child("posts").getValue();
-                        if(postsMap != null)
-                        {
+                        HashMap<String, Boolean> postsMap = (HashMap<String, Boolean>) snapshot.child("posts").getValue();
+                        if (postsMap != null) {
                             List<String> postsList = new ArrayList<>(postsMap.keySet());
-                            postsGroupsByLocation.put(snapshot.getKey(),postsList);
-                        }
-                        else
-                        {
-                            postsGroupsByLocation.put(snapshot.getKey(),null);
+                            postsGroupsByLocation.put(snapshot.getKey(), postsList);
+                        } else {
+                            postsGroupsByLocation.put(snapshot.getKey(), null);
                         }
                     }
                 }
@@ -143,18 +138,55 @@ public class PostDaoImpl implements PostDao{
         return null;
     }
 
+    /**
+     * Record the actions of users following posts by user key and post key
+     * @param postKey
+     * @param userKey
+     * @return whether the operation is successful or not
+     * @author  u7793565    Qihua Huang
+     * */
     @Override
     public boolean followPost(String postKey, String userKey) {
-        return false;
+        PostVo postVo = viewPost(postKey, userKey);
+        Post post = posts.get(postKey);
+        assert post != null;
+        List<String> followersList = post.getFollowers();
+        int followerNumber = post.getFollowerNumber();
+
+        UserDao userDao = UserDaoImpl.getInstance();
+
+        // already followed
+        if (postVo.isFollowing()) {
+            return true;
+        } else {
+            //Add the user to the post follower list
+            postVo.setFollowing(true);
+            boolean addFollowerListResult = followersList.add(userKey);
+            post.setFollowers(followersList);
+
+            //Update number of followers
+            followerNumber++;
+            post.setFollowerNumber(followerNumber);
+
+            //Update database data
+            // TODO: this implementation is not sure
+            DatabaseReference postReference = DBConnector.getInstance().getDatabase().child("post");
+            postReference.child("users").child(postKey).child("followerNumber").setValue((long) followerNumber);
+            postReference.child("users").child(postKey).child("followers").setValue(followersList);
+
+            //Add the post to the user's following list
+            boolean addFollowingListResult = userDao.addFollowingPost(userKey, postKey);
+            return addFollowerListResult && addFollowingListResult;
+        }
     }
 
     /**
-     * Get the corresponding post information according to the postkey
+     * Retrieve the information of a post according to the postkey
      * and convert it into a post instance using post.toPostVo
-     * @author  u7793565    Qihua Huang
      *
-     * @return PostVo
-     * */
+     * @return the PostVo object containing the details of the post, or null
+     * @author u7793565    Qihua Huang
+     */
     @Override
     public PostVo viewPost(String postKey, String userKey) {
         Post post = posts.get(postKey);
