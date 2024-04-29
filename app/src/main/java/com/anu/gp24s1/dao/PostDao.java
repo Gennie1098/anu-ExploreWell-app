@@ -33,7 +33,7 @@ public interface PostDao {
 
     public List<String> getGroupsOfPosts(List<String> postKeyList);
 
-    public List<Post> getFollowingPostsByLocation(String location, List<String> postKeyList);
+    public List<Post> getFollowingPostsByGroup(String group, List<String> postKeyList);
 
     public List<Post> searchPosts(String searchWords);
 

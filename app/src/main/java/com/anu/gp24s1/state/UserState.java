@@ -11,19 +11,15 @@ import java.util.List;
 public abstract class UserState {
 
     //the context associate with this state
-    private UserSession userSession;
+    protected UserSession userSession;
 
     /**
      * Construct a UserState object, and initialize the user session associated with this state.
-     * @param userSession
+     * @param userSession UserSession
      * @author Qinjue Wu
      */
     public UserState(UserSession userSession) {
         this.userSession = userSession;
-    }
-
-    public UserSession getUserSession() {
-        return userSession;
     }
 
     public abstract boolean login(String username, String password);
@@ -46,7 +42,7 @@ public abstract class UserState {
 
     public abstract List<String> viewFollowingGroups();
 
-    public abstract List<PostVo> viewFollowingPosts(String location);
+    public abstract List<PostVo> viewFollowingPosts(String group);
 
     public abstract List<PostVo> searchPosts(String searchWords);
 

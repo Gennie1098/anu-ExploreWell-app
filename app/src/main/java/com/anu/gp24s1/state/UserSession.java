@@ -38,7 +38,7 @@ public class UserSession {
 
     /**
      * Changes the state of the user session
-     * @param state
+     * @param state UserState
      * @author Qinjue Wu
      */
     public void changeState(UserState state){
@@ -96,8 +96,8 @@ public class UserSession {
         return userState.viewFollowingGroups();
     }
 
-    public List<PostVo> viewFollowingPosts(String location){
-        return null;
+    public List<PostVo> viewFollowingPosts(String group){
+        return userState.viewFollowingPosts(group);
     }
 
     public List<PostVo> searchPosts(String searchWords){

@@ -16,7 +16,10 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 public class PostDaoImpl implements PostDao{
 
@@ -32,12 +35,11 @@ public class PostDaoImpl implements PostDao{
     private static HashMap<String,List<String>> postsGroupByLocation;
     private static HashMap<String,List<String>> postsGroupsByLocation;
 
-    private PostDaoImpl(){};
+    private PostDaoImpl(){}
 
     /**
      * Using singleton design pattern to ensure only get all posts,tags,locations data once.
      * @return instance PostDaoImpl
-     * @return instance
      * @author Qinjue Wu
      */
     public static PostDaoImpl getInstance() {
@@ -221,13 +223,56 @@ public class PostDaoImpl implements PostDao{
 
     }
 
+    /**
+     * Given user's following posts' keys,
+     * and return groups of these posts by tags and locations order alphabetically.
+     * @param postKeyList List<String>
+     * @return List<String>
+     * @author Qinjue Wu
+     */
     @Override
     public List<String> getGroupsOfPosts(List<String> postKeyList) {
-        return null;
+        Set<String> groups = new HashSet<>();
+        for(String postKey : postKeyList)
+        {
+            if(posts.containsKey(postKey))
+            {
+                groups.add(Objects.requireNonNull(posts.get(postKey)).getTag());
+                groups.add(Objects.requireNonNull(posts.get(postKey)).getLocation());
+            }
+        }
+        List<String> groupList =  new ArrayList<>(groups);
+        Comparator<String> stringComparator = new Comparator<>() {
+            @Override
+            public int compare(String s, String t1) {
+                return Character.compare(s.charAt(0), t1.charAt(0));
+            }
+        };
+        groupList.sort(stringComparator);
+        return groupList;
     }
 
+    /**
+     * Given the name of group
+     * and return a list of posts followed by the user and belong to the group.
+     * @param group String
+     * @return List<Post>
+     * @author Qinjue Wu
+     */
     @Override
-    public List<Post> getFollowingPostsByLocation(String location, List<String> postKeyList) {
+    public List<Post> getFollowingPostsByGroup(String group, List<String> postKeyList) {
+        if(postsGroupByTag.containsKey(group)) {
+            List<String> intersection = postsGroupByTag.get(group);
+            assert intersection != null;
+            intersection.retainAll(postKeyList);
+            return getPostList(intersection);
+        }
+        else if (postsGroupsByLocation.containsKey(group)) {
+            List<String> intersection = postsGroupsByLocation.get(group);
+            assert intersection != null;
+            intersection.retainAll(postKeyList);
+            return getPostList(intersection);
+        }
         return null;
     }
 
@@ -277,7 +322,7 @@ public class PostDaoImpl implements PostDao{
      * @author Qinjue Wu
      */
     public List<Post> sortPostsByfollowerNum(List<Post> posts) {
-        Comparator<Post> comparatorPost = new Comparator<Post>() {
+        Comparator<Post> comparatorPost = new Comparator<>() {
             @Override
             public int compare(Post o1, Post o2) {
                 return o2.getFollowerNumber() - o1.getFollowerNumber();
