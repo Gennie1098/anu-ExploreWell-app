@@ -119,7 +119,7 @@ public class PostDaoImpl implements PostDao {
                         }
                         else
                         {
-                            postsGroupByLocation.put(snapshot.getKey(),null)
+                            postsGroupByLocation.put(snapshot.getKey(),null);
                         }
                     }
                 }
@@ -127,7 +127,6 @@ public class PostDaoImpl implements PostDao {
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                     postsGroupByLocation = null;
-                    postsGroupsByLocation = null;
                 }
             });
         }
@@ -313,8 +312,8 @@ public class PostDaoImpl implements PostDao {
             intersection.retainAll(postKeyList);
             return getPostList(intersection);
         }
-        else if (postsGroupsByLocation.containsKey(group)) {
-            List<String> intersection = postsGroupsByLocation.get(group);
+        else if (postsGroupByLocation.containsKey(group)) {
+            List<String> intersection = postsGroupByLocation.get(group);
             assert intersection != null;
             intersection.retainAll(postKeyList);
             return getPostList(intersection);

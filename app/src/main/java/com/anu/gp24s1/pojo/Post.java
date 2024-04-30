@@ -1,5 +1,9 @@
 package com.anu.gp24s1.pojo;
 
+import com.anu.gp24s1.dao.CommentDao;
+import com.anu.gp24s1.dao.CommentDaoImpl;
+import com.anu.gp24s1.dao.UserDao;
+import com.anu.gp24s1.dao.UserDaoImpl;
 import com.anu.gp24s1.pojo.vo.PostVo;
 
 import java.util.Date;
@@ -165,6 +169,7 @@ public class Post {
         }
 
         // Through the design pattern of singleton, getInstance will not read repeatedly.
+        // TODO Qinjue please confirm this call
         UserDao userDao = UserDaoImpl.getInstance();
         postVo.setAuthorName(userDao.getUsername(authorKey));
         postVo.setAuthorAvatar(userDao.getAvatar(authorKey));

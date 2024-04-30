@@ -58,9 +58,7 @@ public class LoginSession extends UserState{
     @Override
     public UserVo getProfile() {
         UserDao userDao = UserDaoImpl.getInstance();
-        // TODO: don't know how to get current user key
-        User user = new User();
-        String userKey = user.getUserKey();
+        String userKey = userSession.getUserKey();
         return userDao.getProfile(userKey);
     }
 
@@ -79,9 +77,7 @@ public class LoginSession extends UserState{
     public boolean followPost(String postKey) {
         PostDao postDao = PostDaoImpl.getInstance();
         UserDao userDao = UserDaoImpl.getInstance();
-        // TODO: don't know how to get current user key
-        User user = new User();
-        String userKey = user.getUserKey();
+        String userKey = userSession.getUserKey();
         boolean result1 = postDao.followPost(postKey, userKey);
         boolean result2 = userDao.addFollowingPost(userKey, postKey);
         return result1 && result2;
@@ -97,9 +93,7 @@ public class LoginSession extends UserState{
     public PostVo viewPost(String postKey) {
         PostDao postDao = PostDaoImpl.getInstance();
         UserDao userDao = UserDaoImpl.getInstance();
-        // TODO: don't know how to get current user key
-        User user = new User();
-        String userKey = user.getUserKey();
+        String userKey = userSession.getUserKey();
         return postDao.viewPost(postKey, userKey);
     }
 
