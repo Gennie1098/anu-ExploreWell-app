@@ -21,23 +21,23 @@ public class  MainActivity extends AppCompatActivity {
     private FloatingActionButton fab;
     private NavController navController;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        setSupportActionBar(binding.toolbar);
-
-        fab = binding.fab;
-
-        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        navController.setGraph(R.navigation.nav_graph_java);
-        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            if (destination.getId() == R.id.MainFragment) {
-                fab.setVisibility(View.VISIBLE);
-            } else {
-                fab.setVisibility(View.GONE);
-            }
-        });
-    }
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
+//        setContentView(binding.getRoot());
+//        setSupportActionBar(binding.toolbar);
+//
+//        fab = binding.fab;
+//
+//        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+//        navController.setGraph(R.navigation.nav_graph_java);
+//        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+//            if (destination.getId() == R.id.MainFragment) {
+//                fab.setVisibility(View.VISIBLE);
+//            } else {
+//                fab.setVisibility(View.GONE);
+//            }
+//        });
+//    }
 }
