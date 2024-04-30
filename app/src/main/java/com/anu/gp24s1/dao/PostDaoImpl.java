@@ -1,5 +1,7 @@
 package com.anu.gp24s1.dao;
 
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 
 import com.anu.gp24s1.pojo.Post;
@@ -11,6 +13,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -214,9 +217,64 @@ public class PostDaoImpl implements PostDao{
         return null;
     }
 
+    /**
+     * Add a post
+     * @author  u7284324    Lachlan Stewart
+     *
+     * @param   title   The title of the post
+     * @param   content The content of the main body of the post
+     * @param   tag The tag associated with the post
+     * @param   location The location associated with the post
+     * @param   userKey The userKey associated with the user making the post
+     * */
     @Override
-    public String createPost(String title, String content, String tag, String location, String userKey) {
-        return null;
+    public String createPost(String title, String content, String tag, String location, String userKey) throws Exception {
+        // Create new post
+        Post newPost = new Post();
+        newPost.setTitle(title);
+        newPost.setContent(content);
+        newPost.setTag(tag);
+        newPost.setLocation(location);
+        newPost.setAuthorKey(userKey);
+
+        // Add to root
+        rootPost.insert(newPost);
+
+
+        // Add to database
+
+
+        // Get Key
+        String postKey = ""; // TODO
+
+        // Add postkey
+        newPost.setPostKey(postKey);
+
+        // Add to other datastructures:
+        // Hashmap
+        posts.put(postKey, newPost);
+
+        // Tags
+        try {
+            Objects.requireNonNull(postsGroupByTag.get(tag)).add(postKey);
+        } catch (NullPointerException e) {
+            // TODO: Make an exception class for this
+            throw new Exception("Tag does not exist");
+        }
+
+        // Locations
+        try {
+            Objects.requireNonNull(postsGroupByLocation.get(location)).add(postKey);
+        } catch (NullPointerException e) {
+            throw new Exception("Location does not exist");
+        }
+        try {
+            Objects.requireNonNull(postsGroupsByLocation.get(location)).add(postKey);
+        } catch (NullPointerException e) {
+            throw new Exception("Location does not exist");
+        }
+
+        return postKey;
     }
 
     @Override
@@ -229,6 +287,11 @@ public class PostDaoImpl implements PostDao{
         return null;
     }
 
+    /**
+     * Create a new comment
+     *
+     *
+     * */
     @Override
     public void addComment(String commentKey, String postKey) {
 

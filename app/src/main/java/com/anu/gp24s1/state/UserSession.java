@@ -79,7 +79,7 @@ public class UserSession {
      * @author  u7284324    Lachlan Stewart
      * @see UserState#createPost
      * */
-    public boolean createPost(String title, String content, String tag, String location){
+    public boolean createPost(String title, String content, String tag, String location)  {
         return userState.createPost(title, content, tag, location);
     }
 
