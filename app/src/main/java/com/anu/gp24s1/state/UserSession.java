@@ -81,16 +81,12 @@ public class UserSession {
     }
 
     /**
-     * Create a new post with the given title, content, tag, and location
-     * This allows different implementations based on the userState state
-     * @param title
-     * @param content
-     * @param tag
-     * @param location
-     * @return whether the operation is successful or not
-     * @author  u7793565    Qihua Huang
+     * Asks the user state to create a post
+     * @author  u7284324    Lachlan Stewart
+     * @return  true if successful
+     * @see     UserState#createPost
      * */
-    public boolean createPost(String title, String content, String tag, String location){
+    public boolean createPost(String title, String content, String tag, String location)  {
         return userState.createPost(title, content, tag, location);
     }
 
@@ -117,14 +113,13 @@ public class UserSession {
     }
 
     /**
-     * Add a new comment with the given postkey and content
-     * This allows different implementations based on the userState state
-     * @param postKey
-     * @param content
-     * @return whether the operation is successful or not
-     * @author  u7793565    Qihua Huang
+     * Asks the user state to add a comment
+     * @author  u7284324    Lachlan Stewart
+     * @see UserState#addComment
+     * @return  true if successful
      * */
-    public boolean addComment(String postKey, String content){
+    public boolean addComment(String postKey, String content)
+    {
         return userState.addComment(postKey, content);
     }
 

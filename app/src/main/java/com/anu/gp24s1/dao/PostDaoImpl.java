@@ -3,7 +3,6 @@ package com.anu.gp24s1.dao;
 import androidx.annotation.NonNull;
 
 import com.anu.gp24s1.pojo.Post;
-import com.anu.gp24s1.pojo.User;
 import com.anu.gp24s1.pojo.vo.PostVo;
 import com.anu.gp24s1.utils.DBConnector;
 import com.anu.gp24s1.utils.TypeConvert;
@@ -26,7 +25,7 @@ public class PostDaoImpl implements PostDao {
     private static final int RECOMMENDATION_NUMBER = 3;
     private static PostDaoImpl instance;
 
-    private Post rootPost;
+    private static Post rootPost;
 
     private static HashMap<String, Post> posts;
 
@@ -75,6 +74,17 @@ public class PostDaoImpl implements PostDao {
                             post.setComments(commentsList);
                         }
                         posts.put(post.getPostKey(),post);
+
+                        // add new post to tree
+                        if (rootPost == null) {
+                            rootPost = post;
+                        } else {
+                            try {
+                                rootPost = rootPost.insert(post);
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
                     }
                 }
 
@@ -199,9 +209,66 @@ public class PostDaoImpl implements PostDao {
         return null;
     }
 
+    /**
+     * Add a post
+     * @author  u7284324    Lachlan Stewart
+     *
+     * @param   title   The title of the post
+     * @param   content The content of the main body of the post
+     * @param   tag The tag associated with the post
+     * @param   location The location associated with the post
+     * @param   userKey The userKey associated with the user making the post
+     * */
     @Override
-    public String createPost(String title, String content, String tag, String location, String userKey) {
-        return null;
+    public String createPost(String title, String content, String tag, String location, String userKey) throws Exception {
+        // Create new post
+        Post newPost = new Post();
+        newPost.setTitle(title);
+        newPost.setContent(content);
+        newPost.setTag(tag);
+        newPost.setLocation(location);
+        newPost.setAuthorKey(userKey);
+        newPost.setPublishTime(new Date());
+
+        // Add to root
+        rootPost.insert(newPost); // may throw exception is post exists
+
+        // Add to database
+        // TODO
+
+        // Get Key
+        String postKey = ""; // TODO
+
+        // Add postkey
+        newPost.setPostKey(postKey);
+
+        // Add to other datastructures:
+        // Hashmap
+        posts.put(postKey, newPost);
+
+        // Tags
+        try {
+            Objects.requireNonNull(postsGroupByTag.get(tag)).add(postKey);
+        } catch (NullPointerException e) {
+            // TODO: Make an exception class for this?
+            throw new Exception("Tag does not exist");
+        }
+
+        // Locations
+        try {
+            Objects.requireNonNull(postsGroupByLocation.get(location)).add(postKey);
+        } catch (NullPointerException e) {
+            // TODO: Make an exception class for this?
+            throw new Exception("Location does not exist");
+        }
+        try {
+            Objects.requireNonNull(postsGroupsByLocation.get(location)).add(postKey);
+        } catch (NullPointerException e) {
+            // TODO: Make an exception class for this?
+            throw new Exception("Location does not exist");
+        }
+
+        return postKey;
     }
 
     /**
@@ -263,9 +330,19 @@ public class PostDaoImpl implements PostDao {
         return post.toPostVo(userKey);
     }
 
+    /**
+     * Create a new comment
+     *
+     * */
     @Override
     public void addComment(String commentKey, String postKey) {
+        Post post = posts.get(postKey);
+        List<String> comments = post.getComments();
+        comments.add(commentKey);
+        post.setComments(comments);
+        post.setCommentsNumber(post.getCommentsNumber() + 1);
 
+        // TODO reflect the changes in the database
     }
 
     /**

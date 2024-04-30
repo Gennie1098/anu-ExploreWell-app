@@ -6,6 +6,7 @@ import com.anu.gp24s1.dao.UserDao;
 import com.anu.gp24s1.dao.UserDaoImpl;
 import com.anu.gp24s1.pojo.vo.PostVo;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -41,6 +42,10 @@ public class Post {
     private Post rightNode;
 
     public Post() {
+
+        // so that these are not null
+        this.comments = new ArrayList<String>();
+        this.followers = new ArrayList<String>();
     }
 
     public String getPostKey() {
@@ -211,14 +216,16 @@ public class Post {
      *
      * @throws  NullPointerException    If there is no right node
      * */
-    private void leftRotation() throws NullPointerException {
+    private Post leftRotation() throws NullPointerException {
 
         if (rightNode == null) { throw new NullPointerException("Left rotation without a right node"); }
 
-        Post rightleft = rightNode.leftNode;
+        Post rightOrig = rightNode;
+        Post rightleft = rightOrig.leftNode;
         rightNode.setLeftNode(this);
         setRightNode(rightleft);
 
+        return rightOrig;
     }
 
     /**
@@ -227,14 +234,15 @@ public class Post {
      *
      * @throws  NullPointerException    If there is no left node
      * */
-    private void rightRotation() {
-
+    private Post rightRotation() {
         if (leftNode == null) { throw new NullPointerException("Right rotation without a left node"); }
 
-        Post leftright = leftNode.rightNode;
+        Post leftOrig = leftNode;
+        Post leftright = leftOrig.rightNode;
         leftNode.setRightNode(this);
         setLeftNode(leftright);
 
+        return leftOrig;
     }
 
     /**
@@ -243,21 +251,21 @@ public class Post {
      * @param   newPost     The post to be added to the tree
      * @throws  Exception   The post may already exist
      * */
-    public void insert(Post newPost) throws Exception {
+    public Post insert(Post newPost) throws Exception {
 
         if (newPost.getTitle().compareTo(title) < 0) {
             // belongs to the left
             if (leftNode == null) {
                 leftNode = newPost;
             } else {
-                leftNode.insert(newPost);
+                leftNode = leftNode.insert(newPost);
             }
         } else if (newPost.getTitle().compareTo(title) > 0) {
             // belongs to the right
             if (rightNode == null) {
                 rightNode = newPost;
             } else {
-                rightNode.insert(newPost);
+                rightNode = rightNode.insert(newPost);
             }
         } else {
             throw new Exception("Post already exists");
@@ -271,24 +279,24 @@ public class Post {
             int balanceleft = leftNode.getBalanceFactor();
             if (balanceleft > 0) {
                 // left right rotation
-                leftNode.leftRotation();
-                rightRotation();
-            } else {
-                // right right rotation
-                rightRotation();
+                leftNode = leftNode.leftRotation();
+                return rightRotation();
             }
+            // right rotation
+            return rightRotation();
         } else if (balance > 1) {
             // some left rotation is in order
             int balanceright = rightNode.getBalanceFactor();
             if (balanceright < 0) {
                 // right left rotation
-                rightNode.rightRotation();
-                leftRotation();
-            } else {
-                // left left rotation
-                leftRotation();
+                rightNode = rightNode.rightRotation();
             }
+            // left rotation
+            return leftRotation();
         }
+
+        // no rotation required
+        return this;
     }
 
     /**

@@ -111,6 +111,7 @@ public class SignInFragment extends BaseFragment implements View.OnClickListener
                     Toast.makeText(getContext(), "Sign Up Failed", Toast.LENGTH_SHORT).show();
                 }
             });
+
     }
 
     private void createUser(FirebaseUser user) {

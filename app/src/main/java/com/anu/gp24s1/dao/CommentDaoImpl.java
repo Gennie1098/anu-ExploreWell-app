@@ -68,6 +68,26 @@ public class CommentDaoImpl implements CommentDao{
 
     @Override
     public String addComment(String content, String postKey, String userKey) {
+
+        // Create a new comment
+        Comment newComment = new Comment();
+        newComment.setCommentTime(new Date());
+        newComment.setContent(content);
+        newComment.setPostKey(postKey);
+        newComment.setAuthorKey(userKey);
+
+        // Add to database
+        // TODO
+
+        // Get key
+        String commentKey = ""; // TODO
+
+        // Add key to comment:
+        newComment.setCommentKey(commentKey);
+
+        // Add to comments:
+        comments.put(commentKey, newComment);
+
         return null;
     }
 }

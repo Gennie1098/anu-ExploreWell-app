@@ -64,7 +64,18 @@ public class LoginSession extends UserState{
 
     @Override
     public boolean createPost(String title, String content, String tag, String location) {
-        return false;
+        String postKey = "";
+        try {
+            postKey = PostDaoImpl.getInstance().createPost(title, content, tag, location, super.userSession.getUserKey());
+        } catch (Exception e) {
+            return false;
+        }
+
+        // TODO: What happens to postKey?
+        // is it used in some way?
+
+
+        return true;
     }
 
     /**
@@ -99,7 +110,14 @@ public class LoginSession extends UserState{
 
     @Override
     public boolean addComment(String postKey, String content) {
-        return false;
+
+        // Add comment via Comment dao
+        String commentKey = CommentDaoImpl.getInstance().addComment(content, postKey, super.userSession.getUserKey());
+
+        // Add comment to post:
+        PostDaoImpl.getInstance().addComment(commentKey, content);
+
+        return true;
     }
 
     /**
