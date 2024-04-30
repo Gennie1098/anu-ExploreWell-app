@@ -1,5 +1,7 @@
 package com.anu.gp24s1.state;
 
+import com.anu.gp24s1.dao.UserDao;
+import com.anu.gp24s1.dao.UserDaoImpl;
 import com.anu.gp24s1.pojo.vo.PostVo;
 import com.anu.gp24s1.pojo.vo.UserVo;
 
@@ -26,9 +28,17 @@ public class UserSession {
         changeState(defaultState);
     }
 
+    public String getUserKey() {
+        return userKey;
+    }
+
+    public void setUserKey(String userKey) {
+        this.userKey = userKey;
+    }
+
     /**
      * Changes the state of the user session
-     * @param state
+     * @param state UserState
      * @author Qinjue Wu
      */
     public void changeState(UserState state){
@@ -43,12 +53,21 @@ public class UserSession {
         return true;
     }
 
+    /**
+     * Recommend posts to the current user, according to his passion tag.
+     * @return List<PostVo>
+     * @author Qinjue Wu
+     */
     public List<PostVo> getRecommendationByTag() {
-        return null;
+        return userState.getRecommendationByTag();
     }
 
+    /**
+     * Recommend posts to the current user, according to his location.
+     * @return List<PostVo>
+     */
     public List<PostVo> getRecommendationByLocation() {
-        return null;
+        return userState.getRecommendationByLocation();
     }
 
     public UserVo getProfile() {
@@ -84,11 +103,11 @@ public class UserSession {
 
     public List<String> viewFollowingGroups()
     {
-        return null;
+        return userState.viewFollowingGroups();
     }
 
-    public List<PostVo> viewFollowingPosts(String location){
-        return null;
+    public List<PostVo> viewFollowingPosts(String group){
+        return userState.viewFollowingPosts(group);
     }
 
     public List<PostVo> searchPosts(String searchWords){

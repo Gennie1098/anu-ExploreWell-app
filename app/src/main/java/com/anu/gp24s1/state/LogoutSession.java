@@ -62,7 +62,7 @@ public class LogoutSession extends UserState{
     }
 
     @Override
-    public List<PostVo> viewFollowingPosts(String location) {
+    public List<PostVo> viewFollowingPosts(String group) {
         return null;
     }
 
