@@ -13,6 +13,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -231,6 +232,7 @@ public class PostDaoImpl implements PostDao{
         newPost.setTag(tag);
         newPost.setLocation(location);
         newPost.setAuthorKey(userKey);
+        newPost.setPublishTime(new Date());
 
         // Add to root
         rootPost.insert(newPost); // may throw exception is post exists
@@ -293,6 +295,9 @@ public class PostDaoImpl implements PostDao{
         List<String> comments = post.getComments();
         comments.add(commentKey);
         post.setComments(comments);
+        post.setCommentsNumber(post.getCommentsNumber() + 1);
+
+        // TODO reflect the changes in the database
     }
 
     /**
