@@ -50,9 +50,16 @@ public class LoginSession extends UserState{
         return postDao.viewListOfPosts(postDao.getRecommendationByLocation(location),userKey);
     }
 
+    /**
+     * Retrieve the information of user according to the user key
+     * @return the UserVo object containing the details of the user, or null
+     * @author  u7793565    Qihua Huang
+     * */
     @Override
     public UserVo getProfile() {
-        return null;
+        UserDao userDao = UserDaoImpl.getInstance();
+        String userKey = userSession.getUserKey();
+        return userDao.getProfile(userKey);
     }
 
     @Override
@@ -71,14 +78,34 @@ public class LoginSession extends UserState{
         return true;
     }
 
+    /**
+     * Record the actions of users following posts by its key.
+     * @param postKey
+     * @return whether the operation is successful or not
+     * @author  u7793565    Qihua Huang
+     * */
     @Override
     public boolean followPost(String postKey) {
-        return false;
+        PostDao postDao = PostDaoImpl.getInstance();
+        UserDao userDao = UserDaoImpl.getInstance();
+        String userKey = userSession.getUserKey();
+        boolean result1 = postDao.followPost(postKey, userKey);
+        boolean result2 = userDao.addFollowingPost(userKey, postKey);
+        return result1 && result2;
     }
 
+    /**
+     * Retrieve the details of the post by the given post key
+     * @param postKey
+     * @return the PostVo object containing the details of the post, or null
+     * @author  u7793565    Qihua Huang
+     * */
     @Override
     public PostVo viewPost(String postKey) {
-        return null;
+        PostDao postDao = PostDaoImpl.getInstance();
+        UserDao userDao = UserDaoImpl.getInstance();
+        String userKey = userSession.getUserKey();
+        return postDao.viewPost(postKey, userKey);
     }
 
     @Override

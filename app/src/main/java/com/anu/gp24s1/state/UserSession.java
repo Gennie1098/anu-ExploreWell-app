@@ -70,8 +70,14 @@ public class UserSession {
         return userState.getRecommendationByLocation();
     }
 
+    /**
+     * Retrieve the profile information of the current user, used for user profile display
+     * This allows different implementations based on the userState state
+     * @return the UserVo object containing the details of the current user, or null
+     * @author  u7793565    Qihua Huang
+     * */
     public UserVo getProfile() {
-        return null;
+        return userState.getProfile();
     }
 
     /**
@@ -83,12 +89,26 @@ public class UserSession {
         return userState.createPost(title, content, tag, location);
     }
 
+    /**
+     * Record the actions of users following posts by its key
+     * This allows different implementations based on the userState state
+     * @param postKey
+     * @return whether the operation is successful or not
+     * @author  u7793565    Qihua Huang
+     * */
     public boolean followPost(String postKey){
-        return true;
+        return userState.followPost(postKey);
     }
 
+    /**
+     * Retrieve the details of the post by the given post key
+     * This allows different implementations based on the userState state
+     * @param postKey
+     * @return the PostVo object containing the details of the post, or null
+     * @author  u7793565    Qihua Huang
+     * */
     public PostVo viewPost(String postKey) {
-        return null;
+        return userState.viewPost(postKey);
     }
 
     /**
@@ -101,6 +121,11 @@ public class UserSession {
         return userState.addComment(postKey, content);
     }
 
+    /**
+     * Retrieve grouped followed posts
+     * This allows different implementations based on the userState state
+     * @return a list of posts of grouped followed posts
+     * */
     public List<String> viewFollowingGroups()
     {
         return userState.viewFollowingGroups();

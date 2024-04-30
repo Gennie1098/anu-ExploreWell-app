@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
-public class UserDaoImpl implements UserDao{
+public class UserDaoImpl implements UserDao {
 
     private static UserDaoImpl instance;
 
@@ -144,9 +144,25 @@ public class UserDaoImpl implements UserDao{
         }
     }
 
+    /**
+     * Retrieve the information of user according to the user key
+     * and convert it into a user instance using user.toUserVo
+     *
+     * @return the UserVo object containing the details of the user, or null
+     * @author u7793565    Qihua Huang
+     */
     @Override
     public UserVo getProfile(String userKey) {
-        return null;
+        if (users != null) {
+            User user = users.get(userKey);
+            if (user == null) {
+                // if post or key does not exist
+                throw new IllegalArgumentException("User with key " + userKey + " does not exist.");
+            }
+            return user.toUserVo();
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -154,9 +170,26 @@ public class UserDaoImpl implements UserDao{
         return false;
     }
 
+    /**
+     * Add a post to the user's following list the given post key and user key
+     * @param userKey
+     * @param postKey
+     * @return whether the operation is successful or not
+     * @author  u7793565    Qihua Huang
+     * */
     @Override
     public boolean addFollowingPost(String userKey, String postKey) {
-        return false;
+        User user = users.get(userKey);
+        assert user != null;
+        List<String> followingPosts = user.getFollowingPosts();
+
+        // already followed
+        if (followingPosts.contains(postKey)) {
+            return true;
+        } else {
+            //Add the post to the user's following list
+            return followingPosts.add(postKey);
+        }
     }
 
     @Override
