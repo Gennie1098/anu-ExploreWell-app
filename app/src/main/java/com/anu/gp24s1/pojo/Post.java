@@ -143,7 +143,7 @@ public class Post {
         this.rightNode = rightNode;
     }
 
-    public PostVo toPostVo()
+    public PostVo toPostVo(String userKey)
     {
         return null;
     }

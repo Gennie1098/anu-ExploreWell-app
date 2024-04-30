@@ -25,7 +25,7 @@ public class UserDaoImpl implements UserDao{
 
     private static HashMap<String, User> users;
 
-    private UserDaoImpl(){};
+    private UserDaoImpl(){}
     /**
      * Using singleton design pattern to ensure only get all users' information data once.
      * @return instance
@@ -39,7 +39,7 @@ public class UserDaoImpl implements UserDao{
             DatabaseReference userReference = DBConnector.getInstance().getDatabase().child("user");
             userReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         //create new User object and set values then put it into the hashmap
                         User user = new User();
@@ -118,7 +118,7 @@ public class UserDaoImpl implements UserDao{
      */
     @Override
     public String getPassion(String userKey) {
-        if(users != null)
+        if(users != null && users.containsKey(userKey))
         {
             return users.get(userKey).getPassion();
         }
@@ -136,12 +136,10 @@ public class UserDaoImpl implements UserDao{
      */
     @Override
     public String getLocation(String userKey) {
-        if(users != null)
-        {
+        if(users != null && users.containsKey(userKey)) {
             return users.get(userKey).getLocation();
         }
-        else
-        {
+        else {
             return null;
         }
     }
@@ -163,6 +161,11 @@ public class UserDaoImpl implements UserDao{
 
     @Override
     public List<String> getFollowingPosts(String userKey) {
-        return null;
+        if(users != null && users.containsKey(userKey)) {
+            return users.get(userKey).getFollowingPosts();
+        }
+        else {
+            return null;
+        }
     }
 }
