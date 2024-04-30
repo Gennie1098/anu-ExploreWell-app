@@ -1,5 +1,6 @@
 package com.anu.gp24s1.dao;
 
+import com.anu.gp24s1.pojo.Post;
 import com.anu.gp24s1.pojo.vo.PostVo;
 
 import java.util.List;

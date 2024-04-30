@@ -21,7 +21,7 @@ public class PostDaoImpl implements PostDao{
 
     private static PostDaoImpl instance;
 
-    private Post rootPost;
+    private static Post rootPost;
 
     private static HashMap<String,Post> posts;
 
@@ -70,6 +70,17 @@ public class PostDaoImpl implements PostDao{
                             post.setComments(commentsList);
                         }
                         posts.put(post.getPostKey(),post);
+
+                        // add new post to tree
+                        if (rootPost == null) {
+                            rootPost = post;
+                        } else {
+                            try {
+                                rootPost = rootPost.insert(post);
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
                     }
                 }
 

@@ -1,5 +1,7 @@
 package com.anu.gp24s1.state;
 
+import com.anu.gp24s1.dao.PostDaoImpl;
+import com.anu.gp24s1.pojo.Post;
 import com.anu.gp24s1.pojo.vo.PostVo;
 import com.anu.gp24s1.pojo.vo.UserVo;
 
@@ -39,12 +41,16 @@ public class LoginSession extends UserState{
     }
 
     /**
-     * Adds a post
+     * Adds a post. Inserts this post into the local tree and adds to the database
      *
      * @author  u7284324    Lachlan Stewart
      * */
     @Override
     public boolean createPost(String title, String content, String tag, String location) {
+
+        // PostDaoImpl.getInstance().createPost(title, content, tag, location, );
+
+
         return false;
     }
 
@@ -58,6 +64,15 @@ public class LoginSession extends UserState{
         return null;
     }
 
+    /**
+     * Adds a comment to a post, updating the local Post and adding a Comment object and
+     * adding this to the database
+     *
+     * @author  u7284234    Lachlan Stewart
+     *
+     * @param   postKey     The key associated with the post that the comment is being added to
+     * @param   content     The message string of the comment
+     * */
     @Override
     public boolean addComment(String postKey, String content) {
         return false;
