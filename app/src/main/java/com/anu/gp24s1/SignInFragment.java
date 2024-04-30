@@ -44,7 +44,7 @@ public class SignInFragment extends BaseFragment implements View.OnClickListener
 
         // Click listeners
         binding.buttonSignIn.setOnClickListener(this);
-        binding.buttonSignUp.setOnClickListener(this);
+//        binding.buttonSignUp.setOnClickListener(this);
     }
 
     @Override
@@ -61,8 +61,8 @@ public class SignInFragment extends BaseFragment implements View.OnClickListener
         int i = v.getId();
         if (i == R.id.buttonSignIn) {
             signIn();
-        } else if (i == R.id.buttonSignUp) {
-            signUp();
+//        } else if (i == R.id.buttonSignUp) {
+//            signUp();
         }
     }
 
