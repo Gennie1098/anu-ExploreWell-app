@@ -1,5 +1,7 @@
 package com.anu.gp24s1.state;
 
+import com.anu.gp24s1.dao.UserDao;
+import com.anu.gp24s1.dao.UserDaoImpl;
 import com.anu.gp24s1.pojo.vo.PostVo;
 import com.anu.gp24s1.pojo.vo.UserVo;
 
@@ -26,9 +28,17 @@ public class UserSession {
         changeState(defaultState);
     }
 
+    public String getUserKey() {
+        return userKey;
+    }
+
+    public void setUserKey(String userKey) {
+        this.userKey = userKey;
+    }
+
     /**
      * Changes the state of the user session
-     * @param state
+     * @param state UserState
      * @author Qinjue Wu
      */
     public void changeState(UserState state){
@@ -44,21 +54,18 @@ public class UserSession {
     }
 
     /**
-     * Retrieve a list of post recommendations based on tag
-     * This allows different implementations based on the userState state
-     * @return a list of PostVo object, containing the details of posts
-     * @author  u7793565    Qihua Huang
-     * */
+     * Recommend posts to the current user, according to his passion tag.
+     * @return List<PostVo>
+     * @author Qinjue Wu
+     */
     public List<PostVo> getRecommendationByTag() {
         return userState.getRecommendationByTag();
     }
 
     /**
-     * Retrieve a list of post recommendations based on location
-     * This allows different implementations based on the userState state
-     * @return a list of PostVo object, containing the details of posts
-     * @author  u7793565    Qihua Huang
-     * */
+     * Recommend posts to the current user, according to his location.
+     * @return List<PostVo>
+     */
     public List<PostVo> getRecommendationByLocation() {
         return userState.getRecommendationByLocation();
     }
@@ -125,31 +132,17 @@ public class UserSession {
      * Retrieve grouped followed posts
      * This allows different implementations based on the userState state
      * @return a list of posts of grouped followed posts
-     * @author  u7793565    Qihua Huang
      * */
-    public List<String> viewFollowingGroups(){
+    public List<String> viewFollowingGroups()
+    {
         return userState.viewFollowingGroups();
     }
 
-    /**
-     * Retrieve followed posts by location search
-     * This allows different implementations based on the userState state
-     * @param location
-     * @return a list of grouped posts of followed posts about specific location
-     * @author  u7793565    Qihua Huang
-     * */
-    public List<PostVo> viewFollowingPosts(String location){
-        return userState.viewFollowingPosts(location);
+    public List<PostVo> viewFollowingPosts(String group){
+        return userState.viewFollowingPosts(group);
     }
 
-    /**
-     * Retrieve followed posts by keyword search
-     * This allows different implementations based on the userState state
-     * @param searchWords
-     * @return a list of posts obtained by keyword search
-     * @author  u7793565    Qihua Huang
-     * */
     public List<PostVo> searchPosts(String searchWords){
-        return userState.searchPosts(searchWords);
+        return null;
     }
 }

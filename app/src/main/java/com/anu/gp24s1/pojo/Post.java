@@ -1,9 +1,5 @@
 package com.anu.gp24s1.pojo;
 
-import com.anu.gp24s1.dao.CommentDao;
-import com.anu.gp24s1.dao.CommentDaoImpl;
-import com.anu.gp24s1.dao.UserDao;
-import com.anu.gp24s1.dao.UserDaoImpl;
 import com.anu.gp24s1.pojo.vo.PostVo;
 
 import java.util.Date;

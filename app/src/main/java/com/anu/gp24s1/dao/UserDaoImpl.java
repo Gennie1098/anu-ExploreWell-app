@@ -25,25 +25,21 @@ public class UserDaoImpl implements UserDao {
 
     private static HashMap<String, User> users;
 
-    private UserDaoImpl() {
-    }
-
-    ;
-
+    private UserDaoImpl(){}
     /**
      * Using singleton design pattern to ensure only get all users' information data once.
-     *
      * @return instance
      * @author Qinjue Wu
      */
     public static UserDaoImpl getInstance() {
-        if (instance == null) {
+        if(instance == null)
+        {
             instance = new UserDaoImpl();
-            users = new HashMap<String, User>();
+            users = new HashMap<String,User>();
             DatabaseReference userReference = DBConnector.getInstance().getDatabase().child("user");
             userReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         //create new User object and set values then put it into the hashmap
                         User user = new User();
@@ -52,17 +48,19 @@ public class UserDaoImpl implements UserDao {
                         user.setAvatar(snapshot.child("avatar").getValue(String.class));
                         user.setLocation(snapshot.child("location").getValue(String.class));
                         user.setPassion(snapshot.child("passion").getValue(String.class));
-                        HashMap<String, Boolean> ownPostsMap = (HashMap<String, Boolean>) snapshot.child("ownPosts").getValue();
-                        if (ownPostsMap != null) {
+                        HashMap<String,Boolean> ownPostsMap = (HashMap<String,Boolean>) snapshot.child("ownPosts").getValue();
+                        if(ownPostsMap != null)
+                        {
                             List<String> ownPostsList = new ArrayList<>(ownPostsMap.keySet());
                             user.setOwnPosts(ownPostsList);
                         }
-                        HashMap<String, Boolean> followingPostsMap = (HashMap<String, Boolean>) snapshot.child("followingPosts").getValue();
-                        if (followingPostsMap != null) {
+                        HashMap<String,Boolean> followingPostsMap = (HashMap<String,Boolean>) snapshot.child("followingPosts").getValue();
+                        if(followingPostsMap != null)
+                        {
                             List<String> followingPostsList = new ArrayList<>(followingPostsMap.keySet());
                             user.setFollowingPosts(followingPostsList);
                         }
-                        users.put(user.getUserKey(), user);
+                        users.put(user.getUserKey(),user);
                     }
                 }
 
@@ -78,64 +76,70 @@ public class UserDaoImpl implements UserDao {
 
     /**
      * Using userKey to get username from the hashmap.
-     *
      * @param userKey
      * @return username
      * @author Qinjue Wu
      */
     @Override
     public String getUsername(String userKey) {
-        if (users != null && users.containsKey(userKey)) {
+        if(users != null && users.containsKey(userKey))
+        {
             return users.get(userKey).getUsername();
-        } else {
+        }
+        else
+        {
             return null;
         }
     }
 
     /**
      * Using userKey to get user's avatar from the hashmap.
-     *
      * @param userKey
      * @return avatar
      * @author Qinjue Wu
      */
     @Override
     public String getAvatar(String userKey) {
-        if (users != null && users.containsKey(userKey)) {
+        if(users != null && users.containsKey(userKey))
+        {
             return users.get(userKey).getAvatar();
-        } else {
+        }
+        else
+        {
             return null;
         }
     }
 
     /**
      * Using userKey to get user's passion from the hashmap.
-     *
      * @param userKey
      * @return passion
      * @author Qinjue Wu
      */
     @Override
     public String getPassion(String userKey) {
-        if (users != null) {
+        if(users != null && users.containsKey(userKey))
+        {
             return users.get(userKey).getPassion();
-        } else {
+        }
+        else
+        {
             return null;
         }
     }
 
     /**
      * Using userKey to get user's location from the hashmap.
-     *
      * @param userKey
      * @return location
      * @author Qinjue Wu
      */
     @Override
     public String getLocation(String userKey) {
-        if (users != null) {
+        if(users != null && users.containsKey(userKey)) {
             return users.get(userKey).getLocation();
-        } else {
+        }
+        else {
             return null;
         }
     }
@@ -190,6 +194,11 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<String> getFollowingPosts(String userKey) {
-        return null;
+        if(users != null && users.containsKey(userKey)) {
+            return users.get(userKey).getFollowingPosts();
+        }
+        else {
+            return null;
+        }
     }
 }
