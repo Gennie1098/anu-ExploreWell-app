@@ -83,7 +83,8 @@ public class UserSession {
     /**
      * Asks the user state to create a post
      * @author  u7284324    Lachlan Stewart
-     * @see UserState#createPost
+     * @return  true if successful
+     * @see     UserState#createPost
      * */
     public boolean createPost(String title, String content, String tag, String location)  {
         return userState.createPost(title, content, tag, location);
@@ -115,6 +116,7 @@ public class UserSession {
      * Asks the user state to add a comment
      * @author  u7284324    Lachlan Stewart
      * @see UserState#addComment
+     * @return  true if successful
      * */
     public boolean addComment(String postKey, String content)
     {
