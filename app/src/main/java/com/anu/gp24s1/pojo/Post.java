@@ -2,6 +2,7 @@ package com.anu.gp24s1.pojo;
 
 import com.anu.gp24s1.pojo.vo.PostVo;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -37,6 +38,10 @@ public class Post {
     private Post rightNode;
 
     public Post() {
+
+        // so that these are not null
+        this.comments = new ArrayList<String>();
+        this.followers = new ArrayList<String>();
     }
 
     public String getPostKey() {

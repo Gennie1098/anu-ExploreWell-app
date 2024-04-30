@@ -65,6 +65,8 @@ public class LoginSession extends UserState{
         }
 
         // TODO: What happens to postKey?
+        // is it used in some way?
+
 
         return true;
     }

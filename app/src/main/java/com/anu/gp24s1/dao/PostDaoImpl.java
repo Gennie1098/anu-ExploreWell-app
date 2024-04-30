@@ -1,11 +1,8 @@
 package com.anu.gp24s1.dao;
 
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 
 import com.anu.gp24s1.pojo.Post;
-import com.anu.gp24s1.pojo.User;
 import com.anu.gp24s1.pojo.vo.PostVo;
 import com.anu.gp24s1.utils.DBConnector;
 import com.anu.gp24s1.utils.TypeConvert;
@@ -13,11 +10,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -238,11 +233,10 @@ public class PostDaoImpl implements PostDao{
         newPost.setAuthorKey(userKey);
 
         // Add to root
-        rootPost.insert(newPost);
-
+        rootPost.insert(newPost); // may throw exception is post exists
 
         // Add to database
-
+        // TODO
 
         // Get Key
         String postKey = ""; // TODO
@@ -258,7 +252,7 @@ public class PostDaoImpl implements PostDao{
         try {
             Objects.requireNonNull(postsGroupByTag.get(tag)).add(postKey);
         } catch (NullPointerException e) {
-            // TODO: Make an exception class for this
+            // TODO: Make an exception class for this?
             throw new Exception("Tag does not exist");
         }
 
@@ -266,11 +260,13 @@ public class PostDaoImpl implements PostDao{
         try {
             Objects.requireNonNull(postsGroupByLocation.get(location)).add(postKey);
         } catch (NullPointerException e) {
+            // TODO: Make an exception class for this?
             throw new Exception("Location does not exist");
         }
         try {
             Objects.requireNonNull(postsGroupsByLocation.get(location)).add(postKey);
         } catch (NullPointerException e) {
+            // TODO: Make an exception class for this?
             throw new Exception("Location does not exist");
         }
 
@@ -290,11 +286,13 @@ public class PostDaoImpl implements PostDao{
     /**
      * Create a new comment
      *
-     *
      * */
     @Override
     public void addComment(String commentKey, String postKey) {
-
+        Post post = posts.get(postKey);
+        List<String> comments = post.getComments();
+        comments.add(commentKey);
+        post.setComments(comments);
     }
 
     /**
