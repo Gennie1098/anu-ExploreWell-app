@@ -23,7 +23,7 @@ public interface PostDao {
      */
     public List<Post> getRecommendationByLocation(String location);
 
-    public String createPost(String title, String content, String tag, String location, String userKey);
+    public String createPost(String title, String content, String tag, String location, String userKey) throws Exception;
 
     public boolean followPost(String postKey, String userKey);
 

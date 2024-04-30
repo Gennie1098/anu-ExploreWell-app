@@ -3,7 +3,6 @@ package com.anu.gp24s1.dao;
 import androidx.annotation.NonNull;
 
 import com.anu.gp24s1.pojo.Post;
-import com.anu.gp24s1.pojo.User;
 import com.anu.gp24s1.pojo.vo.PostVo;
 import com.anu.gp24s1.utils.DBConnector;
 import com.anu.gp24s1.utils.TypeConvert;
@@ -21,21 +20,20 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-public class PostDaoImpl implements PostDao{
+public class PostDaoImpl implements PostDao {
 
     private static final int RECOMMENDATION_NUMBER = 3;
     private static PostDaoImpl instance;
 
-    private Post rootPost;
+    private static Post rootPost;
 
-    private static HashMap<String,Post> posts;
+    private static HashMap<String, Post> posts;
 
-    private static HashMap<String,List<String>> postsGroupByTag;
+    private static HashMap<String, List<String>> postsGroupByTag;
 
     private static HashMap<String,List<String>> postsGroupByLocation;
-    private static HashMap<String,List<String>> postsGroupsByLocation;
 
-    private PostDaoImpl(){}
+    private PostDaoImpl(){};
 
     /**
      * Using singleton design pattern to ensure only get all posts,tags,locations data once.
@@ -76,6 +74,17 @@ public class PostDaoImpl implements PostDao{
                             post.setComments(commentsList);
                         }
                         posts.put(post.getPostKey(),post);
+
+                        // add new post to tree
+                        if (rootPost == null) {
+                            rootPost = post;
+                        } else {
+                            try {
+                                rootPost = rootPost.insert(post);
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
                     }
                 }
 
@@ -117,12 +126,10 @@ public class PostDaoImpl implements PostDao{
                         {
                             List<String> postsList = new ArrayList<>(postsMap.keySet());
                             postsGroupByLocation.put(snapshot.getKey(),postsList);
-                            postsGroupsByLocation.put(snapshot.getKey(),postsList);
                         }
                         else
                         {
                             postsGroupByLocation.put(snapshot.getKey(),null);
-                            postsGroupsByLocation.put(snapshot.getKey(),null);
                         }
                     }
                 }
@@ -130,7 +137,6 @@ public class PostDaoImpl implements PostDao{
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                     postsGroupByLocation = null;
-                    postsGroupsByLocation = null;
                 }
             });
         }
@@ -203,24 +209,140 @@ public class PostDaoImpl implements PostDao{
         return null;
     }
 
+    /**
+     * Add a post
+     * @author  u7284324    Lachlan Stewart
+     *
+     * @param   title   The title of the post
+     * @param   content The content of the main body of the post
+     * @param   tag The tag associated with the post
+     * @param   location The location associated with the post
+     * @param   userKey The userKey associated with the user making the post
+     * */
     @Override
-    public String createPost(String title, String content, String tag, String location, String userKey) {
-        return null;
+    public String createPost(String title, String content, String tag, String location, String userKey) throws Exception {
+        // Create new post
+        Post newPost = new Post();
+        newPost.setTitle(title);
+        newPost.setContent(content);
+        newPost.setTag(tag);
+        newPost.setLocation(location);
+        newPost.setAuthorKey(userKey);
+        newPost.setPublishTime(new Date());
+
+        // Add to root
+        rootPost.insert(newPost); // may throw exception is post exists
+
+        // Add to database
+        // TODO
+
+        // Get Key
+        String postKey = ""; // TODO
+
+        // Add postkey
+        newPost.setPostKey(postKey);
+
+        // Add to other datastructures:
+        // Hashmap
+        posts.put(postKey, newPost);
+
+        // Tags
+        try {
+            Objects.requireNonNull(postsGroupByTag.get(tag)).add(postKey);
+        } catch (NullPointerException e) {
+            // TODO: Make an exception class for this?
+            throw new Exception("Tag does not exist");
+        }
+
+        // Locations
+        try {
+            Objects.requireNonNull(postsGroupByLocation.get(location)).add(postKey);
+        } catch (NullPointerException e) {
+            // TODO: Make an exception class for this?
+            throw new Exception("Location does not exist");
+        }
+        try {
+            Objects.requireNonNull(postsGroupsByLocation.get(location)).add(postKey);
+        } catch (NullPointerException e) {
+            // TODO: Make an exception class for this?
+            throw new Exception("Location does not exist");
+        }
+
+        return postKey;
     }
 
+    /**
+     * Record the actions of users following posts by user key and post key
+     * @param postKey
+     * @param userKey
+     * @return whether the operation is successful or not
+     * @author  u7793565    Qihua Huang
+     * */
     @Override
     public boolean followPost(String postKey, String userKey) {
-        return false;
+        PostVo postVo = viewPost(postKey, userKey);
+        Post post = posts.get(postKey);
+        assert post != null;
+        List<String> followersList = post.getFollowers();
+        int followerNumber = post.getFollowerNumber();
+
+        UserDao userDao = UserDaoImpl.getInstance();
+
+        // already followed
+        if (postVo.isFollowing()) {
+            return true;
+        } else {
+            //Add the user to the post follower list
+            postVo.setFollowing(true);
+            boolean addFollowerListResult = followersList.add(userKey);
+            post.setFollowers(followersList);
+
+            //Update number of followers
+            followerNumber++;
+            post.setFollowerNumber(followerNumber);
+
+            //Update database data
+            // TODO: this implementation is not sure
+            DatabaseReference postReference = DBConnector.getInstance().getDatabase().child("post");
+            postReference.child("users").child(postKey).child("followerNumber").setValue((long) followerNumber);
+            postReference.child("users").child(postKey).child("followers").setValue(followersList);
+
+            //Add the post to the user's following list
+            boolean addFollowingListResult = userDao.addFollowingPost(userKey, postKey);
+            return addFollowerListResult && addFollowingListResult;
+        }
     }
 
+    /**
+     * Retrieve the information of a post according to the postkey
+     * and convert it into a post instance using post.toPostVo
+     *
+     * @return the PostVo object containing the details of the post, or null
+     * @author u7793565    Qihua Huang
+     */
     @Override
     public PostVo viewPost(String postKey, String userKey) {
-        return null;
+        Post post = posts.get(postKey);
+        if (post == null) {
+            // if post or key does not exist
+            throw new IllegalArgumentException("Post with key " + postKey + " does not exist.");
+        }
+        return post.toPostVo(userKey);
     }
 
+    /**
+     * Create a new comment
+     *
+     * */
     @Override
     public void addComment(String commentKey, String postKey) {
+        Post post = posts.get(postKey);
+        List<String> comments = post.getComments();
+        comments.add(commentKey);
+        post.setComments(comments);
+        post.setCommentsNumber(post.getCommentsNumber() + 1);
 
+        // TODO reflect the changes in the database
     }
 
     /**
@@ -267,8 +389,8 @@ public class PostDaoImpl implements PostDao{
             intersection.retainAll(postKeyList);
             return getPostList(intersection);
         }
-        else if (postsGroupsByLocation.containsKey(group)) {
-            List<String> intersection = postsGroupsByLocation.get(group);
+        else if (postsGroupByLocation.containsKey(group)) {
+            List<String> intersection = postsGroupByLocation.get(group);
             assert intersection != null;
             intersection.retainAll(postKeyList);
             return getPostList(intersection);
