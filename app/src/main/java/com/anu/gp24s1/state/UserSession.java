@@ -55,8 +55,13 @@ public class UserSession {
         return null;
     }
 
+    /**
+     * Asks the user state to create a post
+     * @author  u7284324    Lachlan Stewart
+     * @see UserState#createPost
+     * */
     public boolean createPost(String title, String content, String tag, String location){
-        return true;
+        return userState.createPost(title, content, tag, location);
     }
 
     public boolean followPost(String postKey){
@@ -67,9 +72,14 @@ public class UserSession {
         return null;
     }
 
+    /**
+     * Asks the user state to add a comment
+     * @author  u7284324    Lachlan Stewart
+     * @see UserState#addComment
+     * */
     public boolean addComment(String postKey, String content)
     {
-        return true;
+        return userState.addComment(postKey, content);
     }
 
     public List<String> viewFollowingGroups()

@@ -38,6 +38,11 @@ public class LoginSession extends UserState{
         return null;
     }
 
+    /**
+     * Adds a post
+     *
+     * @author  u7284324    Lachlan Stewart
+     * */
     @Override
     public boolean createPost(String title, String content, String tag, String location) {
         return false;
