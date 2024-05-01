@@ -2,6 +2,7 @@ package com.anu.gp24s1;
 
 import static android.app.PendingIntent.getActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -25,7 +26,6 @@ import com.anu.gp24s1.dao.UserDaoImpl;
 import com.anu.gp24s1.databinding.ActivityMainBinding;
 import com.anu.gp24s1.ui.following.FollowingFragment;
 import com.anu.gp24s1.ui.home.HomeFragment;
-import com.anu.gp24s1.ui.new_post.NewPostFragment;
 import com.anu.gp24s1.ui.profile.ProfileFragment;
 import com.anu.gp24s1.ui.search.SearchFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -53,7 +53,8 @@ public class  MainActivity extends AppCompatActivity {
             } else if (itemId == R.id.navigation_search) {
                 replaceFragment(new SearchFragment());
             } else if (itemId == R.id.navigation_new_post) {
-                replaceFragment(new NewPostFragment());
+                Intent intent = new Intent(MainActivity.this, AddNewPostActivity.class);
+                startActivity(intent);
             } else if (itemId == R.id.navigation_following) {
                 replaceFragment(new FollowingFragment());
             } else if (itemId == R.id.navigation_profile) {
