@@ -261,12 +261,12 @@ public class PostDaoImpl implements PostDao {
             // TODO: Make an exception class for this?
             throw new Exception("Location does not exist");
         }
-        try {
-            Objects.requireNonNull(postsGroupsByLocation.get(location)).add(postKey);
-        } catch (NullPointerException e) {
-            // TODO: Make an exception class for this?
-            throw new Exception("Location does not exist");
-        }
+//        try {
+//            Objects.requireNonNull(postsGroupsByLocation.get(location)).add(postKey);
+//        } catch (NullPointerException e) {
+//            // TODO: Make an exception class for this?
+//            throw new Exception("Location does not exist");
+//        }
 
         return postKey;
     }
