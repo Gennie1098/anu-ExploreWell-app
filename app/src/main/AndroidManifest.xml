@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -11,36 +12,46 @@
         android:theme="@style/AppTheme">
 
         <!-- StartScreen is the launcher activity; it's the entry point of the app. -->
-        <activity
-            android:name=".StartScreen"
-            android:label="Start"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
+        <!-- <activity -->
+        <!-- android:name=".StartScreen" -->
+        <!-- android:label="Start" -->
+        <!-- android:exported="true"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.MAIN"/> -->
+        <!-- <category android:name="android.intent.category.LAUNCHER"/> -->
+        <!-- </intent-filter> -->
+        <!-- </activity> -->
 
-        <!-- LoginActivity is where users log in. -->
-        <activity
-            android:name=".ui.login.LoginActivity"
-            android:label="Login"
-            android:parentActivityName=".StartScreen"
-            android:exported="false">  <!-- Set to false if not intended to be accessed directly from outside the app. -->
-        </activity>
-
-<!--        &lt;!&ndash; SignUpActivity is for new users to sign up. &ndash;&gt;-->
-<!--        <activity-->
-<!--            android:name=".ui.login.SignUpActivity"-->
-<!--            android:label="Sign up"-->
-<!--            android:exported="false">  &lt;!&ndash; Set to false if not intended to be accessed directly from outside the app. &ndash;&gt;-->
-<!--        </activity>-->
-
-        <!-- Homepage is the main activity after login. -->
         <activity
             android:name=".MainActivity"
-            android:label="Homepage"
-            android:exported="true">  <!-- Set to true to potentially allow navigation from other apps or components. -->
+            android:exported="true"
+            android:label="Home">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity> <!-- LoginActivity is where users log in. -->
+
+        <activity
+            android:name=".ui.login.LoginActivity"
+            android:exported="false"
+            android:label="Login"
+            android:parentActivityName=".StartScreen"> <!-- Set to false if not intended to be accessed directly from outside the app. -->
+        </activity>
+
+<!--        &lt;!&ndash; Homepage is the main activity after login. &ndash;&gt;-->
+<!--        <activity-->
+<!--            android:name=".MainActivity"-->
+<!--            android:label="Homepage"-->
+<!--            android:exported="true">  &lt;!&ndash; Set to true to potentially allow navigation from other apps or components. &ndash;&gt;-->
+<!--        </activity>-->
+
+        <activity
+            android:name=".AddNewPostActivity"
+            android:exported="false"
+            android:label="New post"
+            android:parentActivityName=".MainActivity">
         </activity>
 
     </application>

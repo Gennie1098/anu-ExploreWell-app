@@ -51,7 +51,7 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="name">Name</string>
-    
+
     <!-- Example group names for following list -->
     <string-array name="exapmle_group_name_list.txt">
         <item>Hiking</item>
