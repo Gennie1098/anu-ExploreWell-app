@@ -1,8 +1,12 @@
 package com.anu.gp24s1;
 
+import static android.app.PendingIntent.getActivity;
+
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -21,7 +25,9 @@ import com.anu.gp24s1.dao.UserDaoImpl;
 import com.anu.gp24s1.databinding.ActivityMainBinding;
 import com.anu.gp24s1.ui.following.FollowingFragment;
 import com.anu.gp24s1.ui.home.HomeFragment;
+import com.anu.gp24s1.ui.new_post.NewPostFragment;
 import com.anu.gp24s1.ui.profile.ProfileFragment;
+import com.anu.gp24s1.ui.search.SearchFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class  MainActivity extends AppCompatActivity {
@@ -29,7 +35,7 @@ public class  MainActivity extends AppCompatActivity {
 //    private FloatingActionButton fab;
 //    private NavController navController;
 
-    ActivityMainBinding binding;
+    public ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +44,16 @@ public class  MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         replaceFragment(new HomeFragment());
 
+
         binding.bottomNavigationBar.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.navigation_home) {
                 replaceFragment(new HomeFragment());
+                setTitle("Home");
             } else if (itemId == R.id.navigation_search) {
-
+                replaceFragment(new SearchFragment());
+            } else if (itemId == R.id.navigation_new_post) {
+                replaceFragment(new NewPostFragment());
             } else if (itemId == R.id.navigation_following) {
                 replaceFragment(new FollowingFragment());
             } else if (itemId == R.id.navigation_profile) {
@@ -53,27 +63,18 @@ public class  MainActivity extends AppCompatActivity {
         });
     }
 
-    private void replaceFragment(Fragment fragment) {
+    public void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout, fragment);
         fragmentTransaction.commit();
     }
 
-//        setSupportActionBar(binding.toolbar);
-//
-//        fab = binding.fab;
-//
-//        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-//        navController.setGraph(R.navigation.nav_graph_java);
-//        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-//            if (destination.getId() == R.id.MainFragment) {
-//                fab.setVisibility(View.VISIBLE);
-//            } else {
-//                fab.setVisibility(View.GONE);
-//            }
-//        });
-//    }
+    // Update the title of the activity
+    public void updateTitle(String title) {
+        setTitle(title);
+    }
+
 
 
 }

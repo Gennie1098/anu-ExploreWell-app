@@ -12,6 +12,11 @@
         android:title="Search" />
 
     <item
+        android:id="@+id/navigation_new_post"
+        android:icon="@drawable/ic_new_post"
+        android:title= "" />
+
+    <item
         android:id="@+id/navigation_following"
         android:icon="@drawable/ic_outline_bookmarks_24"
         android:title="Following" />
