@@ -10,28 +10,35 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-//import com.anu.gp24s1.databinding.FragmentDashboardBinding;
+import com.anu.gp24s1.MainActivity;
+
+import com.anu.gp24s1.databinding.FragmentFollowingBinding;
 
 public class FollowingFragment extends Fragment {
 
-//    private FragmentDashboardBinding binding;
-//
-//    public View onCreateView(@NonNull LayoutInflater inflater,
-//                             ViewGroup container, Bundle savedInstanceState) {
-//        FollowingViewModel dashboardViewModel =
-//                new ViewModelProvider(this).get(FollowingViewModel.class);
-//
-//        binding = FragmentDashboardBinding.inflate(inflater, container, false);
-//        View root = binding.getRoot();
-//
-//        final TextView textView = binding.textDashboard;
-//        dashboardViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-//        return root;
-//    }
+    private FragmentFollowingBinding binding;
 
-//    @Override
-//    public void onDestroyView() {
-//        super.onDestroyView();
-//        binding = null;
-//    }
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+        FollowingViewModel dashboardViewModel =
+                new ViewModelProvider(this).get(FollowingViewModel.class);
+
+        binding = FragmentFollowingBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
+
+        return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Update the title of the activity when the fragment is resumed
+        ((MainActivity) requireActivity()).updateTitle("Following");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
 }
