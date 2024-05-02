@@ -53,9 +53,38 @@
     <string name="name">Name</string>
 
     <!-- Example group names for following list -->
-    <string-array name="exapmle_group_name_list.txt">
+    <string-array name="example_group_name_list.txt">
         <item>Hiking</item>
         <item>Canberra</item>
     </string-array>
+
+    <!-- Example user names for post list -->
+    <string-array name="example_user_name_list.txt">
+        <item>Gennie</item>
+        <item>Kai</item>
+        <item>Eva</item>
+    </string-array>
+
+    <!-- Example locations for post list -->
+    <string-array name="exapmle_location_list.txt">
+        <item>Canberra</item>
+        <item>Sydney</item>
+        <item>Tasmina</item>
+    </string-array>
+
+    <!-- Example activities for post list -->
+    <string-array name="exapmle_activities_list.txt">
+        <item>Walking</item>
+        <item>Hiking</item>
+        <item>Swimming</item>
+    </string-array>
+
+    <!-- Example post titles for post list -->
+    <string-array name="exapmle_post_titles_list.txt">
+        <item>Good for spring</item>
+        <item>Too tired!!!</item>
+        <item>amazaing!</item>
+    </string-array>
+
 
 </resources>
