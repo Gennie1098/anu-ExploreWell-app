@@ -248,8 +248,8 @@ public class PostDaoImpl implements PostDao {
         rootPost.insert(newPost); // may throw exception is post exists
 
         // Get database reference
-        DatabaseReference postReference = DBConnector.getInstance().getDatabase();
-        String postKey = postReference.push().getKey(); // Get Key
+        DatabaseReference dbReference = DBConnector.getInstance().getDatabase();
+        String postKey = dbReference.push().getKey(); // Get Key
 
         // Convert Post data to hashmap
         HashMap<String, Object> postValues = new HashMap<String, Object>();
@@ -270,7 +270,7 @@ public class PostDaoImpl implements PostDao {
         childUpdates.put("/user/" + userKey + "/ownPosts/" + postKey, true);
 
         // Execute updates
-        postReference.updateChildren(childUpdates);
+        dbReference.updateChildren(childUpdates);
 
         // Add postkey to local object
         newPost.setPostKey(postKey);
@@ -357,7 +357,10 @@ public class PostDaoImpl implements PostDao {
 
     /**
      * Create a new comment
+     * @author  u7284324    Lachlan Stewart
      *
+     * @param   commentKey  the key for the existing comment being added to an existing post
+     * @param   postKey     the key for the existing post that the comment is being added to
      * */
     @Override
     public void addComment(String commentKey, String postKey) {
@@ -365,9 +368,16 @@ public class PostDaoImpl implements PostDao {
         List<String> comments = post.getComments();
         comments.add(commentKey);
         post.setComments(comments);
-        post.setCommentsNumber(post.getCommentsNumber() + 1);
+        int newCommentNumber = post.getCommentsNumber() + 1
+        post.setCommentsNumber(newCommentNumber);
 
-        // TODO reflect the changes in the database
+        // reflect these changes in the database for the post only
+        DatabaseReference dbReference = DBConnector.getInstance().getDatabase();
+        HashMap<String, Object> childUpdates = new HashMap<String, Object>();
+        childUpdates.put("/post/" + postKey + "/commments/" + commentKey, true);
+        childUpdates.put("/post/" + postKey + "/commentsNumber", newCommentNumber);
+
+        dbReference.updateChildren(childUpdates);
     }
 
     /**
