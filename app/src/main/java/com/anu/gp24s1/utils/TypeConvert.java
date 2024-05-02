@@ -1,5 +1,7 @@
 package com.anu.gp24s1.utils;
 
+import android.annotation.SuppressLint;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -12,13 +14,13 @@ public class TypeConvert {
 
     /**
      * Converts a string representing a date and time in the format "yyyy-MM-dd HH:mm:ss" to a Date object.
-     * @param dateString
-     * @return date
+     * @param dateString String
+     * @return date Date
      * @author Qinjue Wu
      */
     public static Date strToDate(String dateString)
     {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = null;
         try {
             date = dateFormat.parse(dateString);

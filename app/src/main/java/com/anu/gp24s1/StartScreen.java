@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.anu.gp24s1.state.UserSession;
 import com.anu.gp24s1.ui.login.LoginActivity;
 
 public class StartScreen extends AppCompatActivity {
@@ -15,7 +16,7 @@ public class StartScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_screen);
-
+        UserSession userSession = UserSession.getInstance();
         Button loginbtn = findViewById(R.id.LogInButton);
         loginbtn.setOnClickListener(view -> {
             startActivity(new Intent(StartScreen.this, LoginActivity.class));

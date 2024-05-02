@@ -13,7 +13,7 @@ public class DBConnector {
     private DatabaseReference database;
 
     private DBConnector(){
-        database = FirebaseDatabase.getInstance().getReference().child("users");
+        database = FirebaseDatabase.getInstance().getReference();
     };
 
     /**
