@@ -5,6 +5,7 @@ import android.app.Activity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -22,6 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.anu.gp24s1.MainActivity;
 import com.anu.gp24s1.R;
 import com.anu.gp24s1.ui.login.LoginViewModel;
 import com.anu.gp24s1.ui.login.LoginViewModelFactory;
@@ -124,10 +126,16 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    // TODO : initiate successful logged in experience
     private void updateUiWithUser(LoggedInUserView model) {
         String welcome = getString(R.string.welcome) + model.getDisplayName();
-        // TODO : initiate successful logged in experience
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
+
+        // Create an Intent to start MainActivity (aka Homepage)
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.putExtra("USER_NAME", model.getDisplayName());
+        startActivity(intent);
+        finish();
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {
