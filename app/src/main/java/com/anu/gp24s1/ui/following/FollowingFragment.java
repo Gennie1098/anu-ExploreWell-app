@@ -55,14 +55,12 @@ public class FollowingFragment extends Fragment {
     ArrayList<FollowingModel> followingModels = new ArrayList<>();
     int[] groupIcon = {R.drawable.ic_activities, R.drawable.ic_location};
 
-    //TODO: Set up group data
-    // check this video: https://www.youtube.com/watch?v=Mc0XT58A1Z4
+    /**
+     * Get the groups of the user's following posts, show the group name and corresponding icons.
+     * @author Qinjue Wu
+     */
     private void setUpFollowingModel() {
         List<String> groups = UserSession.getInstance().viewFollowingGroups();
-//        String[] groupName = getResources().getStringArray(R.array.exapmle_group_name_list_txt);
-//        for (int i = 0; i < groupName.length; i++) { // 2 arrays should be equal length
-//            followingModels.add(new FollowingModel(groupName[i], groupIcon[i]));
-//        }
         if(groups == null || groups.size() == 0) {
             Toast.makeText(getContext(),"No following posts!", Toast.LENGTH_LONG).show();
         }

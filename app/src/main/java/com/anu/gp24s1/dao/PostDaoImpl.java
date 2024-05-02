@@ -45,6 +45,8 @@ public class PostDaoImpl implements PostDao {
         {
             instance = new PostDaoImpl();
             posts = new HashMap<String,Post>();
+            postsGroupByTag = new HashMap<String, List<String>>();
+            postsGroupByLocation = new HashMap<String, List<String>>();
             DatabaseReference postReference = DBConnector.getInstance().getDatabase().child("post");
             postReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -448,11 +450,21 @@ public class PostDaoImpl implements PostDao {
         return posts;
     }
 
+    /**
+     * Get all tags in the database.
+     * @return Set<String>
+     * @author Qinjue Wu
+     */
     @Override
     public Set<String> getAllTags() {
         return postsGroupByTag.keySet();
     }
 
+    /**
+     * Get all locations in the database.
+     * @return Set<String>
+     * @author Qinjue Wu
+     */
     @Override
     public Set<String> getAllLocations() {
         return postsGroupByLocation.keySet();
