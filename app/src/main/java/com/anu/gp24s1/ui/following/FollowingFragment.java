@@ -40,6 +40,7 @@ public class FollowingFragment extends Fragment {
         View root = binding.getRoot();
 
         RecyclerView recyclerView = binding.followingGroupsList;
+
         setUpFollowingModel();
         followingListAdapter adapter = new followingListAdapter(getActivity(), followingModels);
         recyclerView.setAdapter(adapter);
