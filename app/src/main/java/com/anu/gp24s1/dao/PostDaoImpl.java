@@ -11,6 +11,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -19,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TimeZone;
 
 public class PostDaoImpl implements PostDao {
 
@@ -82,7 +85,7 @@ public class PostDaoImpl implements PostDao {
                             try {
                                 rootPost = rootPost.insert(post);
                             } catch (Exception e) {
-                                throw new RuntimeException(e);
+                                // throw new RuntimeException(e);
                             }
                         }
                     }
@@ -210,8 +213,10 @@ public class PostDaoImpl implements PostDao {
     }
 
     /**
-     * Add a post
-     * @author  u7284324    Lachlan Stewart
+     * Firebase code is based on:
+     * <a href="https://firebase.google.com/docs/database/android/read-and-write#updating_or_deleting_data">...</a>
+     *
+     * @author u7284324    Lachlan Stewart
      *
      * @param   title   The title of the post
      * @param   content The content of the main body of the post
@@ -228,18 +233,46 @@ public class PostDaoImpl implements PostDao {
         newPost.setTag(tag);
         newPost.setLocation(location);
         newPost.setAuthorKey(userKey);
-        newPost.setPublishTime(new Date());
+
+        Date publishDate = new Date(); // timezone independent
+
+        newPost.setPublishTime(publishDate);
+        newPost.setFollowerNumber(0);
+        newPost.setCommentsNumber(0);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sdf.setTimeZone(TimeZone.getTimeZone(ZoneId.of("UTC")));
+        String dateString = sdf.format(publishDate);
 
         // Add to root
         rootPost.insert(newPost); // may throw exception is post exists
 
-        // Add to database
-        // TODO
+        // Get database reference
+        DatabaseReference postReference = DBConnector.getInstance().getDatabase();
+        String postKey = postReference.push().getKey(); // Get Key
 
-        // Get Key
-        String postKey = ""; // TODO
+        // Convert Post data to hashmap
+        HashMap<String, Object> postValues = new HashMap<String, Object>();
+        postValues.put("title", title);
+        postValues.put("content", content);
+        postValues.put("tag", tag);
+        postValues.put("location", location);
+        postValues.put("authorKey", userKey);
+        postValues.put("publishTime", dateString);
+        postValues.put("followerNumber", 0);
+        postValues.put("commentsNumber", 0);
+        postValues.put("followers", new HashMap<String, Boolean>());
+        postValues.put("comments", new HashMap<String, Boolean>());
 
-        // Add postkey
+        // Construct updates
+        HashMap<String, Object> childUpdates = new HashMap<String, Object>();
+        childUpdates.put("/posts/" + postKey, postValues);
+        childUpdates.put("/user/" + userKey + "/ownPosts/" + postKey, true);
+
+        // Execute updates
+        postReference.updateChildren(childUpdates);
+
+        // Add postkey to local object
         newPost.setPostKey(postKey);
 
         // Add to other datastructures:
@@ -250,7 +283,6 @@ public class PostDaoImpl implements PostDao {
         try {
             Objects.requireNonNull(postsGroupByTag.get(tag)).add(postKey);
         } catch (NullPointerException e) {
-            // TODO: Make an exception class for this?
             throw new Exception("Tag does not exist");
         }
 
@@ -258,15 +290,8 @@ public class PostDaoImpl implements PostDao {
         try {
             Objects.requireNonNull(postsGroupByLocation.get(location)).add(postKey);
         } catch (NullPointerException e) {
-            // TODO: Make an exception class for this?
             throw new Exception("Location does not exist");
         }
-//        try {
-//            Objects.requireNonNull(postsGroupsByLocation.get(location)).add(postKey);
-//        } catch (NullPointerException e) {
-//            // TODO: Make an exception class for this?
-//            throw new Exception("Location does not exist");
-//        }
 
         return postKey;
     }
