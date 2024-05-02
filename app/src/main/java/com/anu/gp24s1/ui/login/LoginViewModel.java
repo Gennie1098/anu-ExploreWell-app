@@ -1,44 +1,48 @@
 package com.anu.gp24s1.ui.login;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-
+import android.app.Application;
 import android.util.Patterns;
 
-import com.anu.gp24s1.data.LoginRepository;
-import com.anu.gp24s1.data.Result;
-import com.anu.gp24s1.data.model.LoggedInUser;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.anu.gp24s1.R;
+import com.anu.gp24s1.data.AuthRepository;
+import com.google.firebase.auth.FirebaseUser;
 
-public class LoginViewModel extends ViewModel {
+public class LoginViewModel extends AndroidViewModel {
 
-    private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
-    private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
-    private LoginRepository loginRepository;
+    private final AuthRepository authRepository;
+    private final MutableLiveData<FirebaseUser> userLiveData;
+    private final MutableLiveData<Boolean> loggedOutLiveData;
+    private final MutableLiveData<LoginFormState> loginFormState;
+    private final MutableLiveData<LoginResult> loginResult;
 
-    LoginViewModel(LoginRepository loginRepository) {
-        this.loginRepository = loginRepository;
-    }
+    public LoginViewModel(Application application) {
+        super(application);
 
-    LiveData<LoginFormState> getLoginFormState() {
-        return loginFormState;
-    }
-
-    LiveData<LoginResult> getLoginResult() {
-        return loginResult;
+        this.authRepository = AuthRepository.getInstance();
+        this.userLiveData = authRepository.getUserLiveData();
+        this.loggedOutLiveData = authRepository.getLoggedOutLiveData();
+        this.loginFormState = new MutableLiveData<>();
+        this.loginResult = new MutableLiveData<>();
     }
 
     public void login(String username, String password) {
         // can be launched in a separate asynchronous job
-        Result<LoggedInUser> result = loginRepository.login(username, password);
+        authRepository.login(username, password);
 
-        if (result instanceof Result.Success) {
-            LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
-            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
+        FirebaseUser currentUser = userLiveData.getValue();
+        if (currentUser != null) {
+            loginResult.setValue(new LoginResult(currentUser.getDisplayName()));
         } else {
             loginResult.setValue(new LoginResult(R.string.login_failed));
         }
+    }
+
+    public void logout() {
+        authRepository.logout();
     }
 
     public void loginDataChanged(String username, String password) {
@@ -66,5 +70,21 @@ public class LoginViewModel extends ViewModel {
     // A placeholder password validation check
     private boolean isPasswordValid(String password) {
         return password != null && password.trim().length() > 5;
+    }
+
+    public LiveData<LoginFormState> getLoginFormState() {
+        return loginFormState;
+    }
+
+    public LiveData<LoginResult> getLoginResult() {
+        return loginResult;
+    }
+
+    public MutableLiveData<FirebaseUser> getUserLiveData() {
+        return userLiveData;
+    }
+
+    public MutableLiveData<Boolean> getIsLoggedOut() {
+        return loggedOutLiveData;
     }
 }
