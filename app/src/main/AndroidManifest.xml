@@ -11,27 +11,27 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!-- StartScreen is the launcher activity; it's the entry point of the app. -->
-         <activity
-             android:name=".StartScreen"
-             android:label="Start"
-             android:exported="true">
-             <intent-filter>
-                 <action android:name="android.intent.action.MAIN"/>
-                 <category android:name="android.intent.category.LAUNCHER"/>
-             </intent-filter>
-         </activity>
+<!--        &lt;!&ndash; StartScreen is the launcher activity; it's the entry point of the app. &ndash;&gt;-->
+<!--         <activity-->
+<!--             android:name=".StartScreen"-->
+<!--             android:label="Start"-->
+<!--             android:exported="true">-->
+<!--             <intent-filter>-->
+<!--                 <action android:name="android.intent.action.MAIN"/>-->
+<!--                 <category android:name="android.intent.category.LAUNCHER"/>-->
+<!--             </intent-filter>-->
+<!--         </activity>-->
 
-<!--        <activity-->
-<!--            android:name=".MainActivity"-->
-<!--            android:exported="true"-->
-<!--            android:label="Home">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="Home">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-<!--        </activity> -->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <!-- LoginActivity is where users log in. -->
         <activity
@@ -41,12 +41,12 @@
             android:parentActivityName=".StartScreen"> <!-- Set to false if not intended to be accessed directly from outside the app. -->
         </activity>
 
-        <!-- Homepage is the main activity after login. -->
-        <activity
-            android:name=".MainActivity"
-            android:label="Homepage"
-            android:exported="true">  <!-- Set to true to potentially allow navigation from other apps or components. -->
-        </activity>
+<!--        &lt;!&ndash; Homepage is the main activity after login. &ndash;&gt;-->
+<!--        <activity-->
+<!--            android:name=".MainActivity"-->
+<!--            android:label="Homepage"-->
+<!--            android:exported="true">  &lt;!&ndash; Set to true to potentially allow navigation from other apps or components. &ndash;&gt;-->
+<!--        </activity>-->
 
         <activity
             android:name=".AddNewPostActivity"
