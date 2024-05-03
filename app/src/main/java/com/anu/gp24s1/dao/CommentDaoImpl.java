@@ -10,12 +10,16 @@ import com.anu.gp24s1.utils.TypeConvert;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class CommentDaoImpl implements CommentDao{
 
@@ -69,18 +73,35 @@ public class CommentDaoImpl implements CommentDao{
     @Override
     public String addComment(String content, String postKey, String userKey) {
 
+        // Get current date
+        Date publishDate = new Date(); // timezone independent
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sdf.setTimeZone(TimeZone.getTimeZone(ZoneId.of("UTC")));
+        String dateString = sdf.format(publishDate);
+
         // Create a new comment
         Comment newComment = new Comment();
-        newComment.setCommentTime(new Date());
+        newComment.setCommentTime(publishDate);
         newComment.setContent(content);
         newComment.setPostKey(postKey);
         newComment.setAuthorKey(userKey);
 
-        // Add to database
-        // TODO
+        // Get database reference
+        DatabaseReference dbReference = DBConnector.getInstance().getDatabase();
+        HashMap<String, Object> childUpdates = new HashMap<String, Object>();
+        String commentKey = dbReference.child("comments").push().getKey();
 
-        // Get key
-        String commentKey = ""; // TODO
+        // Create Hashmap with comment data:
+        HashMap<String, Object> commentValues = new HashMap<String, Object>();
+        commentValues.put("content", content);
+        commentValues.put("postKey", postKey);
+        commentValues.put("authorKey", userKey);
+        commentValues.put("commentTime", dateString);
+
+        // Update in database
+        childUpdates.put("/comments/" + commentKey, commentValues);
+
+        dbReference.updateChildren(childUpdates);
 
         // Add key to comment:
         newComment.setCommentKey(commentKey);
@@ -88,6 +109,6 @@ public class CommentDaoImpl implements CommentDao{
         // Add to comments:
         comments.put(commentKey, newComment);
 
-        return null;
+        return commentKey;
     }
 }

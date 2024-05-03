@@ -226,6 +226,13 @@ public class PostDaoImpl implements PostDao {
      * */
     @Override
     public String createPost(String title, String content, String tag, String location, String userKey) throws Exception {
+
+        // Get current date
+        Date publishDate = new Date(); // timezone independent
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sdf.setTimeZone(TimeZone.getTimeZone(ZoneId.of("UTC")));
+        String dateString = sdf.format(publishDate);
+
         // Create new post
         Post newPost = new Post();
         newPost.setTitle(title);
@@ -233,25 +240,18 @@ public class PostDaoImpl implements PostDao {
         newPost.setTag(tag);
         newPost.setLocation(location);
         newPost.setAuthorKey(userKey);
-
-        Date publishDate = new Date(); // timezone independent
-
         newPost.setPublishTime(publishDate);
         newPost.setFollowerNumber(0);
         newPost.setCommentsNumber(0);
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        sdf.setTimeZone(TimeZone.getTimeZone(ZoneId.of("UTC")));
-        String dateString = sdf.format(publishDate);
 
         // Add to root
         rootPost.insert(newPost); // may throw exception is post exists
 
         // Get database reference
         DatabaseReference dbReference = DBConnector.getInstance().getDatabase();
-        String postKey = dbReference.push().getKey(); // Get Key
+        String postKey = dbReference.child("post").push().getKey(); // Get Key
 
-        // Convert Post data to hashmap
+        // Create hashmap with post data
         HashMap<String, Object> postValues = new HashMap<String, Object>();
         postValues.put("title", title);
         postValues.put("content", content);
@@ -264,12 +264,11 @@ public class PostDaoImpl implements PostDao {
         postValues.put("followers", new HashMap<String, Boolean>());
         postValues.put("comments", new HashMap<String, Boolean>());
 
-        // Construct updates
+        // Update in database
         HashMap<String, Object> childUpdates = new HashMap<String, Object>();
         childUpdates.put("/posts/" + postKey, postValues);
         childUpdates.put("/user/" + userKey + "/ownPosts/" + postKey, true);
 
-        // Execute updates
         dbReference.updateChildren(childUpdates);
 
         // Add postkey to local object
