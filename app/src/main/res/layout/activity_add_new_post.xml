@@ -64,7 +64,7 @@
             android:text="Activity" />
     </RadioGroup>
 
-    <EditText
+    <com.anu.gp24s1.ui.PostMultiAutoCompleteTextView
         android:id="@+id/editTextContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -73,9 +73,24 @@
         android:inputType="textMultiLine"
         app:layout_constraintBottom_toTopOf="@+id/buttonPost"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/radioGroupTags"
         app:layout_constraintVertical_bias="0.0" />
+
+<!--    <MultiAutoCompleteTextView-->
+<!--        android:id="@+id/editTextContent"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:gravity="top"-->
+<!--        android:hint="Enter content"-->
+<!--        android:inputType="textMultiLine"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/buttonPost"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/radioGroupTags"-->
+<!--        app:layout_constraintVertical_bias="0.0" />-->
 
     <Button
         android:id="@+id/buttonPost"
