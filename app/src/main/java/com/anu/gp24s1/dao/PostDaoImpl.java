@@ -36,7 +36,7 @@ public class PostDaoImpl implements PostDao {
 
     private static HashMap<String,List<String>> postsGroupByLocation;
 
-    private PostDaoImpl(){};
+    private PostDaoImpl(){}
 
     /**
      * Using singleton design pattern to ensure only get all posts,tags,locations data once.
@@ -48,6 +48,8 @@ public class PostDaoImpl implements PostDao {
         {
             instance = new PostDaoImpl();
             posts = new HashMap<String,Post>();
+            postsGroupByTag = new HashMap<String, List<String>>();
+            postsGroupByLocation = new HashMap<String, List<String>>();
             DatabaseReference postReference = DBConnector.getInstance().getDatabase().child("post");
             postReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -486,5 +488,25 @@ public class PostDaoImpl implements PostDao {
         };
         posts.sort(comparatorPost);
         return posts;
+    }
+
+    /**
+     * Get all tags in the database.
+     * @return Set<String>
+     * @author Qinjue Wu
+     */
+    @Override
+    public Set<String> getAllTags() {
+        return postsGroupByTag.keySet();
+    }
+
+    /**
+     * Get all locations in the database.
+     * @return Set<String>
+     * @author Qinjue Wu
+     */
+    @Override
+    public Set<String> getAllLocations() {
+        return postsGroupByLocation.keySet();
     }
 }

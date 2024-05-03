@@ -4,6 +4,7 @@ import com.anu.gp24s1.pojo.Post;
 import com.anu.gp24s1.pojo.vo.PostVo;
 
 import java.util.List;
+import java.util.Set;
 
 public interface PostDao {
 
@@ -45,4 +46,8 @@ public interface PostDao {
      * @author Qinjue Wu
      */
     public List<PostVo> viewListOfPosts(List<Post> posts,String userKey);
+
+    public Set<String> getAllTags();
+
+    public Set<String> getAllLocations();
 }

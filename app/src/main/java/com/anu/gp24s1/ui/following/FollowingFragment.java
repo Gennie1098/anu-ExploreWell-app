@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,9 +18,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.anu.gp24s1.MainActivity;
 
 import com.anu.gp24s1.R;
+import com.anu.gp24s1.dao.PostDao;
+import com.anu.gp24s1.dao.PostDaoImpl;
 import com.anu.gp24s1.databinding.FragmentFollowingBinding;
+import com.anu.gp24s1.pojo.Post;
+import com.anu.gp24s1.state.UserSession;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FollowingFragment extends Fragment {
 
@@ -34,6 +40,7 @@ public class FollowingFragment extends Fragment {
         View root = binding.getRoot();
 
         RecyclerView recyclerView = binding.followingGroupsList;
+
         setUpFollowingModel();
         followingListAdapter adapter = new followingListAdapter(getActivity(), followingModels);
         recyclerView.setAdapter(adapter);
@@ -49,12 +56,26 @@ public class FollowingFragment extends Fragment {
     ArrayList<FollowingModel> followingModels = new ArrayList<>();
     int[] groupIcon = {R.drawable.ic_activities, R.drawable.ic_location};
 
-    //TODO: Set up group data
-    // check this video: https://www.youtube.com/watch?v=Mc0XT58A1Z4
+    /**
+     * Get the groups of the user's following posts, show the group name and corresponding icons.
+     * @author Qinjue Wu
+     */
     private void setUpFollowingModel() {
-        String[] groupName = getResources().getStringArray(R.array.exapmle_group_name_list_txt);
-        for (int i = 0; i < groupName.length; i++) { // 2 arrays should be equal length
-            followingModels.add(new FollowingModel(groupName[i], groupIcon[i]));
+        List<String> groups = UserSession.getInstance().viewFollowingGroups();
+        if(groups == null || groups.size() == 0) {
+            Toast.makeText(getContext(),"No following posts!", Toast.LENGTH_LONG).show();
+        }
+        else {
+            for (int i = 0; i < groups.size(); ++i) {
+                String groupName = groups.get(i);
+                PostDao postDao = PostDaoImpl.getInstance();
+                if(postDao.getAllTags().contains(groupName)) {
+                    followingModels.add(new FollowingModel(groups.get(i),groupIcon[0]));
+                }
+                else if(postDao.getAllLocations().contains(groupName)) {
+                    followingModels.add(new FollowingModel(groups.get(i),groupIcon[1]));
+                }
+            }
         }
     }
 

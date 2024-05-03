@@ -3,6 +3,7 @@
     <color name="primaryGreen">#043F2E</color>
     <color name="highlightGreen">#C7F169</color>
     <color name="backgroundGreen">#EEF2E3</color>
+    <color name="lighGreen">#CBF0C7</color>
 
     <color name="primary_text">#1f1f1f</color>
     <color name="secondary_text">#043F2E</color>
