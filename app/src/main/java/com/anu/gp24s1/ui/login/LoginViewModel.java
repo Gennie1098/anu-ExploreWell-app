@@ -15,7 +15,6 @@ public class LoginViewModel extends AndroidViewModel {
 
     private final AuthRepository authRepository;
     private final MutableLiveData<FirebaseUser> userLiveData;
-    private final MutableLiveData<Boolean> loggedOutLiveData;
     private final MutableLiveData<LoginFormState> loginFormState;
     private final MutableLiveData<LoginResult> loginResult;
 
@@ -24,25 +23,13 @@ public class LoginViewModel extends AndroidViewModel {
 
         this.authRepository = AuthRepository.getInstance();
         this.userLiveData = authRepository.getUserLiveData();
-        this.loggedOutLiveData = authRepository.getLoggedOutLiveData();
+        this.loginResult = authRepository.getLoginResult();
         this.loginFormState = new MutableLiveData<>();
-        this.loginResult = new MutableLiveData<>();
     }
 
     public void login(String username, String password) {
         // can be launched in a separate asynchronous job
         authRepository.login(username, password);
-
-        FirebaseUser currentUser = userLiveData.getValue();
-        if (currentUser != null) {
-            loginResult.setValue(new LoginResult(currentUser.getDisplayName()));
-        } else {
-            loginResult.setValue(new LoginResult(R.string.login_failed));
-        }
-    }
-
-    public void logout() {
-        authRepository.logout();
     }
 
     public void loginDataChanged(String username, String password) {
@@ -84,7 +71,4 @@ public class LoginViewModel extends AndroidViewModel {
         return userLiveData;
     }
 
-    public MutableLiveData<Boolean> getIsLoggedOut() {
-        return loggedOutLiveData;
-    }
 }

@@ -1,30 +1,34 @@
 package com.anu.gp24s1.ui.profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.anu.gp24s1.MainActivity;
-import com.anu.gp24s1.databinding.FragmentHomeBinding;
+import com.anu.gp24s1.R;
+import com.anu.gp24s1.StartScreen;
+import com.anu.gp24s1.data.AuthRepository;
 import com.anu.gp24s1.databinding.FragmentProfileBinding;
-import com.anu.gp24s1.ui.home.HomeViewModel;
-import com.anu.gp24s1.ui.search.SearchFragment;
+import com.anu.gp24s1.ui.login.LoginActivity;
 
 public class ProfileFragment extends Fragment {
 
     private FragmentProfileBinding binding;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        ProfileViewModel homeViewModel =
-                new ViewModelProvider(this).get(ProfileViewModel.class);
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ProfileViewModel homeViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
 
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -36,15 +40,21 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Setup the button click listener, open search page when click to search bar
-        binding.accountInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Ensure the activity is correctly cast to MainActivity
-                if (getActivity() instanceof MainActivity) {
-                    ((MainActivity) getActivity()).replaceFragment(new AccountInfoFragment());
-                    ((MainActivity) getActivity()).binding.bottomNavigationBar.getMenu().getItem(4).setChecked(true);
-                }
+        binding.accountInfo.setOnClickListener(v -> {
+            // Ensure the activity is correctly cast to MainActivity
+            if (getActivity() instanceof MainActivity) {
+                ((MainActivity) getActivity()).replaceFragment(new AccountInfoFragment());
+                ((MainActivity) getActivity()).binding.bottomNavigationBar.getMenu().getItem(4).setChecked(true);
             }
+        });
+
+        binding.logOut.setOnClickListener(v -> {
+            AuthRepository.getInstance().logout();
+            Toast.makeText(getContext(), "User Logged Out", Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(getActivity(), StartScreen.class);
+            startActivity(intent);
+            requireActivity().finish();
         });
     }
 
@@ -60,4 +70,5 @@ public class ProfileFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
 }

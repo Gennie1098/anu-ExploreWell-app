@@ -11,10 +11,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 
 import com.anu.gp24s1.MainActivity;
 import com.anu.gp24s1.R;
@@ -81,14 +79,6 @@ public class LoginActivity extends AppCompatActivity {
         loginViewModel.getUserLiveData().observe(this, firebaseUser -> {
             if (firebaseUser != null) {
                 Toast.makeText(getApplication(), "Logged In User: " + firebaseUser.getEmail(), Toast.LENGTH_SHORT).show();
-                updateUiWithUser(firebaseUser.getEmail());
-            }
-        });
-
-        loginViewModel.getIsLoggedOut().observe(this, loggedOut -> {
-            if (loggedOut) {
-                Toast.makeText(getApplication(), "User Logged Out", Toast.LENGTH_SHORT).show();
-                Navigation.findNavController(getCurrentFocus()).navigate(R.id.action_navigation_home_to_startScreen);
             }
         });
 
@@ -97,30 +87,25 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
             loadingProgressBar.setVisibility(View.GONE);
-            if (loginResult.getError() != null) {
-                showLoginFailed(loginResult.getError());
-            }
-            if (loginResult.getSuccess() != null) {
-                updateUiWithUser(loginResult.getSuccess());
+            if (loginResult.isSuccess()) {
+                updateUiWithUser(loginViewModel.getUserLiveData().getValue().getEmail());
                 setResult(Activity.RESULT_OK);
                 //Complete and destroy login activity once successful
                 finish();
+            } else {
+                Toast.makeText(getApplication(), R.string.login_failed, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     // TODO : initiate successful logged in experience
     private void updateUiWithUser(String username) {
-        Toast.makeText(getApplication(), getString(R.string.welcome), Toast.LENGTH_LONG).show();
-
         // Create an Intent to start MainActivity (aka Homepage)
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.putExtra("USER_NAME", username);
         startActivity(intent);
-        finish();
+
+        Toast.makeText(getApplication(), getString(R.string.welcome), Toast.LENGTH_LONG).show();
     }
 
-    private void showLoginFailed(@StringRes Integer errorString) {
-        Toast.makeText(getApplication(), errorString, Toast.LENGTH_SHORT).show();
-    }
 }
