@@ -1,7 +1,10 @@
 package com.anu.gp24s1.data;
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 
+import com.anu.gp24s1.ui.login.LoginResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -11,21 +14,22 @@ import com.google.firebase.auth.FirebaseUser;
  */
 public class AuthRepository {
 
+    private static final String TAG = "AuthRepository";
+
     private static AuthRepository instance;
 
     private final FirebaseAuth firebaseAuth;
     private final MutableLiveData<FirebaseUser> userLiveData;
-    private final MutableLiveData<Boolean> loggedOutLiveData;
+    private final MutableLiveData<LoginResult> loginResult;
 
     private AuthRepository() {
         this.firebaseAuth = FirebaseAuth.getInstance();
         this.userLiveData = new MutableLiveData<>();
-        this.loggedOutLiveData = new MutableLiveData<>();
+        this.loginResult = new MutableLiveData<>();
 
         if (firebaseAuth.getCurrentUser() != null) {
             firebaseAuth.signOut();
-//            userLiveData.postValue(firebaseAuth.getCurrentUser());
-//            loggedOutLiveData.postValue(false);
+            userLiveData.postValue(null);
         }
     }
 
@@ -41,9 +45,10 @@ public class AuthRepository {
             .addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     userLiveData.postValue(firebaseAuth.getCurrentUser());
-                    loggedOutLiveData.postValue(false);
+                    loginResult.postValue(new LoginResult(LoginResult.Status.SUCCESS));
                 } else {
-                    System.out.println("Registration Failure: " + task.getException().getMessage());
+                    loginResult.postValue(new LoginResult(LoginResult.Status.FAIL));
+                    Log.e(TAG, "Registration Failure: " + task.getException().getMessage());
                 }
             });
     }
@@ -53,23 +58,25 @@ public class AuthRepository {
             .addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     userLiveData.postValue(firebaseAuth.getCurrentUser());
-                    loggedOutLiveData.postValue(false);
+                    loginResult.postValue(new LoginResult(LoginResult.Status.SUCCESS));
                 } else {
-                    System.out.println("Login Failure: " + task.getException().getMessage());
+                    loginResult.postValue(new LoginResult(LoginResult.Status.FAIL));
+                    Log.e(TAG, "Login Failure: " + task.getException().getMessage());
                 }
             });
     }
 
     public void logout() {
         firebaseAuth.signOut();
-        loggedOutLiveData.postValue(true);
+        userLiveData.postValue(null);
     }
 
     public MutableLiveData<FirebaseUser> getUserLiveData() {
         return userLiveData;
     }
 
-    public MutableLiveData<Boolean> getLoggedOutLiveData() {
-        return loggedOutLiveData;
+    public MutableLiveData<LoginResult> getLoginResult() {
+        return loginResult;
     }
+
 }

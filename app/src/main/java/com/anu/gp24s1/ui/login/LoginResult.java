@@ -1,31 +1,19 @@
 package com.anu.gp24s1.ui.login;
 
-import androidx.annotation.Nullable;
-
-/**
- * Authentication result : success (user details) or error message.
- */
-class LoginResult {
-    @Nullable
-    private String success;
-    @Nullable
-    private Integer error;
-
-    LoginResult(@Nullable Integer error) {
-        this.error = error;
+public class LoginResult {
+    public enum Status {
+        SUCCESS,
+        FAIL
     }
 
-    LoginResult(@Nullable String success) {
-        this.success = success;
+    private Status status;
+
+    public LoginResult(Status status) {
+        this.status = status;
     }
 
-    @Nullable
-    String getSuccess() {
-        return success;
+    public boolean isSuccess() {
+        return status.equals(Status.SUCCESS);
     }
 
-    @Nullable
-    Integer getError() {
-        return error;
-    }
 }
