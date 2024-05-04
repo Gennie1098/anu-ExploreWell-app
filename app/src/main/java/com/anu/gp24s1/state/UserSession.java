@@ -16,6 +16,8 @@ public class UserSession {
     //current user state of this session
     private UserState userState;
 
+    private static UserSession instance;
+
     //the key of current user
     private String userKey;
 
@@ -23,9 +25,18 @@ public class UserSession {
      * Initializes the user session with a default state of LogoutSession
      * @author Qinjue Wu
      */
-    public UserSession() {
+    private UserSession() {
         UserState defaultState = new LogoutSession(this);
         changeState(defaultState);
+    }
+
+    public static UserSession getInstance()
+    {
+        if(instance == null)
+        {
+            instance = new UserSession();
+        }
+        return instance;
     }
 
     public String getUserKey() {

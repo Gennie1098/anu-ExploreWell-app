@@ -22,7 +22,7 @@ import java.util.Set;
 
 public class PostDaoImpl implements PostDao {
 
-    private static final int RECOMMENDATION_NUMBER = 3;
+    private static final int RECOMMENDATION_NUMBER = 5;
     private static PostDaoImpl instance;
 
     private static Post rootPost;
@@ -33,7 +33,7 @@ public class PostDaoImpl implements PostDao {
 
     private static HashMap<String,List<String>> postsGroupByLocation;
 
-    private PostDaoImpl(){};
+    private PostDaoImpl(){}
 
     /**
      * Using singleton design pattern to ensure only get all posts,tags,locations data once.
@@ -45,6 +45,8 @@ public class PostDaoImpl implements PostDao {
         {
             instance = new PostDaoImpl();
             posts = new HashMap<String,Post>();
+            postsGroupByTag = new HashMap<String, List<String>>();
+            postsGroupByLocation = new HashMap<String, List<String>>();
             DatabaseReference postReference = DBConnector.getInstance().getDatabase().child("post");
             postReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -261,12 +263,6 @@ public class PostDaoImpl implements PostDao {
             // TODO: Make an exception class for this?
             throw new Exception("Location does not exist");
         }
-//        try {
-//            Objects.requireNonNull(postsGroupsByLocation.get(location)).add(postKey);
-//        } catch (NullPointerException e) {
-//            // TODO: Make an exception class for this?
-//            throw new Exception("Location does not exist");
-//        }
 
         return postKey;
     }
@@ -412,6 +408,9 @@ public class PostDaoImpl implements PostDao {
      */
     @Override
     public List<PostVo> viewListOfPosts(List<Post> postsList, String userKey) {
+        if(postsList == null || postsList.size() == 0) {
+            return null;
+        }
         List<PostVo> postVoList = new ArrayList<>();
         for (Post post : postsList) {
             postVoList.add(post.toPostVo(userKey));
@@ -452,5 +451,25 @@ public class PostDaoImpl implements PostDao {
         };
         posts.sort(comparatorPost);
         return posts;
+    }
+
+    /**
+     * Get all tags in the database.
+     * @return Set<String>
+     * @author Qinjue Wu
+     */
+    @Override
+    public Set<String> getAllTags() {
+        return postsGroupByTag.keySet();
+    }
+
+    /**
+     * Get all locations in the database.
+     * @return Set<String>
+     * @author Qinjue Wu
+     */
+    @Override
+    public Set<String> getAllLocations() {
+        return postsGroupByLocation.keySet();
     }
 }
