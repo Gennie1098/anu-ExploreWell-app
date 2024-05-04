@@ -11,8 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anu.gp24s1.R;
-import com.anu.gp24s1.ui.following.FollowingModel;
-import com.anu.gp24s1.ui.following.followingListAdapter;
 import com.google.android.material.chip.Chip;
 
 import java.util.ArrayList;
@@ -74,8 +72,8 @@ public class RePostsByLocationAdapter extends RecyclerView.Adapter<RePostsByLoca
             locationTag = itemView.findViewById(R.id.locationTag);
             activityTag = itemView.findViewById(R.id.activityTag);
             postTitle = itemView.findViewById(R.id.postTitle);
-            numberOfFollowing = itemView.findViewById(R.id.numberOfFollowing);
-            numberOfComments = itemView.findViewById(R.id.numberOfComments);
+            numberOfFollowing = itemView.findViewById(R.id.numberFollowing);
+            numberOfComments = itemView.findViewById(R.id.numberComments);
 
         }
     }
