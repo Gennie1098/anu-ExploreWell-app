@@ -1,6 +1,7 @@
 package com.anu.gp24s1.ui.home;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,10 @@ import com.anu.gp24s1.R;
 import com.anu.gp24s1.ui.following.FollowingModel;
 import com.anu.gp24s1.ui.following.followingListAdapter;
 import com.google.android.material.chip.Chip;
+import com.squareup.picasso.Picasso;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 public class RePostsByLocationAdapter extends RecyclerView.Adapter<RePostsByLocationAdapter.MyViewHolder>{
@@ -41,7 +45,8 @@ public class RePostsByLocationAdapter extends RecyclerView.Adapter<RePostsByLoca
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         //assigning values to the views created in following_groups_list_row layout file
         //base on the position of the recycler view
-        holder.userAva.setImageResource(rePostsByLocationModel.get(position).getUserAva());
+        Uri imageUrl = Uri.parse(rePostsByLocationModel.get(position).getUserAva());
+        Picasso.get().load(imageUrl).into(holder.userAva);
         holder.userName.setText(rePostsByLocationModel.get(position).getUserName());
         holder.locationTag.setText(rePostsByLocationModel.get(position).getLocation());
         holder.activityTag.setText(rePostsByLocationModel.get(position).getActivity());

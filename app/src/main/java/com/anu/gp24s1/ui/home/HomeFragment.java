@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,11 +16,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.anu.gp24s1.MainActivity;
 import com.anu.gp24s1.R;
+import com.anu.gp24s1.dao.PostDaoImpl;
 import com.anu.gp24s1.databinding.FragmentHomeBinding;
+import com.anu.gp24s1.pojo.vo.PostVo;
+import com.anu.gp24s1.state.UserSession;
 import com.anu.gp24s1.ui.following.FollowingModel;
 import com.anu.gp24s1.ui.search.SearchFragment;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HomeFragment extends Fragment {
 
@@ -42,7 +47,7 @@ public class HomeFragment extends Fragment {
         //list by popular
         RecyclerView recyclerViewPopular = binding.postListPopular;
         setUpRePostsByPopularModel();
-        RePostsByLocationAdapter adapterPopular = new RePostsByLocationAdapter(getActivity(), rePostsByLocationModels);
+        RePostsByLocationAdapter adapterPopular = new RePostsByLocationAdapter(getActivity(), rePostsByTagModels);
         recyclerViewPopular.setAdapter(adapterPopular);
         recyclerViewPopular.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
 
@@ -52,33 +57,33 @@ public class HomeFragment extends Fragment {
     }
 
     ArrayList<RePostsByLocationModel> rePostsByLocationModels = new ArrayList<>();
-    int[] userAva = {R.drawable.ic_outline_account_circle_24, R.drawable.ic_outline_account_circle_24, R.drawable.ic_outline_account_circle_24};
 
-    //TODO: Set up group data
-    // check this video: https://www.youtube.com/watch?v=Mc0XT58A1Z4
     private void setUpRePostsByLocationModel() {
-        String[] userName = getResources().getStringArray(R.array.example_user_name_list_txt);
-        String[] location = getResources().getStringArray(R.array.exapmle_location_list_txt);
-        String[] activity = getResources().getStringArray(R.array.exapmle_activities_list_txt);
-        String[] postTitle = getResources().getStringArray(R.array.exapmle_post_titles_list_txt);
-        int[] numberOfFollowing = getResources().getIntArray(R.array.example_following_list_txt);
-        int[] numberOfComments = getResources().getIntArray(R.array.example_comments_list_txt);
-        for (int i = 0; i < userName.length; i++) { // arrays should be equal length
-            rePostsByLocationModels.add(new RePostsByLocationModel(userAva[i], userName[i], location[i], activity[i],
-                    postTitle[i], numberOfFollowing[i], numberOfComments[i]));
+        List<PostVo> recommendationByLocation = UserSession.getInstance().getRecommendationByLocation();
+        if(recommendationByLocation == null || recommendationByLocation.size() == 0) {
+            Toast.makeText(getContext(),"Get Recommended posts by location failed!", Toast.LENGTH_LONG).show();
+        }
+        else {
+            for (int i = 0; i < recommendationByLocation.size(); i++) { // arrays should be equal length
+                rePostsByLocationModels.add(new RePostsByLocationModel(recommendationByLocation.get(i).getAuthorAvatar(), recommendationByLocation.get(i).getAuthorName(),
+                        recommendationByLocation.get(i).getLocation(), recommendationByLocation.get(i).getTag(),
+                        recommendationByLocation.get(i).getTitle(), recommendationByLocation.get(i).getFollowerNumber(), recommendationByLocation.get(i).getCommentsNumber()));
+            }
         }
     }
 
+    ArrayList<RePostsByLocationModel> rePostsByTagModels = new ArrayList<>();
     private void setUpRePostsByPopularModel() {
-        String[] userName = getResources().getStringArray(R.array.example_user_name_list_txt);
-        String[] location = getResources().getStringArray(R.array.exapmle_location_list_txt);
-        String[] activity = getResources().getStringArray(R.array.exapmle_activities_list_txt);
-        String[] postTitle = getResources().getStringArray(R.array.exapmle_post_titles_list_txt);
-        int[] numberOfFollowing = getResources().getIntArray(R.array.example_following_list_txt);
-        int[] numberOfComments = getResources().getIntArray(R.array.example_comments_list_txt);
-        for (int i = 0; i < userName.length; i++) { // arrays should be equal length
-            rePostsByLocationModels.add(new RePostsByLocationModel(userAva[i], userName[i], location[i], activity[i],
-                    postTitle[i], numberOfFollowing[i], numberOfComments[i]));
+        List<PostVo> recommendationByTag = UserSession.getInstance().getRecommendationByTag();
+        if(recommendationByTag == null || recommendationByTag.size() == 0) {
+            Toast.makeText(getContext(),"Get Recommended posts by tag failed!", Toast.LENGTH_LONG).show();
+        }
+        else {
+            for (int i = 0; i < recommendationByTag.size(); i++) { // arrays should be equal length
+                rePostsByTagModels.add(new RePostsByLocationModel(recommendationByTag.get(i).getAuthorAvatar(), recommendationByTag.get(i).getAuthorName(),
+                        recommendationByTag.get(i).getLocation(), recommendationByTag.get(i).getTag(),
+                        recommendationByTag.get(i).getTitle(), recommendationByTag.get(i).getFollowerNumber(), recommendationByTag.get(i).getCommentsNumber()));
+            }
         }
     }
 
