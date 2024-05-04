@@ -175,6 +175,7 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="post_content_example">Everyone loves giving away company swag, until it’s taking up your spare bedroom and dominating your schedule. Schedule a quick demo where we’ll show you how our platform has helped companies like Adobe use swag giveaways to clear out their swag closets and give them back their time. useslingshot.com</string>
+    <string name="search_example">easy #hiking @ACT</string>
 
 
 </resources>

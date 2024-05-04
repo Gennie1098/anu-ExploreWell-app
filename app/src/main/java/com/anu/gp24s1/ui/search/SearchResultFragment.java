@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.anu.gp24s1.R;
+import com.anu.gp24s1.ui.post.PostListFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,6 +62,16 @@ public class SearchResultFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search_result, container, false);
+        View view = inflater.inflate(R.layout.fragment_search_result, container, false);
+
+        // Check if the fragment is already added, to avoid overlapping fragments on re-creating the view
+        if (getChildFragmentManager().findFragmentById(R.id.searchResult) == null) {
+            PostListFragment postListFragment = PostListFragment.newInstance();
+            getChildFragmentManager().beginTransaction()
+                    .add(R.id.searchResult, postListFragment)
+                    .commit();
+        }
+
+        return view;
     }
 }
