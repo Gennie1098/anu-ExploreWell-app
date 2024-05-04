@@ -25,4 +25,3 @@ tasks {
         delete(rootProject.buildDir)
     }
 }
-
