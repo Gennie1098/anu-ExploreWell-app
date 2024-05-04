@@ -143,7 +143,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/postTitle">
 
                 <ImageButton
-                    android:id="@+id/imageButton"
+                    android:id="@+id/followingButton"
                     android:layout_width="14dp"
                     android:layout_height="14dp"
                     android:layout_marginRight="5dp"
@@ -152,7 +152,7 @@
                     android:src="@drawable/ic_outline_bookmarks_14" />
 
                 <TextView
-                    android:id="@+id/numberOfFollowing"
+                    android:id="@+id/numberFollowing"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="20dp"
@@ -163,7 +163,7 @@
                     android:textSize="12dp" />
 
                 <ImageButton
-                    android:id="@+id/imageButton2"
+                    android:id="@+id/commentButton"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_marginRight="5dp"
@@ -171,7 +171,7 @@
                     android:src="@drawable/ic_outline_comment_14" />
 
                 <TextView
-                    android:id="@+id/numberOfComments"
+                    android:id="@+id/numberComments"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
