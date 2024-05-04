@@ -20,6 +20,8 @@ import com.anu.gp24s1.R;
 import com.anu.gp24s1.StartScreen;
 import com.anu.gp24s1.data.AuthRepository;
 import com.anu.gp24s1.databinding.FragmentProfileBinding;
+import com.anu.gp24s1.state.LogoutSession;
+import com.anu.gp24s1.state.UserSession;
 import com.anu.gp24s1.ui.login.LoginActivity;
 
 public class ProfileFragment extends Fragment {
@@ -49,6 +51,9 @@ public class ProfileFragment extends Fragment {
         });
 
         binding.logOut.setOnClickListener(v -> {
+            UserSession userSession = UserSession.getInstance();
+            userSession.changeState(new LogoutSession(userSession));
+            userSession.setUserKey(null);
             AuthRepository.getInstance().logout();
             Toast.makeText(getContext(), "User Logged Out", Toast.LENGTH_SHORT).show();
 
