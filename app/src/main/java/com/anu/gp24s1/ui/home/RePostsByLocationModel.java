@@ -48,4 +48,12 @@ public class RePostsByLocationModel {
     public int getNumberOfComments() {
         return numberOfComments;
     }
+
+    public void setNumberOfFollowing(int numberOfFollowing) {
+        this.numberOfFollowing = numberOfFollowing;
+    }
+
+    public void setNumberOfComments(int numberOfComments) {
+        this.numberOfComments = numberOfComments;
+    }
 }

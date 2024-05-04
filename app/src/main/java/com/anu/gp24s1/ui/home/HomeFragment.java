@@ -1,6 +1,8 @@
 package com.anu.gp24s1.ui.home;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,27 +28,31 @@ import com.anu.gp24s1.ui.search.SearchFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
+    private Handler handler;
+    private Runnable updateRunnable;
+    RecyclerView recyclerViewLocation;
+    RecyclerView recyclerViewPopular;
+    Random random = new Random();
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        HomeViewModel homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
         //list by locations
-        RecyclerView recyclerViewLocation = binding.postListLocation;
+        recyclerViewLocation = binding.postListLocation;
         setUpRePostsByLocationModel();
         RePostsByLocationAdapter adapterLocation = new RePostsByLocationAdapter(getActivity(), rePostsByLocationModels);
         recyclerViewLocation.setAdapter(adapterLocation);
         recyclerViewLocation.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
 
         //list by popular
-        RecyclerView recyclerViewPopular = binding.postListPopular;
+        recyclerViewPopular = binding.postListPopular;
         setUpRePostsByPopularModel();
         RePostsByLocationAdapter adapterPopular = new RePostsByLocationAdapter(getActivity(), rePostsByTagModels);
         recyclerViewPopular.setAdapter(adapterPopular);
@@ -53,6 +60,17 @@ public class HomeFragment extends Fragment {
 
 
         View root = binding.getRoot();
+
+        handler = new Handler(Looper.getMainLooper());
+        updateRunnable = new Runnable() {
+            @Override
+            public void run() {
+                dataStream();
+                handler.postDelayed(this, random.nextInt(6000) + 5000); // update interval: 5-10 second
+            }
+        };
+        handler.post(updateRunnable);
+
         return root;
     }
 
@@ -60,29 +78,24 @@ public class HomeFragment extends Fragment {
 
     private void setUpRePostsByLocationModel() {
         List<PostVo> recommendationByLocation = UserSession.getInstance().getRecommendationByLocation();
-        if(recommendationByLocation == null || recommendationByLocation.size() == 0) {
-            Toast.makeText(getContext(),"Get Recommended posts by location failed!", Toast.LENGTH_LONG).show();
-        }
-        else {
+        if (recommendationByLocation == null || recommendationByLocation.size() == 0) {
+            Toast.makeText(getContext(), "Get Recommended posts by location failed!", Toast.LENGTH_LONG).show();
+        } else {
             for (int i = 0; i < recommendationByLocation.size(); i++) { // arrays should be equal length
-                rePostsByLocationModels.add(new RePostsByLocationModel(recommendationByLocation.get(i).getAuthorAvatar(), recommendationByLocation.get(i).getAuthorName(),
-                        recommendationByLocation.get(i).getLocation(), recommendationByLocation.get(i).getTag(),
-                        recommendationByLocation.get(i).getTitle(), recommendationByLocation.get(i).getFollowerNumber(), recommendationByLocation.get(i).getCommentsNumber()));
+                rePostsByLocationModels.add(new RePostsByLocationModel(recommendationByLocation.get(i).getAuthorAvatar(), recommendationByLocation.get(i).getAuthorName(), recommendationByLocation.get(i).getLocation(), recommendationByLocation.get(i).getTag(), recommendationByLocation.get(i).getTitle(), recommendationByLocation.get(i).getFollowerNumber(), recommendationByLocation.get(i).getCommentsNumber()));
             }
         }
     }
 
     ArrayList<RePostsByLocationModel> rePostsByTagModels = new ArrayList<>();
+
     private void setUpRePostsByPopularModel() {
         List<PostVo> recommendationByTag = UserSession.getInstance().getRecommendationByTag();
-        if(recommendationByTag == null || recommendationByTag.size() == 0) {
-            Toast.makeText(getContext(),"Get Recommended posts by tag failed!", Toast.LENGTH_LONG).show();
-        }
-        else {
+        if (recommendationByTag == null || recommendationByTag.size() == 0) {
+            Toast.makeText(getContext(), "Get Recommended posts by tag failed!", Toast.LENGTH_LONG).show();
+        } else {
             for (int i = 0; i < recommendationByTag.size(); i++) { // arrays should be equal length
-                rePostsByTagModels.add(new RePostsByLocationModel(recommendationByTag.get(i).getAuthorAvatar(), recommendationByTag.get(i).getAuthorName(),
-                        recommendationByTag.get(i).getLocation(), recommendationByTag.get(i).getTag(),
-                        recommendationByTag.get(i).getTitle(), recommendationByTag.get(i).getFollowerNumber(), recommendationByTag.get(i).getCommentsNumber()));
+                rePostsByTagModels.add(new RePostsByLocationModel(recommendationByTag.get(i).getAuthorAvatar(), recommendationByTag.get(i).getAuthorName(), recommendationByTag.get(i).getLocation(), recommendationByTag.get(i).getTag(), recommendationByTag.get(i).getTitle(), recommendationByTag.get(i).getFollowerNumber(), recommendationByTag.get(i).getCommentsNumber()));
             }
         }
     }
@@ -108,5 +121,18 @@ public class HomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    public ArrayList<RePostsByLocationModel> getRePostsByLocationModels() {
+        return rePostsByLocationModels;
+    }
+
+    private void dataStream() {
+        if (getRePostsByLocationModels().size() > 0) {
+            RePostsByLocationModel model = rePostsByLocationModels.get(0);
+            model.setNumberOfFollowing(model.getNumberOfFollowing() + random.nextInt(4) - 1); // randomly add -1 to 2
+            rePostsByLocationModels.set(0, model);
+            recyclerViewLocation.getAdapter().notifyItemChanged(0);
+        }
     }
 }
