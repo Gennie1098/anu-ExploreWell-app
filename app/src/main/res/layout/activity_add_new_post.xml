@@ -64,7 +64,7 @@
             android:text="Activity" />
     </RadioGroup>
 
-    <com.anu.gp24s1.ui.PostMultiAutoCompleteTextView
+    <MultiAutoCompleteTextView
         android:id="@+id/editTextContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

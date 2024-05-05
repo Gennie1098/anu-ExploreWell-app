@@ -13,13 +13,12 @@ import android.widget.RadioGroup;
 
 import com.anu.gp24s1.dao.PostDaoImpl;
 import com.anu.gp24s1.state.UserSession;
-import com.anu.gp24s1.ui.PostMultiAutoCompleteTextView;
 
 import java.util.Set;
 
 public class AddNewPostActivity extends AppCompatActivity {
 
-    private PostMultiAutoCompleteTextView editTextContent;
+    private MultiAutoCompleteTextView editTextContent;
     private EditText editTextTitle, editTextLocation; //TODO: If branch accepted, remove these
     private RadioGroup radioGroupTags;
     private RadioButton radioButtonLocation, radioButtonActivity;
@@ -32,7 +31,7 @@ public class AddNewPostActivity extends AppCompatActivity {
 
         editTextTitle = findViewById(R.id.editTextTitle);
         editTextLocation = findViewById(R.id.editTextLocation);
-        editTextContent = (PostMultiAutoCompleteTextView) findViewById(R.id.editTextContent);
+        editTextContent = (MultiAutoCompleteTextView) findViewById(R.id.editTextContent);
         radioGroupTags = findViewById(R.id.radioGroupTags);
         buttonPost = findViewById(R.id.buttonPost);
 
@@ -52,14 +51,14 @@ public class AddNewPostActivity extends AppCompatActivity {
         System.out.println("tags: ");
         int idx = 0;
         for (String tag : tagsSet) {
-            tags[idx] = tag;
+            tags[idx] = "#" + tag;
             System.out.print(tag + ", ");
             idx++;
         }
         System.out.println("locations: ");
         idx = 0;
         for (String location : locationsSet) {
-            locations[idx] = location;
+            locations[idx] = "@" + location;
             System.out.print(location + ", ");
             idx++;
         }
@@ -69,36 +68,66 @@ public class AddNewPostActivity extends AppCompatActivity {
         System.arraycopy(tags, 0, allAutocompletions, 0, tags.length);
         System.arraycopy(locations, 0, allAutocompletions, tags.length, locations.length);
 
-//        String[] allAutocompletions = {"a", "ant", "apple", "asp", "android", "animation", "adobe",
-//                "chrome", "chromium", "firefox", "freeware", "fedora"};
-
         // adapter
-
         ArrayAdapter<String> autoCompletionArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, allAutocompletions);
 
         editTextContent.setThreshold(1);
         editTextContent.setAdapter(autoCompletionArrayAdapter);
-        editTextContent.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+        //editTextContent.listene
 
 
-//        editTextContent.setTokenizer(new MultiAutoCompleteTextView.Tokenizer() {
-//            @Override
-//            public int findTokenStart(CharSequence charSequence, int i) {
-//                return 0;
-//            }
+        /**
+         * Based on the CommaTokenizer in:
+         * @see https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/widget/MultiAutoCompleteTextView.java
+         *
+         * */
+        editTextContent.setTokenizer(new MultiAutoCompleteTextView.Tokenizer() {
+            @Override
+            public int findTokenStart(CharSequence inputText, int cursor) {
+
+                int idx = cursor;
+
+                while (idx > 0 && inputText.charAt(idx - 1) != '@' && inputText.charAt(idx - 1) != '#') {
+                    idx--;
+                }
+                if (idx > 0) {idx--;} // we want the @ or # symbol in the token
+
+                return idx;
+            }
+
+            @Override
+            public int findTokenEnd(CharSequence inputText, int cursor) {
+                int idx = cursor;
+
+                while (idx < inputText.length() && Character.isLetter(inputText.charAt(idx))) {
+                    idx++;
+                }
+
+                return idx;
+            }
+
+            @Override
+            public CharSequence terminateToken(CharSequence inputText) {
+                return inputText;
+//                int idx = inputText.length();
 //
-//            @Override
-//            public int findTokenEnd(CharSequence charSequence, int i) {
-//                return 0;
-//            }
-//
-//            @Override
-//            public CharSequence terminateToken(CharSequence charSequence) {
-//                return null;
-//            }
-//        });
-
-//        editTextContent.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+//                while (idx > 0 && inputText.charAt(idx - 1) == ' ') {
+//                    idx--;
+//                }
+//                if (idx > 0 && inputText.charAt(idx - 1) == ' ') {
+//                    return inputText;
+//                } else {
+//                    if (inputText instanceof Spanned) {
+//                        SpannableString sp = new SpannableString(inputText + " ");
+//                        TextUtils.copySpansFrom((Spanned) inputText, 0, inputText.length(),
+//                                Object.class, sp, 0);
+//                        return sp;
+//                    } else {
+//                        return inputText + " ";
+//                    }
+//                }
+            }
+        });
 
     }
 
