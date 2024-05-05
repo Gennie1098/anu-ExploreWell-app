@@ -12,7 +12,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.anu.gp24s1.databinding.ActivityHomepageBinding;
 
-public class Homepage extends AppCompatActivity {
+public class HomepageNavigation extends AppCompatActivity {
 
     private ActivityHomepageBinding binding;
 

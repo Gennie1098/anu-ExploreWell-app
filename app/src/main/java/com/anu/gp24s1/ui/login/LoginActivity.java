@@ -103,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
 
     // TODO : initiate successful logged in experience
     private void updateUiWithUser(String username) {
-        // Create an Intent to start MainActivity (aka Homepage)
+        // Create an Intent to start MainActivity (aka HomepageNavigation)
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.putExtra("USER_NAME", username);
         startActivity(intent);
