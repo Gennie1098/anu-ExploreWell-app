@@ -1,14 +1,16 @@
 package com.anu.gp24s1.utils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /** Implements the parser for strings given as input to the search bar
  *  Formal Grammar for searches:
- *     <X> ::= alpha | nonalpha(") <T> nonalpha(") | alpha nonalpha(space) <Y> | <Y>
- *     <T> ::= alpha | alpha nonalpha(space) <T>
- *     <Y> ::= <Z> | <Z> nonalpha(space) <Y>
+ *     <X> ::= alpha | nonalpha("\"") <T> nonalpha("\") whitespace | alpha whitespace <Y> | <Y>
+ *     <T> ::= alpha | alpha whitespace <T>
+ *     <Y> ::= <Z> | <Z> whitespace <Y>
  *     <Z> ::= hashtag alpha | at alpha
  *
  * Calling parseX() will return true if the content tokenized by the
@@ -27,19 +29,19 @@ import java.util.List;
  * */
 public class SearchParser {
 
-    private List<String> tags = null;
-    private List<String> locations = null;
+    private Set<String> tags = null;
+    private Set<String> locations = null;
     private String title = "";
-    private final PostTokenizer tokenizer;
+    private PostTokenizer tokenizer;
 
     public SearchParser(PostTokenizer tokenizer) {
         this.tokenizer = tokenizer;
-        tags = new ArrayList<String>();
-        locations = new ArrayList<String>();
+        tags = new HashSet<String>();
+        locations = new HashSet<String>();
     }
 
     /** Parse the <X> expression:
-     * <X> ::= alpha | nonalpha(") <T> nonalpha(") | alpha nonalpha(space) <Y> | <Y>
+     * <X> ::= alpha | nonalpha("\"") <T> nonalpha("\") whitespace | alpha whitespace <Y> | <Y>
      *
      * @return  boolean     True if the expression was parsed, making it valid
      * @author  u7284324    Lachlan Stewart
@@ -49,7 +51,7 @@ public class SearchParser {
         Token curToken = tokenizer.curToken;
         if (curToken == null) { return false; };
 
-        if (curToken.getType() == TokenType.NonAlpha && curToken.getContent() == "\"") {
+        if (curToken.getType() == TokenType.NonAlpha && curToken.getContent().equals("\"")) {
             // title enclosed in quotation marks
             if (tokenizer.hasNext()) {
                 tokenizer.next();
@@ -63,7 +65,7 @@ public class SearchParser {
             curToken = tokenizer.curToken;
             if (curToken == null) {
                 return false;
-            } else if (!(curToken.getType() == TokenType.NonAlpha && curToken.getContent() == "\"")) {
+            } else if (!(curToken.getType() == TokenType.NonAlpha && curToken.getContent().equals("\""))) {
                 return false;
             }
         } else if (curToken.getType() != TokenType.Alpha) {
@@ -77,9 +79,11 @@ public class SearchParser {
         if (tokenizer.hasNext()) {
             tokenizer.next();
             curToken = tokenizer.curToken;
-            if (curToken.getType() == TokenType.NonAlpha && curToken.getContent() == " ") {
+            if (curToken.getType() == TokenType.WhiteSpace) {
                 tokenizer.next();
                 return parseY();
+            } else {
+                return false;
             }
         }
 
@@ -87,12 +91,16 @@ public class SearchParser {
     }
 
     /** Parse the <T> expression:
-     * <T> ::= alpha | alpha nonalpha(space) <T>
+     * <T> ::= alpha | alpha whitespace <T>
+     *
+     * Note: this can be used to check that the user is providing a valid
+     * alphanumerical title with single whitespaces inbetween words,
+     * hence it is made public
      *
      * @return  boolean     True if the expression was parsed, making it valid
      * @author  u7284324    Lachlan Stewart
      * */
-    private boolean parseT() {
+    public boolean parseT() {
 
         Token curToken = tokenizer.curToken;
         if (curToken == null) {
@@ -108,7 +116,7 @@ public class SearchParser {
             }
             curToken = tokenizer.curToken;
 
-            if (curToken.getType() == TokenType.NonAlpha && curToken.getContent() == " ") {
+            if (curToken.getType() == TokenType.WhiteSpace) {
                 title = title + " ";
                 tokenizer.next();
                 return parseT();
@@ -121,7 +129,7 @@ public class SearchParser {
     }
 
     /** Parse the <Y> expression:
-     * <Y> ::= <Z> | <Z> nonalpha(space) <Y>
+     * <Y> ::= <Z> | <Z> whitespace <Y>
      *
      * @return  boolean     True if the expression was parsed, making it valid
      * @author  u7284324    Lachlan Stewart
@@ -135,7 +143,7 @@ public class SearchParser {
         Token curToken = tokenizer.curToken;
         if (curToken == null) {
             return true;
-        } else if (curToken.getType() == TokenType.NonAlpha && curToken.getContent() == " ") {
+        } else if (curToken.getType() == TokenType.WhiteSpace) {
             if (tokenizer.hasNext()) {
                 tokenizer.next();
             } else {
@@ -202,11 +210,11 @@ public class SearchParser {
         return title;
     }
 
-    public List<String> getTags() {
+    public Set<String> getTags() {
         return tags;
     }
 
-    public List<String> getLocations() {
+    public Set<String> getLocations() {
         return locations;
     }
 }

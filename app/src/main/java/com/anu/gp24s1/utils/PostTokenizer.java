@@ -66,6 +66,12 @@ public class PostTokenizer {
             // 'hashtag' symbol
             idx++;
             return new Token(idx - 1, idx, "#", TokenType.Hashtag);
+        } else if (curChar == ' ') {
+            int start = idx;
+            while (idx < content.length() && content.charAt(idx) == ' ') {
+                idx++;
+            }
+            return new Token(start, idx, content.subSequence(start, idx), TokenType.WhiteSpace);
         } else if (Character.isLetterOrDigit(curChar)) {
             // alphanumeric
             int start = idx;
@@ -76,16 +82,17 @@ public class PostTokenizer {
                 return new Token(start, idx, content.subSequence(start, idx), TokenType.Alpha);
             }
         } else {
-            // nonalphanumeric (whitespace and punctuation etc.)
+            // nonalphanumeric (punctuation etc.)
             int start = idx;
             while (idx < content.length()
                     && !Character.isLetterOrDigit(content.charAt(idx))
+                    && content.charAt(idx) != ' '
                     && content.charAt(idx) != '@'
                     && content.charAt(idx) != '#') {
                 idx++;
             }
             if (idx > start) {
-                return new Token(start, idx, content.subSequence(start, idx), TokenType.Alpha);
+                return new Token(start, idx, content.subSequence(start, idx), TokenType.NonAlpha);
             }
         }
 
