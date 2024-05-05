@@ -18,6 +18,17 @@ public class followingListAdapter extends RecyclerView.Adapter<followingListAdap
 
     Context context;
     ArrayList<FollowingModel> followingModel;
+    private OnItemClickListener mListener;
+
+    //set click on each topic in list, to open list of posts
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.mListener = listener;
+    }
+
 
     public followingListAdapter (Context context, ArrayList<FollowingModel> followingModel) {
         this.context = context;
@@ -39,6 +50,13 @@ public class followingListAdapter extends RecyclerView.Adapter<followingListAdap
         //base on the position of the recycler view
         holder.groupName.setText(followingModel.get(position).getGroupName());
         holder.groupIcon.setImageResource(followingModel.get(position).getGroupIcon());
+
+        //click item
+        holder.itemView.setOnClickListener(v -> {
+            if (mListener != null && position != RecyclerView.NO_POSITION) {
+                mListener.onItemClick(position);
+            }
+        });
     }
 
     @Override
@@ -46,6 +64,8 @@ public class followingListAdapter extends RecyclerView.Adapter<followingListAdap
         //the number of items displayed on view
         return followingModel.size();
     }
+
+
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 

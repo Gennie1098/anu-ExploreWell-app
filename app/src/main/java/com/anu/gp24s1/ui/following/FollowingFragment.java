@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,10 +47,13 @@ public class FollowingFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        // Adding Divider
-//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
-//        recyclerView.addItemDecoration(dividerItemDecoration);
-
+        adapter.setOnItemClickListener(position -> {
+            FollowingModel selectedModel = followingModels.get(position);
+            Bundle bundle = new Bundle();
+            bundle.putString("groupName", selectedModel.getGroupName());
+            // Navigate with NavController
+            Navigation.findNavController(getView()).navigate(R.id.action_followingfragment_to_postslistfragment, bundle);
+        });
         return root;
     }
 
