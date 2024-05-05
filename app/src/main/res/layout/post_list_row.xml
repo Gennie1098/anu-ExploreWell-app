@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="15dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <ImageView
+            android:id="@+id/userImg"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="top"
+            android:src="@drawable/default_avatar_profile" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/UserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:text="User Name"
+                    tools:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="1hr" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/PostTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Post title, can be up to 2 lines, something else here"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/tagGroups"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/locationTag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/lighGreen"
+                    android:text="@string/location"
+                    android:textSize="10sp"
+                    app:chipMinTouchTargetSize="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/activityTag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:backgroundTint="@color/highlightGreen"
+                    android:text="@string/activities"
+                    android:textSize="10dp"
+                    app:chipMinTouchTargetSize="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/locationTag"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:lines="5"
+                android:text="@string/post_content_example"
+                android:textColor="@android:color/black" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:src="@drawable/post_image" />
+
+            <LinearLayout
+                android:id="@+id/postStast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:background="@android:color/transparent"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/postTitle">
+
+                <ImageButton
+                    android:id="@+id/followingButton"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@android:color/transparent"
+                    android:src="@drawable/ic_outline_bookmarks_14" />
+
+                <TextView
+                    android:id="@+id/numberFollowing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="100"
+                    android:textColor="@android:color/black"
+                    android:textSize="12dp" />
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+                    android:text="following"
+                    android:textColor="@android:color/black"
+                    android:textSize="12sp" />
+
+                <ImageButton
+                    android:id="@+id/commentButton"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@android:color/transparent"
+                    android:src="@drawable/ic_outline_comment_14" />
+
+                <TextView
+                    android:id="@+id/numberComments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="100"
+                    android:textColor="@android:color/black"
+                    android:textSize="12dp"
+                    tools:layout_marginRight="5dp" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+                    android:text="comments"
+                    android:textColor="@android:color/black"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
