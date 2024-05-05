@@ -369,6 +369,7 @@ public class PostDaoImpl implements PostDao {
         List<String> comments = post.getComments();
         comments.add(commentKey);
         post.setComments(comments);
+
         int newCommentNumber = post.getCommentsNumber() + 1;
         post.setCommentsNumber(newCommentNumber);
 
