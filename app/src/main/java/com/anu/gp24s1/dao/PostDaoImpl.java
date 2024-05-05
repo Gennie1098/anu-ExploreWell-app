@@ -25,7 +25,7 @@ import java.util.TimeZone;
 
 public class PostDaoImpl implements PostDao {
 
-    private static final int RECOMMENDATION_NUMBER = 3;
+    private static final int RECOMMENDATION_NUMBER = 5;
     private static PostDaoImpl instance;
 
     private static Post rootPost;
@@ -448,6 +448,9 @@ public class PostDaoImpl implements PostDao {
      */
     @Override
     public List<PostVo> viewListOfPosts(List<Post> postsList, String userKey) {
+        if(postsList == null || postsList.size() == 0) {
+            return null;
+        }
         List<PostVo> postVoList = new ArrayList<>();
         for (Post post : postsList) {
             postVoList.add(post.toPostVo(userKey));

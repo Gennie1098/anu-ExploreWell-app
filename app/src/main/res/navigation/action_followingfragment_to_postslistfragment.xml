@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/action_followingfragment_to_postslistfragment"
+    app:startDestination="@id/followingFragment">
+
+    <fragment
+        android:id="@+id/followingFragment"
+        android:name="com.anu.gp24s1.ui.following.FollowingFragment"
+        android:label="fragment_following"
+        tools:layout="@layout/fragment_following" >
+        <action
+            android:id="@+id/action_followingFragment_to_followingPostFragment"
+            app:destination="@id/followingPostFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/followingPostFragment"
+        android:name="com.anu.gp24s1.ui.following.FollowingPostFragment"
+        android:label="fragment_following_post"
+        tools:layout="@layout/fragment_following_post" >
+        <action
+            android:id="@+id/action_followingPostFragment_to_singlePostActivity"
+            app:destination="@id/singlePostActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/singlePostActivity"
+        android:name="com.anu.gp24s1.ui.post.SinglePostActivity"
+        android:label="activity_single_post"
+        tools:layout="@layout/activity_single_post" />
+</navigation>
