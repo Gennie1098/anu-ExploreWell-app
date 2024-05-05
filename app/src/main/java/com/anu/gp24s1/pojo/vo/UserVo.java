@@ -1,11 +1,12 @@
 package com.anu.gp24s1.pojo.vo;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * View object of user, define how to show a user's profile
  */
-public class UserVo {
+public class UserVo implements Serializable {
 
     private String username;
 

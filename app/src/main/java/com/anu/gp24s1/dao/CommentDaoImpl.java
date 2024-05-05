@@ -10,20 +10,25 @@ import com.anu.gp24s1.utils.TypeConvert;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class CommentDaoImpl implements CommentDao{
 
     private static CommentDaoImpl instance;
 
-    private static Map<String, Comment> comments;
+    private static Map<String, List<Comment>> comments;
 
-    private CommentDaoImpl(){};
+    private CommentDaoImpl(){}
 
     /**
      * Using singleton design pattern to ensure only get all comments data once.
@@ -34,7 +39,7 @@ public class CommentDaoImpl implements CommentDao{
         if(instance == null)
         {
             instance = new CommentDaoImpl();
-            comments = new HashMap<String, Comment>();
+            comments = new HashMap<String, List<Comment>>();
             DatabaseReference commentReference = DBConnector.getInstance().getDatabase().child("comments");
             commentReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -47,7 +52,17 @@ public class CommentDaoImpl implements CommentDao{
                         comment.setAuthorKey(snapshot.child("authorKey").getValue(String.class));
                         comment.setContent(snapshot.child("content").getValue(String.class));
                         comment.setCommentTime(TypeConvert.strToDate(snapshot.child("commentTime").getValue(String.class)));
-                        comments.put(comment.getCommentKey(),comment);
+                        String postKey = comment.getPostKey();
+                        if(comments.containsKey(postKey)) {
+                            List<Comment> commentsList = comments.get(postKey);
+                            commentsList.add(comment);
+                            comments.put(postKey,commentsList);
+                        }
+                        else {
+                            List<Comment> commentList = new ArrayList<>();
+                            commentList.add(comment);
+                            comments.put(postKey,commentList);
+                        }
                     }
                 }
 
@@ -69,25 +84,50 @@ public class CommentDaoImpl implements CommentDao{
     @Override
     public String addComment(String content, String postKey, String userKey) {
 
+        // Get current date
+        Date publishDate = new Date(); // timezone independent
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sdf.setTimeZone(TimeZone.getTimeZone(ZoneId.of("UTC")));
+        String dateString = sdf.format(publishDate);
+
         // Create a new comment
         Comment newComment = new Comment();
-        newComment.setCommentTime(new Date());
+        newComment.setCommentTime(publishDate);
         newComment.setContent(content);
         newComment.setPostKey(postKey);
         newComment.setAuthorKey(userKey);
 
-        // Add to database
-        // TODO
+        // Get database reference
+        DatabaseReference dbReference = DBConnector.getInstance().getDatabase();
+        HashMap<String, Object> childUpdates = new HashMap<String, Object>();
+        String commentKey = dbReference.child("comments").push().getKey();
 
-        // Get key
-        String commentKey = ""; // TODO
+        // Create Hashmap with comment data:
+        HashMap<String, Object> commentValues = new HashMap<String, Object>();
+        commentValues.put("content", content);
+        commentValues.put("postKey", postKey);
+        commentValues.put("authorKey", userKey);
+        commentValues.put("commentTime", dateString);
+
+        // Update in database
+        childUpdates.put("/comments/" + commentKey, commentValues);
+
+        dbReference.updateChildren(childUpdates);
 
         // Add key to comment:
         newComment.setCommentKey(commentKey);
 
         // Add to comments:
-        comments.put(commentKey, newComment);
-
-        return null;
+        if(comments.containsKey(postKey)) {
+            List<Comment> commentsList = comments.get(postKey);
+            commentsList.add(newComment);
+            comments.put(postKey,commentsList);
+        }
+        else {
+            List<Comment> commentList = new ArrayList<>();
+            commentList.add(newComment);
+            comments.put(postKey,commentList);
+        }
+        return commentKey;
     }
 }
