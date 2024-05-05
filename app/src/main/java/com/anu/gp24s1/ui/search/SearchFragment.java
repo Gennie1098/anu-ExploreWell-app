@@ -38,8 +38,8 @@ public class SearchFragment extends Fragment {
 
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
         // TODO: Use the ViewModel
     }
