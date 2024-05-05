@@ -45,5 +45,6 @@ public class AddNewPostActivity extends AppCompatActivity {
         String tag = selectedId == R.id.radioButtonLocation ? "Location" : "Activity";
 
         // TODO: handle the submission of the post data, possibly sending it to a server or saving locally
+
     }
 }
