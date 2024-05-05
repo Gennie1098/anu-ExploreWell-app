@@ -1,6 +1,7 @@
 package com.anu.gp24s1.ui.post;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,24 +12,26 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anu.gp24s1.R;
+import com.anu.gp24s1.pojo.vo.PostVo;
 import com.google.android.material.chip.Chip;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.MyViewHolder> {
     Context context;
-    ArrayList<PostListModel> postListModels;
+    ArrayList<PostVo> postListModels;
     private OnItemClickListener listener;
 
     public interface OnItemClickListener {
-        void onItemClick(PostListModel item);
+        void onItemClick(PostVo item);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 
-    public PostListAdapter (Context context, ArrayList<PostListModel> postListModels) {
+    public PostListAdapter (Context context, ArrayList<PostVo> postListModels) {
         this.context = context;
         this.postListModels = postListModels;
         this.listener = listener;
@@ -44,20 +47,21 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.MyView
 
     @Override
     public void onBindViewHolder(@NonNull PostListAdapter.MyViewHolder holder, int position) {
-        PostListModel item = postListModels.get(position);
+        PostVo item = postListModels.get(position);
         if (listener != null) {
             holder.itemView.setOnClickListener(v -> listener.onItemClick(item));
         }
 
-        holder.userImg.setImageResource(postListModels.get(position).getUserImg());
-        holder.UserName.setText(postListModels.get(position).getUserName());
-        holder.time.setText(postListModels.get(position).getTime());
-        holder.PostTitle.setText(postListModels.get(position).getPostTitle());
-        holder.locationTag.setText(postListModels.get(position).getLocationTag());
-        holder.activityTag.setText(postListModels.get(position).getActivityTag());
-        holder.postContent.setText(postListModels.get(position).getPostContent());
-        holder.numberFollowing.setText(String.valueOf(postListModels.get(position).getNumberFollowing()));
-        holder.numberComments.setText(String.valueOf(postListModels.get(position).getNumberComments()));
+        Uri imageUrl = Uri.parse(postListModels.get(position).getAuthorAvatar());
+        Picasso.get().load(imageUrl).into(holder.userImg);
+        holder.UserName.setText(postListModels.get(position).getAuthorName());
+        holder.time.setText(postListModels.get(position).getPublishTime().toString());
+        holder.PostTitle.setText(postListModels.get(position).getTitle());
+        holder.locationTag.setText(postListModels.get(position).getLocation());
+        holder.activityTag.setText(postListModels.get(position).getTag());
+        holder.postContent.setText(postListModels.get(position).getContent());
+        holder.numberFollowing.setText(String.valueOf(postListModels.get(position).getFollowerNumber()));
+        holder.numberComments.setText(String.valueOf(postListModels.get(position).getCommentsNumber()));
     }
 
     @Override

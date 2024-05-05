@@ -2,13 +2,14 @@ package com.anu.gp24s1.pojo.vo;
 
 import com.anu.gp24s1.pojo.Comment;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 /**
  * View object of post, define how to show a post
  */
-public class PostVo {
+public class PostVo implements Serializable {
 
     private String title;
 

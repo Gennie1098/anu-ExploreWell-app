@@ -1,11 +1,12 @@
 package com.anu.gp24s1.pojo.vo;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * View object of comment, define how to show a comment
  */
-public class CommentVo {
+public class CommentVo implements Serializable {
 
     private String content;
 

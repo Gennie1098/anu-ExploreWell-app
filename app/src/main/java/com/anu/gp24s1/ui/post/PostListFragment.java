@@ -14,14 +14,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.anu.gp24s1.R;
 import com.anu.gp24s1.databinding.FragmentHomeBinding;
 import com.anu.gp24s1.databinding.FragmentPostListBinding;
+import com.anu.gp24s1.pojo.vo.PostVo;
+import com.anu.gp24s1.state.UserSession;
 import com.anu.gp24s1.ui.home.HomeViewModel;
 import com.anu.gp24s1.ui.home.RePostsByLocationAdapter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PostListFragment extends Fragment {
 
@@ -43,7 +48,16 @@ public class PostListFragment extends Fragment {
 
         //list by locations
         RecyclerView recyclerViewLocation = binding.postList;
-        setUpPostListModels();
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            Serializable postSerializable = bundle.getSerializable("postListModels");
+            try {
+                setUpPostListModels((List<PostVo>) postSerializable);
+            }catch (Exception e)
+            {
+                Toast.makeText(getContext(), "Get following posts failed", Toast.LENGTH_SHORT).show();
+            }
+        }
 
         PostListAdapter adapter = new PostListAdapter(getActivity(), postListModels);
         adapter.setOnItemClickListener(this::handleItemClick);
@@ -54,30 +68,17 @@ public class PostListFragment extends Fragment {
         return root;
     }
 
-    private void handleItemClick(PostListModel item) {
+    private void handleItemClick(PostVo item) {
         Intent intent = new Intent(getActivity(), SinglePostActivity.class);
         intent.putExtra("post_details", item); // Ensure PostListModel is Serializable or Parcelable
         startActivity(intent);
     }
 
-    ArrayList<PostListModel> postListModels = new ArrayList<>();
+    ArrayList<PostVo> postListModels = new ArrayList<>();
     int[] userAva = {R.drawable.ic_outline_account_circle_24, R.drawable.ic_outline_account_circle_24, R.drawable.ic_outline_account_circle_24};
 
-    //TODO: Set up group data
-    // check this video: https://www.youtube.com/watch?v=Mc0XT58A1Z4
-    private void setUpPostListModels() {
-        String[] userName = getResources().getStringArray(R.array.example_user_name_list_txt);
-        String[] time = getResources().getStringArray(R.array.example_user_name_list_txt);
-        String[] PostTitle = getResources().getStringArray(R.array.exapmle_post_titles_list_txt);
-        String[] locationTag = getResources().getStringArray(R.array.exapmle_location_list_txt);
-        String[] activityTag = getResources().getStringArray(R.array.exapmle_activities_list_txt);
-        String[] postContent = getResources().getStringArray(R.array.exapmle_post_titles_list_txt);
-        int[] numberFollowing = getResources().getIntArray(R.array.example_following_list_txt);
-        int[] numberComments = getResources().getIntArray(R.array.example_comments_list_txt);
-        for (int i = 0; i < userName.length; i++) { // arrays should be equal length
-            postListModels.add(new PostListModel(userAva[i], userName[i], time[i], PostTitle[i],
-                    locationTag[i], activityTag[i], postContent[i], numberFollowing[i], numberComments[i]));
-        }
+    private void setUpPostListModels(List<PostVo> postsVoList) {
+        postListModels.addAll(postsVoList);
     }
 
     @Override
