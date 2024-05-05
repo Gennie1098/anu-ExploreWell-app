@@ -15,6 +15,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -25,9 +26,9 @@ public class CommentDaoImpl implements CommentDao{
 
     private static CommentDaoImpl instance;
 
-    private static Map<String, Comment> comments;
+    private static Map<String, List<Comment>> comments;
 
-    private CommentDaoImpl(){};
+    private CommentDaoImpl(){}
 
     /**
      * Using singleton design pattern to ensure only get all comments data once.
@@ -38,7 +39,7 @@ public class CommentDaoImpl implements CommentDao{
         if(instance == null)
         {
             instance = new CommentDaoImpl();
-            comments = new HashMap<String, Comment>();
+            comments = new HashMap<String, List<Comment>>();
             DatabaseReference commentReference = DBConnector.getInstance().getDatabase().child("comments");
             commentReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -51,7 +52,17 @@ public class CommentDaoImpl implements CommentDao{
                         comment.setAuthorKey(snapshot.child("authorKey").getValue(String.class));
                         comment.setContent(snapshot.child("content").getValue(String.class));
                         comment.setCommentTime(TypeConvert.strToDate(snapshot.child("commentTime").getValue(String.class)));
-                        comments.put(comment.getCommentKey(),comment);
+                        String postKey = comment.getPostKey();
+                        if(comments.containsKey(postKey)) {
+                            List<Comment> commentsList = comments.get(postKey);
+                            commentsList.add(comment);
+                            comments.put(postKey,commentsList);
+                        }
+                        else {
+                            List<Comment> commentList = new ArrayList<>();
+                            commentList.add(comment);
+                            comments.put(postKey,commentList);
+                        }
                     }
                 }
 
@@ -107,8 +118,16 @@ public class CommentDaoImpl implements CommentDao{
         newComment.setCommentKey(commentKey);
 
         // Add to comments:
-        comments.put(commentKey, newComment);
-
+        if(comments.containsKey(postKey)) {
+            List<Comment> commentsList = comments.get(postKey);
+            commentsList.add(newComment);
+            comments.put(postKey,commentsList);
+        }
+        else {
+            List<Comment> commentList = new ArrayList<>();
+            commentList.add(newComment);
+            comments.put(postKey,commentList);
+        }
         return commentKey;
     }
 }

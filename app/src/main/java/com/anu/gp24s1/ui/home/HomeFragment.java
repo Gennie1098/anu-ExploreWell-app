@@ -76,6 +76,10 @@ public class HomeFragment extends Fragment {
 
     ArrayList<RePostsByLocationModel> rePostsByLocationModels = new ArrayList<>();
 
+    /**
+     * set recommendations by location to the list
+     * @author Qinjue Wu
+     */
     private void setUpRePostsByLocationModel() {
         List<PostVo> recommendationByLocation = UserSession.getInstance().getRecommendationByLocation();
         if (recommendationByLocation == null || recommendationByLocation.size() == 0) {
@@ -89,6 +93,10 @@ public class HomeFragment extends Fragment {
 
     ArrayList<RePostsByLocationModel> rePostsByTagModels = new ArrayList<>();
 
+    /**
+     * Set recommendations by tag to the list
+     * @author Qinjue Wu
+     */
     private void setUpRePostsByPopularModel() {
         List<PostVo> recommendationByTag = UserSession.getInstance().getRecommendationByTag();
         if (recommendationByTag == null || recommendationByTag.size() == 0) {
