@@ -1,10 +1,13 @@
 package com.anu.gp24s1.ui.profile;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,9 +23,14 @@ import com.anu.gp24s1.R;
 import com.anu.gp24s1.StartScreen;
 import com.anu.gp24s1.data.AuthRepository;
 import com.anu.gp24s1.databinding.FragmentProfileBinding;
+import com.anu.gp24s1.pojo.vo.UserVo;
+import com.anu.gp24s1.state.UserSession;
 import com.anu.gp24s1.state.LogoutSession;
 import com.anu.gp24s1.state.UserSession;
 import com.anu.gp24s1.ui.login.LoginActivity;
+import com.squareup.picasso.Picasso;
+
+import java.net.URI;
 
 public class ProfileFragment extends Fragment {
 
@@ -31,8 +39,22 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ProfileViewModel homeViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
-
         binding = FragmentProfileBinding.inflate(inflater, container, false);
+
+        // get user's information
+        UserSession userSession = UserSession.getInstance();
+        UserVo userVo = userSession.getProfile();
+        if (userVo != null) {
+            String username = userVo.getUsername();
+            String avatar = userVo.getAvatar();
+            Uri imageUrl = Uri.parse(avatar);
+            // bind user's information
+            TextView usernameTextView = binding.username;
+            usernameTextView.setText(username);
+            ImageView avatarImageView = binding.userImage;
+            Picasso.get().load(imageUrl).into(avatarImageView);
+        }
+        
         View root = binding.getRoot();
         return root;
     }
