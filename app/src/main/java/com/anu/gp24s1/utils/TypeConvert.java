@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Used for convert between different types.
@@ -21,6 +23,7 @@ public class TypeConvert {
     public static Date strToDate(String dateString)
     {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        dateFormat.setTimeZone(TimeZone.getTimeZone(ZoneId.of("UTC")));
         Date date = null;
         try {
             date = dateFormat.parse(dateString);
