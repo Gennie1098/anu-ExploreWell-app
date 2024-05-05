@@ -268,7 +268,7 @@ public class PostDaoImpl implements PostDao {
 
         // Update in database
         HashMap<String, Object> childUpdates = new HashMap<String, Object>();
-        childUpdates.put("/posts/" + postKey, postValues);
+        childUpdates.put("/post/" + postKey, postValues);
         childUpdates.put("/user/" + userKey + "/ownPosts/" + postKey, true);
 
         dbReference.updateChildren(childUpdates);
@@ -369,6 +369,7 @@ public class PostDaoImpl implements PostDao {
         List<String> comments = post.getComments();
         comments.add(commentKey);
         post.setComments(comments);
+
         int newCommentNumber = post.getCommentsNumber() + 1;
         post.setCommentsNumber(newCommentNumber);
 
