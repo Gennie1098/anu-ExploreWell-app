@@ -1,5 +1,6 @@
 package com.anu.gp24s1.ui.profile;
 
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,13 +11,18 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.anu.gp24s1.MainActivity;
 import com.anu.gp24s1.R;
 import com.anu.gp24s1.databinding.FragmentAccountInfoBinding;
 import com.anu.gp24s1.databinding.FragmentHomeBinding;
 import com.anu.gp24s1.databinding.FragmentProfileBinding;
+import com.anu.gp24s1.pojo.vo.UserVo;
+import com.anu.gp24s1.state.UserSession;
 import com.anu.gp24s1.ui.search.SearchFragment;
+import com.squareup.picasso.Picasso;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -74,6 +80,24 @@ public class AccountInfoFragment extends Fragment {
                 new ViewModelProvider(this).get(ProfileViewModel.class);
 
         binding = FragmentAccountInfoBinding.inflate(inflater, container, false);
+        UserSession userSession = UserSession.getInstance();
+        UserVo userVo = userSession.getProfile();
+        if (userVo != null) {
+            String username = userVo.getUsername();
+            String location = userVo.getLocation();
+            String avatar = userVo.getAvatar();
+            Uri imageUrl = Uri.parse(avatar);
+            // bind user's information
+            TextView usernameTextView = binding.name;
+            usernameTextView.setText(username);
+            TextView emailTextView = binding.email;
+            emailTextView.setText(username);
+            TextView locationTextView = binding.location;
+            locationTextView.setText(location);
+            ImageView avatarImageView = binding.userImage;
+            Picasso.get().load(imageUrl).into(avatarImageView);
+        }
+
         View root = binding.getRoot();
         return root;
     }
