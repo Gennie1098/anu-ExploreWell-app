@@ -27,7 +27,8 @@ public class UserDaoImpl implements UserDao {
 
     private UserDaoImpl(){}
     /**
-     * Using singleton design pattern to ensure only get all users' information data once.
+     * Using singleton design pattern to ensure only get all users' information data once
+     * and update user data synchronously.
      * @return instance
      * @author Qinjue Wu
      */
@@ -37,7 +38,7 @@ public class UserDaoImpl implements UserDao {
             instance = new UserDaoImpl();
             users = new HashMap<String,User>();
             DatabaseReference userReference = DBConnector.getInstance().getDatabase().child("user");
-            userReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            userReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
