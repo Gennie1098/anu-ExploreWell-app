@@ -64,7 +64,7 @@
             android:text="Activity" />
     </RadioGroup>
 
-    <MultiAutoCompleteTextView
+    <EditText
         android:id="@+id/editTextContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
