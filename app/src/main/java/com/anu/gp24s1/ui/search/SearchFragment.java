@@ -46,27 +46,7 @@ public class SearchFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        // Add listeners to the searchViewModel data:
-        searchViewModel.getTitleState().observe(getViewLifecycleOwner(), title -> {
-            // TODO: update the result based on the title:
-            // NOTE: title is a String
 
-
-        });
-
-        // Add listeners to the searchViewModel data:
-        searchViewModel.getLocationsState().observe(getViewLifecycleOwner(), locations -> {
-            // TODO: update the result based on the locations:
-            // NOTE: locations is a set
-
-        });
-
-        // Add listeners to the searchViewModel data:
-        searchViewModel.getTagsState().observe(getViewLifecycleOwner(), tags -> {
-            // TODO: update the result based on the locations:
-            // NOTE: tags is a set
-
-        });
 
         // get existing tags and locations:
         Set<String> tagsSet = PostDaoImpl.getInstance().getAllTags();
