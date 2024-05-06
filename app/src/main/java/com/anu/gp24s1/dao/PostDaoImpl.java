@@ -39,7 +39,8 @@ public class PostDaoImpl implements PostDao {
     private PostDaoImpl(){}
 
     /**
-     * Using singleton design pattern to ensure only get all posts,tags,locations data once.
+     * Using singleton design pattern to ensure only get all posts,tags,locations data once
+     * and update post,tag,location data synchronously.
      * @return instance PostDaoImpl
      * @author Qinjue Wu
      */
@@ -51,7 +52,7 @@ public class PostDaoImpl implements PostDao {
             postsGroupByTag = new HashMap<String, List<String>>();
             postsGroupByLocation = new HashMap<String, List<String>>();
             DatabaseReference postReference = DBConnector.getInstance().getDatabase().child("post");
-            postReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            postReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -99,7 +100,7 @@ public class PostDaoImpl implements PostDao {
                 }
             });
             DatabaseReference tagReference = DBConnector.getInstance().getDatabase().child("tag");
-            tagReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            tagReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -122,7 +123,7 @@ public class PostDaoImpl implements PostDao {
                 }
             });
             DatabaseReference locationReference = DBConnector.getInstance().getDatabase().child("location");
-            locationReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            locationReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -391,6 +392,9 @@ public class PostDaoImpl implements PostDao {
      */
     @Override
     public List<String> getGroupsOfPosts(List<String> postKeyList) {
+        if(postKeyList == null || postKeyList.size() == 0) {
+            return null;
+        }
         Set<String> groups = new HashSet<>();
         for(String postKey : postKeyList)
         {
