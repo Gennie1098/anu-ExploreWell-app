@@ -10,11 +10,13 @@ import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.TextView;
 
 import com.anu.gp24s1.MainActivity;
 import com.anu.gp24s1.R;
@@ -43,6 +45,8 @@ public class SearchFragment extends Fragment {
         searchBinding = FragmentSearchBinding.inflate(inflater, container, false);
 
         View view = inflater.inflate(R.layout.fragment_search, container, false);
+
+
 
         // get existing tags and locations:
         Set<String> tagsSet = PostDaoImpl.getInstance().getAllTags();
@@ -73,21 +77,15 @@ public class SearchFragment extends Fragment {
 
         searchContent.setThreshold(1);
         searchContent.setAdapter(autoCompletionArrayAdapter);
-        searchContent.addTextChangedListener(new TextWatcher(){
-
+        searchContent.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                searchViewModel.updateSearch(editable.toString());
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                        searchViewModel.updateSearch(textView.toString());
+                    }
+                }
+                return false;
             }
         });
 
