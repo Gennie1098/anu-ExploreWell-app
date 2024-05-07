@@ -30,7 +30,7 @@ import java.util.List;
 
 public class PostListFragment extends Fragment {
 
-    private PostListViewModel mViewModel;
+//    private PostListViewModel mViewModel;
 
     private FragmentPostListBinding binding;
 
@@ -41,13 +41,10 @@ public class PostListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
 
         binding = FragmentPostListBinding.inflate(inflater, container, false);
-
-        //list by locations
         RecyclerView recyclerViewLocation = binding.postList;
+
         Bundle bundle = getArguments();
         if (bundle != null) {
             Serializable postSerializable = bundle.getSerializable("postListModels");
@@ -70,22 +67,16 @@ public class PostListFragment extends Fragment {
 
     private void handleItemClick(PostVo item) {
         Intent intent = new Intent(getActivity(), SinglePostActivity.class);
-        intent.putExtra("post_details", item); // Ensure PostListModel is Serializable or Parcelable
+        intent.putExtra("post_details", item);
         startActivity(intent);
     }
 
     ArrayList<PostVo> postListModels = new ArrayList<>();
-    int[] userAva = {R.drawable.ic_outline_account_circle_24, R.drawable.ic_outline_account_circle_24, R.drawable.ic_outline_account_circle_24};
+//    int[] userAva = {R.drawable.ic_outline_account_circle_24, R.drawable.ic_outline_account_circle_24, R.drawable.ic_outline_account_circle_24};
 
     private void setUpPostListModels(List<PostVo> postsVoList) {
+        postListModels.clear();
         postListModels.addAll(postsVoList);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(PostListViewModel.class);
-        // TODO: Use the ViewModel
     }
 
 }

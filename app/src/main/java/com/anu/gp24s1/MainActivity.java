@@ -33,7 +33,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class  MainActivity extends AppCompatActivity {
 
 //    private FloatingActionButton fab;
-//    private NavController navController;
+    private NavController navController;
 
     public ActivityMainBinding binding;
 

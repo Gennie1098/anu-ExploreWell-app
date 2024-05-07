@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.following.FollowingFragment">
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/followingGroupsList"
         android:layout_width="match_parent"

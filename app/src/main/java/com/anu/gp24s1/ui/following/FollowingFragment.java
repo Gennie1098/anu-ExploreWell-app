@@ -52,7 +52,7 @@ public class FollowingFragment extends Fragment {
             Bundle bundle = new Bundle();
             bundle.putString("groupName", selectedModel.getGroupName());
             // Navigate with NavController
-            Navigation.findNavController(getView()).navigate(R.id.action_followingfragment_to_postslistfragment, bundle);
+            Navigation.findNavController(getView()).navigate(R.id.action_followingGroup_to_followingPostList, bundle);
         });
         return root;
     }

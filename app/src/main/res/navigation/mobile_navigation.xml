@@ -12,18 +12,27 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.anu.gp24s1.ui.following.FollowingFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_following" />
+        android:id="@+id/navigation_search"
+        android:name="com.anu.gp24s1.ui.search.SearchFragment"
+        tools:layout="@layout/fragment_profile">
+    </fragment>
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.anu.gp24s1.ui.profile.ProfileFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_profile" >
+        android:id="@+id/navigation_followingList"
+        android:name="com.anu.gp24s1.ui.following.FollowingFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_following">
         <action
-            android:id="@+id/action_navigation_notifications_to_startScreen"
+        android:id="@+id/action_followingGroup_to_followingPostList"
+        app:destination="@id/followingPostFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_profilePage"
+        android:name="com.anu.gp24s1.ui.profile.ProfileFragment"
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/logOut"
             app:destination="@id/startScreen" />
     </fragment>
 
@@ -33,16 +42,10 @@
         android:label="activity_start_screen"
         tools:layout="@layout/activity_start_screen" />
 
-    <activity
-        android:id="@+id/loginActivity"
-        android:name="com.anu.gp24s1.ui.login.LoginActivity"
-        android:label="activity_login"
-        tools:layout="@layout/activity_login" />
-
-    <activity
-        android:id="@+id/mainActivity"
-        android:name="com.anu.gp24s1.MainActivity"
-        android:label="activity_main"
-        tools:layout="@layout/activity_main" />
+    <fragment
+        android:id="@+id/followingPostFragment"
+        android:name="com.anu.gp24s1.ui.following.FollowingPostFragment"
+        android:label="fragment_following_post"
+        tools:layout="@layout/fragment_following_post" />
 
 </navigation>
