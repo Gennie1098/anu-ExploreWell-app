@@ -1,6 +1,7 @@
 package com.anu.gp24s1.ui.post;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -26,7 +27,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
     @NonNull
     @Override
     public CommentAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view = inflater.inflate(R.layout.post_comment, parent, false);
+
+        return new CommentAdapter.MyViewHolder(view);
     }
 
     @Override
