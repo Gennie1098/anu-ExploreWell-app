@@ -1,6 +1,7 @@
 package com.anu.gp24s1.ui.following;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anu.gp24s1.R;
@@ -18,17 +22,6 @@ public class followingListAdapter extends RecyclerView.Adapter<followingListAdap
 
     Context context;
     ArrayList<FollowingModel> followingModel;
-    private OnItemClickListener mListener;
-
-    //set click on each topic in list, to open list of posts
-    public interface OnItemClickListener {
-        void onItemClick(int position);
-    }
-
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.mListener = listener;
-    }
-
 
     public followingListAdapter (Context context, ArrayList<FollowingModel> followingModel) {
         this.context = context;
@@ -40,7 +33,6 @@ public class followingListAdapter extends RecyclerView.Adapter<followingListAdap
         //Inflate the layout (Giving a look to rows)
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.following_groups_list_row, parent, false);
-
         return new followingListAdapter.MyViewHolder(view);
     }
 
@@ -50,13 +42,6 @@ public class followingListAdapter extends RecyclerView.Adapter<followingListAdap
         //base on the position of the recycler view
         holder.groupName.setText(followingModel.get(position).getGroupName());
         holder.groupIcon.setImageResource(followingModel.get(position).getGroupIcon());
-
-        //click item
-        holder.itemView.setOnClickListener(v -> {
-            if (mListener != null && position != RecyclerView.NO_POSITION) {
-                mListener.onItemClick(position);
-            }
-        });
     }
 
     @Override
@@ -65,10 +50,7 @@ public class followingListAdapter extends RecyclerView.Adapter<followingListAdap
         return followingModel.size();
     }
 
-
-
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
-
+    public class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView groupIcon;
         TextView groupName;
 
@@ -76,6 +58,28 @@ public class followingListAdapter extends RecyclerView.Adapter<followingListAdap
             super(itemView);
             groupIcon = itemView.findViewById(R.id.groupIcon);
             groupName = itemView.findViewById(R.id.groupName);
+
+            // Setting the click listener
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getBindingAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        FollowingModel model = followingModel.get(position);
+
+                        FollowingPostFragment postFragment = new FollowingPostFragment();
+                        Bundle args = new Bundle();
+                        args.putString("groupName", model.getGroupName());
+                        postFragment.setArguments(args);
+
+                        FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
+                        FragmentTransaction transaction = fragmentManager.beginTransaction();
+                        transaction.replace(R.id.frameLayout, postFragment);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                    }
+                }
+            });
         }
     }
 }

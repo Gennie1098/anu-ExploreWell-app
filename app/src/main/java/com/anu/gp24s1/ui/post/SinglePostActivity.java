@@ -25,7 +25,6 @@ public class SinglePostActivity extends AppCompatActivity {
 
         // Retrieve the data from intent
         PostListModel post = (PostListModel) getIntent().getSerializableExtra("post_details");
-
         if (post != null) {
             updateUI(post);
         }

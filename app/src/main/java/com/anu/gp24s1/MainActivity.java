@@ -14,6 +14,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import com.anu.gp24s1.databinding.ActivityMainBinding;
 
@@ -28,6 +30,7 @@ import com.anu.gp24s1.ui.following.FollowingFragment;
 import com.anu.gp24s1.ui.home.HomeFragment;
 import com.anu.gp24s1.ui.profile.ProfileFragment;
 import com.anu.gp24s1.ui.search.SearchFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class  MainActivity extends AppCompatActivity {
@@ -75,7 +78,5 @@ public class  MainActivity extends AppCompatActivity {
     public void updateTitle(String title) {
         setTitle(title);
     }
-
-
 
 }
