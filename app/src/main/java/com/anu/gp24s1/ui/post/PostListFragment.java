@@ -43,16 +43,17 @@ public class PostListFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentPostListBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
         RecyclerView recyclerViewLocation = binding.postList;
 
         Bundle bundle = getArguments();
         if (bundle != null) {
-            Serializable postSerializable = bundle.getSerializable("postListModels");
             try {
-                setUpPostListModels((List<PostVo>) postSerializable);
+                Serializable postVoList = bundle.getSerializable("postVoList");
+                setUpPostListModels((List<PostVo>) postVoList);
             }catch (Exception e)
             {
-                Toast.makeText(getContext(), "Get following posts failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Get posts list failed", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -61,7 +62,6 @@ public class PostListFragment extends Fragment {
         recyclerViewLocation.setAdapter(adapter);
         recyclerViewLocation.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        View root = binding.getRoot();
         return root;
     }
 
