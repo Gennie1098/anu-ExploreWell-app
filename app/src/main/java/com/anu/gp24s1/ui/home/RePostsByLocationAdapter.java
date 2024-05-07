@@ -44,7 +44,9 @@ public class RePostsByLocationAdapter extends RecyclerView.Adapter<RePostsByLoca
         //assigning values to the views created in following_groups_list_row layout file
         //base on the position of the recycler view
         Uri imageUrl = Uri.parse(rePostsByLocationModel.get(position).getUserAva());
-        Picasso.get().load(imageUrl).into(holder.userAva);
+        Picasso.get().load(imageUrl)
+                .error(R.drawable.default_avatar_profile)
+                .into(holder.userAva);
         holder.userName.setText(rePostsByLocationModel.get(position).getUserName());
         holder.locationTag.setText(rePostsByLocationModel.get(position).getLocation());
         holder.activityTag.setText(rePostsByLocationModel.get(position).getActivity());

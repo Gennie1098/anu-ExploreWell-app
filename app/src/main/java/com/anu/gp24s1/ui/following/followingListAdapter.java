@@ -15,8 +15,12 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anu.gp24s1.R;
+import com.anu.gp24s1.pojo.vo.PostVo;
+import com.anu.gp24s1.state.UserSession;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class followingListAdapter extends RecyclerView.Adapter<followingListAdapter.MyViewHolder> {
 
