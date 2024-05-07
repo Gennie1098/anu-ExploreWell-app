@@ -23,10 +23,13 @@ import com.anu.gp24s1.dao.PostDao;
 import com.anu.gp24s1.dao.PostDaoImpl;
 import com.anu.gp24s1.databinding.FragmentFollowingBinding;
 import com.anu.gp24s1.pojo.Post;
+import com.anu.gp24s1.pojo.vo.PostVo;
 import com.anu.gp24s1.state.UserSession;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class FollowingFragment extends Fragment {
 
@@ -46,6 +49,8 @@ public class FollowingFragment extends Fragment {
         followingListAdapter adapter = new followingListAdapter(getActivity(), followingModels);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        
 
         return root;
     }

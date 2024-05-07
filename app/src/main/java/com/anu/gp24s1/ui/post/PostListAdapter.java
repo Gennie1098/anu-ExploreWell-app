@@ -52,16 +52,16 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.MyView
             holder.itemView.setOnClickListener(v -> listener.onItemClick(item));
         }
 
-        Uri imageUrl = Uri.parse(postListModels.get(position).getAuthorAvatar());
+        holder.UserName.setText(item.getAuthorName());
+        Uri imageUrl = Uri.parse(item.getAuthorAvatar());
         Picasso.get().load(imageUrl).into(holder.userImg);
-        holder.UserName.setText(postListModels.get(position).getAuthorName());
-        holder.time.setText(postListModels.get(position).getPublishTime().toString());
-        holder.PostTitle.setText(postListModels.get(position).getTitle());
-        holder.locationTag.setText(postListModels.get(position).getLocation());
-        holder.activityTag.setText(postListModels.get(position).getTag());
-        holder.postContent.setText(postListModels.get(position).getContent());
-        holder.numberFollowing.setText(String.valueOf(postListModels.get(position).getFollowerNumber()));
-        holder.numberComments.setText(String.valueOf(postListModels.get(position).getCommentsNumber()));
+        holder.time.setText(item.getPublishTime().toString());
+        holder.PostTitle.setText(item.getTitle());
+        holder.locationTag.setText(item.getLocation());
+        holder.activityTag.setText(item.getTag());
+        holder.postContent.setText(item.getContent());
+        holder.numberFollowing.setText(String.valueOf(item.getFollowerNumber()));
+        holder.numberComments.setText(String.valueOf(item.getCommentsNumber()));
     }
 
     @Override
@@ -81,10 +81,10 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.MyView
         TextView numberComments;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            userImg = itemView.findViewById(R.id.userAva);
-            UserName = itemView.findViewById(R.id.userName);
+            userImg = itemView.findViewById(R.id.userImg);
+            UserName = itemView.findViewById(R.id.UserName);
             time = itemView.findViewById(R.id.time);
-            PostTitle = itemView.findViewById(R.id.postTitle);
+            PostTitle = itemView.findViewById(R.id.PostTitle);
             locationTag = itemView.findViewById(R.id.locationTag);
             activityTag = itemView.findViewById(R.id.activityTag);
             postContent = itemView.findViewById(R.id.content);
