@@ -77,7 +77,9 @@ public class SinglePostActivity extends AppCompatActivity {
 
         UserName.setText(post.getAuthorName());
         Uri imageUrl = Uri.parse(post.getAuthorAvatar());
-        Picasso.get().load(imageUrl).into(userImg);
+        Picasso.get().load(imageUrl)
+                .error(R.drawable.default_avatar_profile)
+                .into(userImg);
         time.setText(post.getPublishTime().toString());
         PostTitle.setText(post.getTitle());
         locationTag.setText(post.getLocation());

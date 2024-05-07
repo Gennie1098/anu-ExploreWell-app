@@ -54,7 +54,9 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.MyView
 
         holder.UserName.setText(item.getAuthorName());
         Uri imageUrl = Uri.parse(item.getAuthorAvatar());
-        Picasso.get().load(imageUrl).into(holder.userImg);
+        Picasso.get().load(imageUrl)
+                .error(R.drawable.default_avatar_profile)
+                .into(holder.userImg);
         holder.time.setText(item.getPublishTime().toString());
         holder.PostTitle.setText(item.getTitle());
         holder.locationTag.setText(item.getLocation());

@@ -2,6 +2,7 @@ package com.anu.gp24s1.ui.post;
 
 import android.content.Context;
 import android.net.Uri;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -29,14 +30,19 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
     @NonNull
     @Override
     public CommentAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view = inflater.inflate(R.layout.post_comment, parent, false);
+
+        return new CommentAdapter.MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CommentAdapter.MyViewHolder holder, int position) {
-        Uri imageUrl = Uri.parse(commentModels.get(position).getUserAvatar());
-        Picasso.get().load(imageUrl).into(holder.userImg);
         holder.UserName.setText(commentModels.get(position).getUsername());
+        Uri imageUrl = Uri.parse(commentModels.get(position).getUserAvatar());
+        Picasso.get().load(imageUrl)
+                .error(R.drawable.default_avatar_profile)
+                .into(holder.userImg);
         holder.time.setText(String.valueOf(commentModels.get(position).getCommentTime()));
         holder.content.setText(commentModels.get(position).getContent());
     }
@@ -54,8 +60,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            userImg = itemView.findViewById(R.id.userAva);
-            UserName = itemView.findViewById(R.id.userName);
+            userImg = itemView.findViewById(R.id.userImg);
+            UserName = itemView.findViewById(R.id.UserName);
             time = itemView.findViewById(R.id.time);
             content = itemView.findViewById(R.id.content);
         }
