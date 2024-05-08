@@ -42,13 +42,13 @@ public class SearchParser {
      * */
     public boolean parseX() {
 
-        Token curToken = tokenizer.curToken;
+        Token curToken = tokenizer.curToken();
         if (curToken == null) { return false; };
 
         boolean parsedT = parseT();
 
         if (parsedT) {
-            curToken = tokenizer.curToken;
+            curToken = tokenizer.curToken();
             if (curToken == null) {
                 return true;
             } else {
@@ -72,7 +72,7 @@ public class SearchParser {
      * */
     public boolean parseT() {
 
-        Token curToken = tokenizer.curToken;
+        Token curToken = tokenizer.curToken();
         if (curToken == null) {
             return false;
         }
@@ -85,14 +85,14 @@ public class SearchParser {
             parsedT = true;
 
             tokenizer.next();
-            curToken = tokenizer.curToken;
+            curToken = tokenizer.curToken();
         }
         while (curToken != null && curToken.getType() == TokenType.Alpha) {
             titleStringBuilder.append(" ");
             titleStringBuilder.append(curToken.getContent().toString());
 
             tokenizer.next();
-            curToken = tokenizer.curToken;
+            curToken = tokenizer.curToken();
         }
 
         title = titleStringBuilder.toString();
@@ -112,7 +112,7 @@ public class SearchParser {
 
         if (!parsedZ) { return false; };
 
-        Token curToken = tokenizer.curToken;
+        Token curToken = tokenizer.curToken();
         if (curToken == null) {
             return true;
         } else {
@@ -128,14 +128,14 @@ public class SearchParser {
      * */
     private boolean parseZ() {
 
-        Token curToken = tokenizer.curToken;
+        Token curToken = tokenizer.curToken();
         if (curToken == null) { return false; };
 
         TokenType type = curToken.getType();
         if (type == TokenType.Alpha) { return false; }
 
         tokenizer.next();
-        curToken = tokenizer.curToken;
+        curToken = tokenizer.curToken();
         if (curToken == null) {
             return false;
         } else if (curToken.getType() != TokenType.Alpha) {

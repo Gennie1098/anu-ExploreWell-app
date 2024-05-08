@@ -1,5 +1,10 @@
 package com.anu.gp24s1.utils;
 
+/**
+ * Token class for the SearchParser and SearchTokenizer
+ *
+ * @author  u7284324    Lachlan Stewart
+ * */
 public class Token {
     private final CharSequence content;
 

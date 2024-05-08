@@ -4,7 +4,7 @@ package com.anu.gp24s1.utils;
  * pertaining to Posts, distinguishing between:
  * - '@'
  * - '#'
- * - alpha (anything that isn't '@' or '#'
+ * - alpha (anything contiguous that isn't '@' or '#'
  *
  * @author  u7284324    Lachlan Stewart
  * */
@@ -12,7 +12,7 @@ public class SearchTokenizer {
 
     private final CharSequence content;
     private int idx;
-    public Token curToken;
+    private Token curToken;
 
     public SearchTokenizer(CharSequence content) {
         this.content = content;
@@ -79,6 +79,10 @@ public class SearchTokenizer {
             }
             return new Token(content.subSequence(start, idx), TokenType.Alpha);
         }
+    }
+
+    public Token curToken() {
+        return curToken;
     }
 
 }
