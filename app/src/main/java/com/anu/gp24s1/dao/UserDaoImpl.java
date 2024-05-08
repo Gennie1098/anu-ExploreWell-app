@@ -168,7 +168,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean addOwnPost(String userKey, String postKey) {
-        return false;
+        return true;
     }
 
     /**
