@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.anu.gp24s1.R;
 import com.anu.gp24s1.pojo.vo.PostVo;
@@ -49,6 +50,17 @@ public class FollowingPostFragment extends Fragment {
                     .add(R.id.following_post_container, postListFragment)
                     .commit();
         }
+
+        ImageView backButton = view.findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Use getParentFragmentManager() instead of the deprecated getFragmentManager()
+                if (getParentFragmentManager().getBackStackEntryCount() > 0) {
+                    getParentFragmentManager().popBackStack();
+                }
+            }
+        });
 
         return view;
     }
