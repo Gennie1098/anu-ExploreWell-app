@@ -6,6 +6,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,7 +30,6 @@ public class SinglePostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_single_post);
 
         RecyclerView recyclerView = findViewById(R.id.commentSection);
-
         // Retrieve the data from intent
         PostVo post = (PostVo) getIntent().getSerializableExtra("post_details");
         if (post != null) {
@@ -38,7 +40,18 @@ public class SinglePostActivity extends AppCompatActivity {
         CommentAdapter adapter = new CommentAdapter(this, commentModels);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        ImageButton backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("SinglePostActivity", "Back button clicked");
+                finish();
+            }
+        });
     }
+
+
 
     ArrayList<CommentVo> commentModels = new ArrayList<>();
 

@@ -2,16 +2,21 @@ package com.anu.gp24s1.ui.following;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.anu.gp24s1.MainActivity;
 import com.anu.gp24s1.R;
 import com.anu.gp24s1.pojo.vo.PostVo;
 import com.anu.gp24s1.state.UserSession;
 import com.anu.gp24s1.ui.post.PostListFragment;
+import com.anu.gp24s1.ui.profile.ProfileFragment;
 
 import java.io.Serializable;
 import java.util.List;
@@ -37,6 +42,17 @@ public class FollowingPostFragment extends Fragment {
                     .add(R.id.following_post_container, postListFragment)
                     .commit();
         }
+
+        ImageView backButton = view.findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Check if it's possible to go back and then go back
+                if (getParentFragmentManager().getBackStackEntryCount() > 0) {
+                    getParentFragmentManager().popBackStack();
+                }
+            }
+        });
 
         return view;
 

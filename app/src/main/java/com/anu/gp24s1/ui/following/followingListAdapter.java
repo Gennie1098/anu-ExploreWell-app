@@ -79,7 +79,7 @@ public class followingListAdapter extends RecyclerView.Adapter<followingListAdap
                         FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
                         FragmentTransaction transaction = fragmentManager.beginTransaction();
                         transaction.replace(R.id.frameLayout, postFragment);
-                        transaction.addToBackStack(null);
+                        transaction.addToBackStack("FollowingFragment");
                         transaction.commit();
                     }
                 }

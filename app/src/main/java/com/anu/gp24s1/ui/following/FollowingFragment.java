@@ -50,8 +50,6 @@ public class FollowingFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        
-
         return root;
     }
 
