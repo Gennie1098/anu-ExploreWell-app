@@ -76,6 +76,7 @@ public class LoginActivity extends AppCompatActivity {
 
         loginButton.setOnClickListener(v -> {
             UserDaoImpl.getInstance();
+            CommentDaoImpl.getInstance();
             loadingProgressBar.setVisibility(View.VISIBLE);
             loginViewModel.login(usernameEditText.getText().toString(), passwordEditText.getText().toString());
         });

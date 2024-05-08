@@ -94,9 +94,9 @@ public class HomeFragment extends Fragment {
     }
 
     // TODO: check this for set up post data
-    private void handleItemClick(PostVo item) {
+    private void handleItemClick(RePostsByLocationModel item) {
         Intent intent = new Intent(getActivity(), SinglePostActivity.class);
-        intent.putExtra("post_details", item);
+        intent.putExtra("post_details", item.getPostKey());
         startActivity(intent);
     }
 
@@ -113,7 +113,7 @@ public class HomeFragment extends Fragment {
             Toast.makeText(getContext(), "Get Recommended posts by location failed!", Toast.LENGTH_LONG).show();
         } else {
             for (int i = 0; i < recommendationByLocation.size(); i++) { // arrays should be equal length
-                rePostsByLocationModels.add(new RePostsByLocationModel(recommendationByLocation.get(i).getAuthorAvatar(), recommendationByLocation.get(i).getAuthorName(), recommendationByLocation.get(i).getLocation(), recommendationByLocation.get(i).getTag(), recommendationByLocation.get(i).getTitle(), recommendationByLocation.get(i).getFollowerNumber(), recommendationByLocation.get(i).getCommentsNumber()));
+                rePostsByLocationModels.add(new RePostsByLocationModel(recommendationByLocation.get(i).getPostKey(),recommendationByLocation.get(i).getAuthorAvatar(), recommendationByLocation.get(i).getAuthorName(), recommendationByLocation.get(i).getLocation(), recommendationByLocation.get(i).getTag(), recommendationByLocation.get(i).getTitle(), recommendationByLocation.get(i).getFollowerNumber(), recommendationByLocation.get(i).getCommentsNumber()));
             }
         }
     }
@@ -131,7 +131,7 @@ public class HomeFragment extends Fragment {
             Toast.makeText(getContext(), "Get Recommended posts by tag failed!", Toast.LENGTH_LONG).show();
         } else {
             for (int i = 0; i < recommendationByTag.size(); i++) { // arrays should be equal length
-                rePostsByTagModels.add(new RePostsByLocationModel(recommendationByTag.get(i).getAuthorAvatar(), recommendationByTag.get(i).getAuthorName(), recommendationByTag.get(i).getLocation(), recommendationByTag.get(i).getTag(), recommendationByTag.get(i).getTitle(), recommendationByTag.get(i).getFollowerNumber(), recommendationByTag.get(i).getCommentsNumber()));
+                rePostsByTagModels.add(new RePostsByLocationModel(recommendationByTag.get(i).getPostKey(),recommendationByTag.get(i).getAuthorAvatar(), recommendationByTag.get(i).getAuthorName(), recommendationByTag.get(i).getLocation(), recommendationByTag.get(i).getTag(), recommendationByTag.get(i).getTitle(), recommendationByTag.get(i).getFollowerNumber(), recommendationByTag.get(i).getCommentsNumber()));
             }
         }
     }
