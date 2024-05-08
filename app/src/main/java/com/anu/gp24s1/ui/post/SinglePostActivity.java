@@ -10,20 +10,32 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.anu.gp24s1.MainActivity;
 import com.anu.gp24s1.R;
 import com.anu.gp24s1.dao.CommentDaoImpl;
 import com.anu.gp24s1.pojo.vo.CommentVo;
 import com.anu.gp24s1.pojo.vo.PostVo;
 import com.anu.gp24s1.state.UserSession;
+import com.anu.gp24s1.ui.search.SearchFragment;
 import com.anu.gp24s1.utils.DBConnector;
 import com.google.android.material.chip.Chip;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+import com.anu.gp24s1.dao.PostDao;
+import com.anu.gp24s1.dao.PostDaoImpl;
+import com.anu.gp24s1.dao.UserDao;
+import com.anu.gp24s1.dao.UserDaoImpl;
+import com.anu.gp24s1.pojo.vo.PostVo;
+import com.anu.gp24s1.pojo.vo.UserVo;
+import com.anu.gp24s1.state.UserSession;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -62,6 +74,17 @@ public class SinglePostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // UserSession.getInstance().addComment(post.ge
+                System.out.println("add comment");
+            }
+        });
+
+        // follow
+        ImageButton followingButton = findViewById(R.id.followingButton);
+        followingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean result = UserSession.getInstance().followPost(post.getPostKey());
+                System.out.println("add follow result: "+result);
             }
         });
 
@@ -101,6 +124,7 @@ public class SinglePostActivity extends AppCompatActivity {
         TextView postContent = findViewById(R.id.content);
         TextView numberFollowing = findViewById(R.id.numberFollowing);
         TextView numberComments = findViewById(R.id.numberComments);
+
 
         UserName.setText(post.getAuthorName());
         Uri imageUrl = Uri.parse(post.getAuthorAvatar());

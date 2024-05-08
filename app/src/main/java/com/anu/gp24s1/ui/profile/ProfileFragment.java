@@ -13,24 +13,19 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 
 import com.anu.gp24s1.MainActivity;
-import com.anu.gp24s1.R;
 import com.anu.gp24s1.StartScreen;
 import com.anu.gp24s1.data.AuthRepository;
 import com.anu.gp24s1.databinding.FragmentProfileBinding;
 import com.anu.gp24s1.pojo.vo.UserVo;
 import com.anu.gp24s1.state.UserSession;
 import com.anu.gp24s1.state.LogoutSession;
-import com.anu.gp24s1.state.UserSession;
-import com.anu.gp24s1.ui.login.LoginActivity;
+
 import com.squareup.picasso.Picasso;
 
-import java.net.URI;
 
 public class ProfileFragment extends Fragment {
 

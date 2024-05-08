@@ -6,7 +6,6 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,12 +17,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anu.gp24s1.MainActivity;
-import com.anu.gp24s1.R;
-import com.anu.gp24s1.dao.PostDaoImpl;
 import com.anu.gp24s1.databinding.FragmentHomeBinding;
 import com.anu.gp24s1.pojo.vo.PostVo;
 import com.anu.gp24s1.state.UserSession;
-import com.anu.gp24s1.ui.following.FollowingModel;
+
 import com.anu.gp24s1.ui.search.SearchFragment;
 import com.anu.gp24s1.utils.DBConnector;
 import com.google.firebase.database.DataSnapshot;
@@ -179,10 +176,20 @@ public class HomeFragment extends Fragment {
 
     private void dataStream() {
         if (getRePostsByLocationModels().size() > 0) {
-            RePostsByLocationModel model = rePostsByLocationModels.get(0);
-            model.setNumberOfFollowing(model.getNumberOfFollowing() + random.nextInt(4) - 1); // randomly add -1 to 2
-            rePostsByLocationModels.set(0, model);
-            recyclerViewLocation.getAdapter().notifyItemChanged(0);
+            // recommend posts by location
+            RePostsByLocationModel rePostsByLocationModel = rePostsByLocationModels.get(0);
+            if (rePostsByLocationModel.getNumberOfFollowing() < 27) {
+                rePostsByLocationModel.setNumberOfFollowing(rePostsByLocationModel.getNumberOfFollowing() + random.nextInt(3)); // randomly add 0 to 2
+                rePostsByLocationModels.set(0, rePostsByLocationModel);
+                recyclerViewLocation.getAdapter().notifyItemChanged(0);
+            }
+            // recommend posts by tag
+            RePostsByLocationModel rePostsByTagModel = rePostsByTagModels.get(0);
+            if (rePostsByTagModel.getNumberOfFollowing() < 27) {
+                rePostsByTagModel.setNumberOfFollowing(rePostsByTagModel.getNumberOfFollowing() + random.nextInt(3)); // randomly add 0 to 2
+                rePostsByTagModels.set(0, rePostsByTagModel);
+                recyclerViewPopular.getAdapter().notifyItemChanged(0);
+            }
         }
     }
 }

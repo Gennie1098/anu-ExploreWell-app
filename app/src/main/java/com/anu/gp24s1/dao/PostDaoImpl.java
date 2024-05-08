@@ -34,21 +34,22 @@ public class PostDaoImpl implements PostDao {
 
     private static HashMap<String, List<String>> postsGroupByTag;
 
-    private static HashMap<String,List<String>> postsGroupByLocation;
+    private static HashMap<String, List<String>> postsGroupByLocation;
 
-    private PostDaoImpl(){}
+    private PostDaoImpl() {
+    }
 
     /**
      * Using singleton design pattern to ensure only get all posts,tags,locations data once
      * and update post,tag,location data synchronously.
+     *
      * @return instance PostDaoImpl
      * @author Qinjue Wu
      */
     public static PostDaoImpl getInstance() {
-        if(instance == null)
-        {
+        if (instance == null) {
             instance = new PostDaoImpl();
-            posts = new HashMap<String,Post>();
+            posts = new HashMap<String, Post>();
             postsGroupByTag = new HashMap<String, List<String>>();
             postsGroupByLocation = new HashMap<String, List<String>>();
             DatabaseReference postReference = DBConnector.getInstance().getDatabase().child("post");
@@ -66,20 +67,18 @@ public class PostDaoImpl implements PostDao {
                         post.setPublishTime(TypeConvert.strToDate(snapshot.child("publishTime").getValue(String.class)));
                         post.setAuthorKey(snapshot.child("authorKey").getValue(String.class));
                         post.setFollowerNumber(snapshot.child("followerNumber").getValue(Integer.class));
-                        HashMap<String,Boolean> followersMap = (HashMap<String,Boolean>) snapshot.child("followers").getValue();
-                        if(followersMap != null)
-                        {
+                        HashMap<String, Boolean> followersMap = (HashMap<String, Boolean>) snapshot.child("followers").getValue();
+                        if (followersMap != null) {
                             List<String> followersList = new ArrayList<>(followersMap.keySet());
                             post.setFollowers(followersList);
                         }
                         post.setCommentsNumber(snapshot.child("commentsNumber").getValue(Integer.class));
-                        HashMap<String,Boolean> commentsMap = (HashMap<String,Boolean>) snapshot.child("comments").getValue();
-                        if(commentsMap != null)
-                        {
+                        HashMap<String, Boolean> commentsMap = (HashMap<String, Boolean>) snapshot.child("comments").getValue();
+                        if (commentsMap != null) {
                             List<String> commentsList = new ArrayList<>(commentsMap.keySet());
                             post.setComments(commentsList);
                         }
-                        posts.put(post.getPostKey(),post);
+                        posts.put(post.getPostKey(), post);
 
                         // add new post to tree
                         if (rootPost == null) {
@@ -104,15 +103,12 @@ public class PostDaoImpl implements PostDao {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        HashMap<String,Boolean> postsMap = (HashMap<String,Boolean>) snapshot.child("posts").getValue();
-                        if(postsMap != null)
-                        {
+                        HashMap<String, Boolean> postsMap = (HashMap<String, Boolean>) snapshot.child("posts").getValue();
+                        if (postsMap != null) {
                             List<String> postsList = new ArrayList<>(postsMap.keySet());
-                            postsGroupByTag.put(snapshot.getKey(),postsList);
-                        }
-                        else
-                        {
-                            postsGroupByTag.put(snapshot.getKey(),null);
+                            postsGroupByTag.put(snapshot.getKey(), postsList);
+                        } else {
+                            postsGroupByTag.put(snapshot.getKey(), null);
                         }
                     }
                 }
@@ -127,15 +123,12 @@ public class PostDaoImpl implements PostDao {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        HashMap<String,Boolean> postsMap = (HashMap<String,Boolean>) snapshot.child("posts").getValue();
-                        if(postsMap != null)
-                        {
+                        HashMap<String, Boolean> postsMap = (HashMap<String, Boolean>) snapshot.child("posts").getValue();
+                        if (postsMap != null) {
                             List<String> postsList = new ArrayList<>(postsMap.keySet());
-                            postsGroupByLocation.put(snapshot.getKey(),postsList);
-                        }
-                        else
-                        {
-                            postsGroupByLocation.put(snapshot.getKey(),null);
+                            postsGroupByLocation.put(snapshot.getKey(), postsList);
+                        } else {
+                            postsGroupByLocation.put(snapshot.getKey(), null);
                         }
                     }
                 }
@@ -151,32 +144,26 @@ public class PostDaoImpl implements PostDao {
 
     /**
      * Given the passion tag of the user, and recommend corresponding posts to users by the number of followers.
+     *
      * @param tag String
      * @return List<Post>
      * @author Qinjue Wu
      */
     @Override
     public List<Post> getRecommendationByTag(String tag) {
-        if(postsGroupByTag.containsKey(tag))
-        {
+        if (postsGroupByTag.containsKey(tag)) {
             List<String> postKeyList = postsGroupByTag.get(tag);
-            if(postKeyList == null)
-            {
+            if (postKeyList == null) {
                 return null;
             }
             List<Post> sortPosts = sortPostsByfollowerNum(getPostList(postKeyList));
             int postsNum = sortPosts.size();
-            if(RECOMMENDATION_NUMBER < postsNum)
-            {
-                return sortPosts.subList(0,RECOMMENDATION_NUMBER);
-            }
-            else if(postsNum == 0)
-            {
+            if (RECOMMENDATION_NUMBER < postsNum) {
+                return sortPosts.subList(0, RECOMMENDATION_NUMBER);
+            } else if (postsNum == 0) {
                 return null;
-            }
-            else
-            {
-                return sortPosts.subList(0,postsNum);
+            } else {
+                return sortPosts.subList(0, postsNum);
             }
         }
         return null;
@@ -184,32 +171,26 @@ public class PostDaoImpl implements PostDao {
 
     /**
      * Given the location of the user, and recommend corresponding posts to users by the number of followers.
+     *
      * @param location String
      * @return List<Post>
      * @author Qinjue Wu
      */
     @Override
     public List<Post> getRecommendationByLocation(String location) {
-        if(postsGroupByLocation.containsKey(location))
-        {
+        if (postsGroupByLocation.containsKey(location)) {
             List<String> postKeyList = postsGroupByLocation.get(location);
-            if(postKeyList == null)
-            {
+            if (postKeyList == null) {
                 return null;
             }
             List<Post> sortPosts = sortPostsByfollowerNum(getPostList(postKeyList));
             int postsNum = sortPosts.size();
-            if(RECOMMENDATION_NUMBER < postsNum)
-            {
-                return sortPosts.subList(0,RECOMMENDATION_NUMBER);
-            }
-            else if(postsNum == 0)
-            {
+            if (RECOMMENDATION_NUMBER < postsNum) {
+                return sortPosts.subList(0, RECOMMENDATION_NUMBER);
+            } else if (postsNum == 0) {
                 return null;
-            }
-            else
-            {
-                return sortPosts.subList(0,postsNum);
+            } else {
+                return sortPosts.subList(0, postsNum);
             }
         }
         return null;
@@ -219,14 +200,13 @@ public class PostDaoImpl implements PostDao {
      * Firebase code is based on:
      * <a href="https://firebase.google.com/docs/database/android/read-and-write#updating_or_deleting_data">...</a>
      *
+     * @param title    The title of the post
+     * @param content  The content of the main body of the post
+     * @param tag      The tag associated with the post
+     * @param location The location associated with the post
+     * @param userKey  The userKey associated with the user making the post
      * @author u7284324    Lachlan Stewart
-     *
-     * @param   title   The title of the post
-     * @param   content The content of the main body of the post
-     * @param   tag The tag associated with the post
-     * @param   location The location associated with the post
-     * @param   userKey The userKey associated with the user making the post
-     * */
+     */
     @Override
     public String createPost(String title, String content, String tag, String location, String userKey) throws Exception {
 
@@ -300,13 +280,15 @@ public class PostDaoImpl implements PostDao {
 
     /**
      * Record the actions of users following posts by user key and post key
+     *
      * @param postKey
      * @param userKey
      * @return whether the operation is successful or not
-     * @author  u7793565    Qihua Huang
-     * */
+     * @author u7793565    Qihua Huang
+     */
     @Override
     public boolean followPost(String postKey, String userKey) {
+        System.out.println(postKey+ " "+userKey);
         PostVo postVo = viewPost(postKey, userKey);
         Post post = posts.get(postKey);
         assert post != null;
@@ -320,6 +302,7 @@ public class PostDaoImpl implements PostDao {
             return true;
         } else {
             //Add the user to the post follower list
+            //It's not working. It's a code smell.
             postVo.setFollowing(true);
             boolean addFollowerListResult = followersList.add(userKey);
             post.setFollowers(followersList);
@@ -329,11 +312,11 @@ public class PostDaoImpl implements PostDao {
             post.setFollowerNumber(followerNumber);
 
             //Update database data
-            // TODO: this implementation is not sure
             DatabaseReference postReference = DBConnector.getInstance().getDatabase().child("post");
-            postReference.child("users").child(postKey).child("followerNumber").setValue((long) followerNumber);
-            postReference.child("users").child(postKey).child("followers").setValue(followersList);
-
+            postReference.child(postKey).child("followerNumber").setValue((long) followerNumber);
+            HashMap<String, Object> childUpdates = new HashMap<>();
+            childUpdates.put(userKey, true);
+            postReference.child(postKey).child("followers").updateChildren(childUpdates);
             //Add the post to the user's following list
             boolean addFollowingListResult = userDao.addFollowingPost(userKey, postKey);
             return addFollowerListResult && addFollowingListResult;
@@ -359,11 +342,11 @@ public class PostDaoImpl implements PostDao {
 
     /**
      * Create a new comment
-     * @author  u7284324    Lachlan Stewart
      *
-     * @param   commentKey  the key for the existing comment being added to an existing post
-     * @param   postKey     the key for the existing post that the comment is being added to
-     * */
+     * @param commentKey the key for the existing comment being added to an existing post
+     * @param postKey    the key for the existing post that the comment is being added to
+     * @author u7284324    Lachlan Stewart
+     */
     @Override
     public void addComment(String commentKey, String postKey) {
         Post post = posts.get(postKey);
@@ -386,25 +369,24 @@ public class PostDaoImpl implements PostDao {
     /**
      * Given user's following posts' keys,
      * and return groups of these posts by tags and locations order alphabetically.
+     *
      * @param postKeyList List<String>
      * @return List<String>
      * @author Qinjue Wu
      */
     @Override
     public List<String> getGroupsOfPosts(List<String> postKeyList) {
-        if(postKeyList == null || postKeyList.size() == 0) {
+        if (postKeyList == null || postKeyList.size() == 0) {
             return null;
         }
         Set<String> groups = new HashSet<>();
-        for(String postKey : postKeyList)
-        {
-            if(posts.containsKey(postKey))
-            {
+        for (String postKey : postKeyList) {
+            if (posts.containsKey(postKey)) {
                 groups.add(Objects.requireNonNull(posts.get(postKey)).getTag());
                 groups.add(Objects.requireNonNull(posts.get(postKey)).getLocation());
             }
         }
-        List<String> groupList =  new ArrayList<>(groups);
+        List<String> groupList = new ArrayList<>(groups);
         Comparator<String> stringComparator = new Comparator<>() {
             @Override
             public int compare(String s, String t1) {
@@ -418,19 +400,19 @@ public class PostDaoImpl implements PostDao {
     /**
      * Given the name of group
      * and return a list of posts followed by the user and belong to the group.
+     *
      * @param group String
      * @return List<Post>
      * @author Qinjue Wu
      */
     @Override
     public List<Post> getFollowingPostsByGroup(String group, List<String> postKeyList) {
-        if(postsGroupByTag.containsKey(group)) {
+        if (postsGroupByTag.containsKey(group)) {
             List<String> intersection = postsGroupByTag.get(group);
             assert intersection != null;
             intersection.retainAll(postKeyList);
             return getPostList(intersection);
-        }
-        else if (postsGroupByLocation.containsKey(group)) {
+        } else if (postsGroupByLocation.containsKey(group)) {
             List<String> intersection = postsGroupByLocation.get(group);
             assert intersection != null;
             intersection.retainAll(postKeyList);
@@ -446,14 +428,15 @@ public class PostDaoImpl implements PostDao {
 
     /**
      * Convert a list of Post objects to PostVo objects
+     *
      * @param postsList List<Post>
-     * @param userKey String
+     * @param userKey   String
      * @return List<PostVo>
      * @author Qinjue Wu
      */
     @Override
     public List<PostVo> viewListOfPosts(List<Post> postsList, String userKey) {
-        if(postsList == null || postsList.size() == 0) {
+        if (postsList == null || postsList.size() == 0) {
             return null;
         }
         List<PostVo> postVoList = new ArrayList<>();
@@ -465,16 +448,15 @@ public class PostDaoImpl implements PostDao {
 
     /**
      * From a list of keys of posts to get corresponding post objetcs.
+     *
      * @param postKeyList List<String>
      * @return postsList List<Post>
      * @author Qinjue Wu
      */
     public List<Post> getPostList(List<String> postKeyList) {
         List<Post> postsList = new ArrayList<>();
-        for(String postKey : postKeyList)
-        {
-            if(posts.containsKey(postKey))
-            {
+        for (String postKey : postKeyList) {
+            if (posts.containsKey(postKey)) {
                 postsList.add(posts.get(postKey));
             }
         }
@@ -483,6 +465,7 @@ public class PostDaoImpl implements PostDao {
 
     /**
      * Sort a lists of posts according to the number of their followers in descending order.
+     *
      * @param posts List<Post>
      * @return posts List<Post>
      * @author Qinjue Wu
@@ -500,6 +483,7 @@ public class PostDaoImpl implements PostDao {
 
     /**
      * Get all tags in the database.
+     *
      * @return Set<String>
      * @author Qinjue Wu
      */
@@ -510,6 +494,7 @@ public class PostDaoImpl implements PostDao {
 
     /**
      * Get all locations in the database.
+     *
      * @return Set<String>
      * @author Qinjue Wu
      */
