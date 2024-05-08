@@ -270,7 +270,6 @@ public class PostDaoImpl implements PostDao {
         // Update in database
         HashMap<String, Object> childUpdates = new HashMap<String, Object>();
         childUpdates.put("/post/" + postKey, postValues);
-        childUpdates.put("/user/" + userKey + "/ownPosts/" + postKey, true);
 
         dbReference.updateChildren(childUpdates);
 
@@ -331,8 +330,8 @@ public class PostDaoImpl implements PostDao {
             //Update database data
             // TODO: this implementation is not sure
             DatabaseReference postReference = DBConnector.getInstance().getDatabase().child("post");
-            postReference.child("users").child(postKey).child("followerNumber").setValue((long) followerNumber);
-            postReference.child("users").child(postKey).child("followers").setValue(followersList);
+            postReference.child("user").child(postKey).child("followerNumber").setValue((long) followerNumber);
+            postReference.child("user").child(postKey).child("followers").setValue(followersList);
 
             //Add the post to the user's following list
             boolean addFollowingListResult = userDao.addFollowingPost(userKey, postKey);
