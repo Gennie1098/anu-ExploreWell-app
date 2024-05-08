@@ -25,9 +25,15 @@ import com.anu.gp24s1.pojo.vo.PostVo;
 import com.anu.gp24s1.state.UserSession;
 import com.anu.gp24s1.ui.following.FollowingModel;
 import com.anu.gp24s1.ui.search.SearchFragment;
+import com.anu.gp24s1.utils.DBConnector;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class HomeFragment extends Fragment {
@@ -58,6 +64,7 @@ public class HomeFragment extends Fragment {
         recyclerViewPopular.setAdapter(adapterPopular);
         recyclerViewPopular.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
 
+        updateData();
 
         View root = binding.getRoot();
 
@@ -81,6 +88,7 @@ public class HomeFragment extends Fragment {
      * @author Qinjue Wu
      */
     private void setUpRePostsByLocationModel() {
+        rePostsByLocationModels.clear();
         List<PostVo> recommendationByLocation = UserSession.getInstance().getRecommendationByLocation();
         if (recommendationByLocation == null || recommendationByLocation.size() == 0) {
             Toast.makeText(getContext(), "Get Recommended posts by location failed!", Toast.LENGTH_LONG).show();
@@ -98,6 +106,7 @@ public class HomeFragment extends Fragment {
      * @author Qinjue Wu
      */
     private void setUpRePostsByPopularModel() {
+        rePostsByTagModels.clear();
         List<PostVo> recommendationByTag = UserSession.getInstance().getRecommendationByTag();
         if (recommendationByTag == null || recommendationByTag.size() == 0) {
             Toast.makeText(getContext(), "Get Recommended posts by tag failed!", Toast.LENGTH_LONG).show();
@@ -106,6 +115,24 @@ public class HomeFragment extends Fragment {
                 rePostsByTagModels.add(new RePostsByLocationModel(recommendationByTag.get(i).getAuthorAvatar(), recommendationByTag.get(i).getAuthorName(), recommendationByTag.get(i).getLocation(), recommendationByTag.get(i).getTag(), recommendationByTag.get(i).getTitle(), recommendationByTag.get(i).getFollowerNumber(), recommendationByTag.get(i).getCommentsNumber()));
             }
         }
+    }
+
+    private void updateData() {
+        DatabaseReference postDatabase = DBConnector.getInstance().getDatabase().child("post");
+        postDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                setUpRePostsByLocationModel();
+                setUpRePostsByPopularModel();
+                recyclerViewLocation.getAdapter().notifyDataSetChanged();
+                recyclerViewPopular.getAdapter().notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     @Override

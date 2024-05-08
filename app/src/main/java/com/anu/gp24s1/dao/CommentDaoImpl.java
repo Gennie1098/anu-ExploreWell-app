@@ -31,7 +31,8 @@ public class CommentDaoImpl implements CommentDao{
     private CommentDaoImpl(){}
 
     /**
-     * Using singleton design pattern to ensure only get all comments data once.
+     * Using singleton design pattern to ensure only get all comments data once
+     * and update comment data synchronously.
      * @return instance
      * @author Qinjue Wu
      */
@@ -41,7 +42,7 @@ public class CommentDaoImpl implements CommentDao{
             instance = new CommentDaoImpl();
             comments = new HashMap<String, List<Comment>>();
             DatabaseReference commentReference = DBConnector.getInstance().getDatabase().child("comments");
-            commentReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            commentReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for(DataSnapshot snapshot: dataSnapshot.getChildren())

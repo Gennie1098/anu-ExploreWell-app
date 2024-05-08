@@ -23,10 +23,13 @@ import com.anu.gp24s1.dao.PostDao;
 import com.anu.gp24s1.dao.PostDaoImpl;
 import com.anu.gp24s1.databinding.FragmentFollowingBinding;
 import com.anu.gp24s1.pojo.Post;
+import com.anu.gp24s1.pojo.vo.PostVo;
 import com.anu.gp24s1.state.UserSession;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class FollowingFragment extends Fragment {
 
@@ -47,13 +50,8 @@ public class FollowingFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        adapter.setOnItemClickListener(position -> {
-            FollowingModel selectedModel = followingModels.get(position);
-            Bundle bundle = new Bundle();
-            bundle.putString("groupName", selectedModel.getGroupName());
-            // Navigate with NavController
-            Navigation.findNavController(getView()).navigate(R.id.action_followingfragment_to_postslistfragment, bundle);
-        });
+        
+
         return root;
     }
 

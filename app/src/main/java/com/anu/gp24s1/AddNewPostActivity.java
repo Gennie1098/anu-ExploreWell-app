@@ -6,21 +6,21 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.MultiAutoCompleteTextView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import com.anu.gp24s1.dao.PostDaoImpl;
 import com.anu.gp24s1.state.UserSession;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class AddNewPostActivity extends AppCompatActivity {
 
-    private EditText editTextContent, editTextTitle, editTextLocation; //TODO: If branch accepted, remove these
-    private RadioGroup radioGroupTags;
-    private RadioButton radioButtonLocation, radioButtonActivity;
+    private EditText editTextContent, editTextTitle, editTextLocation;
+    private CheckBox checkBoxLocation, checkBoxActivity;
     private Button buttonPost;
 
     @Override
@@ -30,8 +30,9 @@ public class AddNewPostActivity extends AppCompatActivity {
 
         editTextTitle = findViewById(R.id.editTextTitle);
         editTextLocation = findViewById(R.id.editTextLocation);
-        editTextContent = (EditText) findViewById(R.id.editTextContent);
-        radioGroupTags = findViewById(R.id.radioGroupTags);
+        editTextContent = findViewById(R.id.editTextContent);
+        checkBoxLocation = findViewById(R.id.checkBoxLocation);
+        checkBoxActivity = findViewById(R.id.checkBoxActivity);
         buttonPost = findViewById(R.id.buttonPost);
 
         buttonPost.setOnClickListener(new View.OnClickListener() {
@@ -47,9 +48,20 @@ public class AddNewPostActivity extends AppCompatActivity {
         String title = editTextTitle.getText().toString();
         String location = editTextLocation.getText().toString();
         String content = editTextContent.getText().toString();
-        int selectedId = radioGroupTags.getCheckedRadioButtonId();
-        String tag = selectedId == R.id.radioButtonLocation ? "Location" : "Activity";
+        List<String> tags = new ArrayList<>();
 
-        UserSession.getInstance().createPost(title, content, tag, location);
+        if (checkBoxLocation.isChecked()) {
+            tags.add("Location");
+        }
+
+        if (checkBoxActivity.isChecked()) {
+            tags.add("Activity");
+        }
+
+        // Convert List of tags to a single String with commas separating tags
+        String tagsString = String.join(", ", tags);
+
+        // pass the single string of tags
+        UserSession.getInstance().createPost(title, content, tagsString, location);
     }
 }

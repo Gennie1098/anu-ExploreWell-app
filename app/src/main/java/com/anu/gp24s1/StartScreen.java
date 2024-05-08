@@ -24,8 +24,6 @@ public class StartScreen extends AppCompatActivity {
         Button loginbtn = findViewById(R.id.LogInButton);
         loginbtn.setOnClickListener(view -> {
             PostDaoImpl.getInstance();
-            UserDaoImpl.getInstance();
-            CommentDaoImpl.getInstance();
             startActivity(new Intent(StartScreen.this, LoginActivity.class));
         });
         Button signupbtn = findViewById(R.id.SignUpButton);

@@ -10,96 +10,104 @@
     <EditText
         android:id="@+id/editTextTitle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginTop="15dp"
         android:hint="Enter title"
-        app:layout_constraintBottom_toTopOf="@+id/radioGroupTags"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <EditText
-        android:id="@+id/editTextLocation"
+    <LinearLayout
+        android:id="@+id/linearLayoutTags"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter location"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTitle"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="8dp"
-        android:text="Select Tag"
-        app:layout_constraintBottom_toTopOf="@+id/radioGroupTags"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextLocation"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <RadioGroup
-        android:id="@+id/radioGroupTags"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
+        app:layout_constraintTop_toBottomOf="@+id/editTextTitle"
+        app:layout_constraintVertical_bias="0.0">
 
-        <RadioButton
-            android:id="@+id/radioButtonLocation"
+        <TextView
+            android:id="@+id/selectTag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingRight="25dp"
+            android:text="Select Tags"
+            android:textSize="16sp" />
+
+        <CheckBox
+            android:id="@+id/checkBoxLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
             android:text="Location" />
 
-        <RadioButton
-            android:id="@+id/radioButtonActivity"
+        <CheckBox
+            android:id="@+id/checkBoxActivity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Activity" />
-    </RadioGroup>
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/editTextLocation"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="15dp"
+        android:hint="Enter location"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutTags"
+        app:layout_constraintVertical_bias="0.0"
+        tools:visibility="visible" />
+
+    <EditText
+        android:id="@+id/editTextActivity"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="15dp"
+        android:hint="Enter activity"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextLocation"
+        app:layout_constraintVertical_bias="0.0"
+        tools:visibility="visible" />
+
 
     <EditText
         android:id="@+id/editTextContent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
+        android:layout_marginTop="50dp"
         android:gravity="top"
         android:hint="Enter content"
         android:inputType="textMultiLine"
-        app:layout_constraintBottom_toTopOf="@+id/buttonPost"
+        app:layout_constraintBaseline_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroupTags"
+        app:layout_constraintTop_toBottomOf="@id/editTextActivity"
         app:layout_constraintVertical_bias="0.0" />
-
-<!--    <MultiAutoCompleteTextView-->
-<!--        android:id="@+id/editTextContent"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:gravity="top"-->
-<!--        android:hint="Enter content"-->
-<!--        android:inputType="textMultiLine"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/buttonPost"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.0"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/radioGroupTags"-->
-<!--        app:layout_constraintVertical_bias="0.0" />-->
 
     <Button
         android:id="@+id/buttonPost"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="Post"
-        app:layout_constraintTop_toBottomOf="@+id/editTextContent"
+        app:cornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextContent"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

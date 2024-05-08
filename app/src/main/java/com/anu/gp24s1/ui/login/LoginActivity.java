@@ -75,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordEditText.addTextChangedListener(afterTextChangedListener);
 
         loginButton.setOnClickListener(v -> {
+            UserDaoImpl.getInstance();
             loadingProgressBar.setVisibility(View.VISIBLE);
             loginViewModel.login(usernameEditText.getText().toString(), passwordEditText.getText().toString());
         });
@@ -103,7 +104,7 @@ public class LoginActivity extends AppCompatActivity {
 
     // TODO : initiate successful logged in experience
     private void updateUiWithUser(String username) {
-        // Create an Intent to start MainActivity (aka HomepageNavigation)
+        // Create an Intent to start MainActivity
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.putExtra("USER_NAME", username);
         startActivity(intent);

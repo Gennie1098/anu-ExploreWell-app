@@ -3,6 +3,7 @@ package com.anu.gp24s1.ui.search;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,8 @@ public class SearchResultFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    SearchViewModel searchViewModel = null;
 
     public SearchResultFragment() {
         // Required empty public constructor
@@ -52,10 +55,37 @@ public class SearchResultFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        searchViewModel = new ViewModelProvider(requireActivity()).get(SearchViewModel.class);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        // Add listeners to the searchViewModel data:
+        // TODO: Should these listeners be in the SearchResultFragment?
+        searchViewModel.getTitleState().observe(getViewLifecycleOwner(), title -> {
+            // TODO: update the result based on the title:
+            // NOTE: title is a String
+
+
+        });
+
+        // Add listeners to the searchViewModel data:
+        searchViewModel.getLocationsState().observe(getViewLifecycleOwner(), locations -> {
+            // TODO: update the result based on the locations:
+            // NOTE: locations is a set
+
+        });
+
+        // Add listeners to the searchViewModel data:
+        searchViewModel.getTagsState().observe(getViewLifecycleOwner(), tags -> {
+            // TODO: update the result based on the locations:
+            // NOTE: tags is a set
+
+        });
+
     }
 
     @Override
