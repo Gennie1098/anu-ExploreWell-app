@@ -39,6 +39,8 @@ public class SinglePostActivity extends AppCompatActivity {
         if (post != null) {
             updateUI(post);
             setUpCommentModels (post);
+
+            updatePost(post.getPostKey());
         }
 
         CommentAdapter adapter = new CommentAdapter(this, commentModels);
@@ -95,12 +97,12 @@ public class SinglePostActivity extends AppCompatActivity {
         numberComments.setText(String.valueOf(post.getCommentsNumber()));
     }
 
-    private void updatePost() {
+    private void updatePost(String postKey) {
         DatabaseReference postDatabase = DBConnector.getInstance().getDatabase().child("post");
         postDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                PostVo post = (PostVo) getIntent().getSerializableExtra("post_details");
+                PostVo post = UserSession.getInstance().viewPost(postKey);
                 updateUI(post);
             }
 

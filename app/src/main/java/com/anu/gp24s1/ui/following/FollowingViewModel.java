@@ -4,23 +4,16 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.anu.gp24s1.pojo.vo.PostVo;
-
-import java.util.List;
-
 public class FollowingViewModel extends ViewModel {
 
-    private MutableLiveData<List<PostVo>> postVoListData;
+    private final MutableLiveData<String> mText;
 
     public FollowingViewModel() {
-        postVoListData = new MutableLiveData<>();
+        mText = new MutableLiveData<>();
+        mText.setValue("This is dashboard fragment");
     }
 
-    public LiveData<List<PostVo>> getPostVoListData() {
-        return postVoListData;
-    }
-
-    public void setPostVoListData(List<PostVo> postVoListData) {
-        this.postVoListData.setValue(postVoListData);
+    public LiveData<String> getText() {
+        return mText;
     }
 }
