@@ -161,6 +161,7 @@ public class Post {
     public PostVo toPostVo(String userKey)
     {
         PostVo postVo = new PostVo();
+        postVo.setPostKey(postKey);
         postVo.setTitle(title);
         postVo.setContent(content);
         postVo.setTag(tag);

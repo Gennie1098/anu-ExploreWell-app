@@ -1,5 +1,6 @@
 package com.anu.gp24s1.ui.post;
 
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
@@ -30,7 +31,9 @@ import java.util.List;
 
 public class PostListFragment extends Fragment {
 
-//    private PostListViewModel mViewModel;
+    private PostListViewModel postListData;
+
+    RecyclerView recyclerViewLocation;
 
     private FragmentPostListBinding binding;
 
@@ -44,18 +47,19 @@ public class PostListFragment extends Fragment {
 
         binding = FragmentPostListBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        RecyclerView recyclerViewLocation = binding.postList;
+        recyclerViewLocation = binding.postList;
 
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            try {
-                Serializable postVoList = bundle.getSerializable("postVoList");
-                setUpPostListModels((List<PostVo>) postVoList);
-            }catch (Exception e)
-            {
-                Toast.makeText(getContext(), "Get posts list failed", Toast.LENGTH_SHORT).show();
+        postListData = new ViewModelProvider(requireActivity()).get(PostListViewModel.class);
+        setUpPostListModels(postListData.getPostVoListData().getValue());
+
+        postListData.getPostVoListData().observe(getViewLifecycleOwner(), new Observer<List<PostVo>>() {
+            @Override
+            public void onChanged(List<PostVo> postVos) {
+                setUpPostListModels(postVos);
+                recyclerViewLocation.getAdapter().notifyDataSetChanged();
             }
-        }
+        });
+
 
         PostListAdapter adapter = new PostListAdapter(getActivity(), postListModels);
         adapter.setOnItemClickListener(this::handleItemClick);
@@ -78,5 +82,6 @@ public class PostListFragment extends Fragment {
         postListModels.clear();
         postListModels.addAll(postsVoList);
     }
+
 
 }

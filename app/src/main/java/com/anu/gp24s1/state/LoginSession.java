@@ -111,7 +111,7 @@ public class LoginSession extends UserState{
         String commentKey = CommentDaoImpl.getInstance().addComment(content, postKey, super.userSession.getUserKey());
 
         // Add comment to post:
-        PostDaoImpl.getInstance().addComment(commentKey, content);
+        PostDaoImpl.getInstance().addComment(commentKey, postKey);
 
         return true;
     }

@@ -1,19 +1,31 @@
 package com.anu.gp24s1.ui.post;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.anu.gp24s1.R;
+import com.anu.gp24s1.dao.CommentDaoImpl;
 import com.anu.gp24s1.pojo.vo.CommentVo;
 import com.anu.gp24s1.pojo.vo.PostVo;
 import com.anu.gp24s1.state.UserSession;
+import com.anu.gp24s1.utils.DBConnector;
 import com.google.android.material.chip.Chip;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -21,10 +33,22 @@ import java.util.Date;
 
 public class SinglePostActivity extends AppCompatActivity {
 
+    EditText addCommentText;
+    Button addCommentButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_post);
+
+        ImageButton backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("SinglePostActivity", "Back button clicked");
+                finish();
+            }
+        });
 
         RecyclerView recyclerView = findViewById(R.id.commentSection);
 
@@ -33,11 +57,25 @@ public class SinglePostActivity extends AppCompatActivity {
         if (post != null) {
             updateUI(post);
             setUpCommentModels (post);
+
+            updatePost(post.getPostKey());
         }
 
         CommentAdapter adapter = new CommentAdapter(this, commentModels);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Add comment:
+        addCommentText = findViewById(R.id.addCommentText);
+        addCommentButton = findViewById(R.id.addCommentButton);
+
+        addCommentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UserSession.getInstance().addComment(post.getPostKey(), addCommentText.getText().toString());
+            }
+        });
+
     }
 
     ArrayList<CommentVo> commentModels = new ArrayList<>();
@@ -87,5 +125,21 @@ public class SinglePostActivity extends AppCompatActivity {
         postContent.setText(post.getContent());
         numberFollowing.setText(String.valueOf(post.getFollowerNumber()));
         numberComments.setText(String.valueOf(post.getCommentsNumber()));
+    }
+
+    private void updatePost(String postKey) {
+        DatabaseReference postDatabase = DBConnector.getInstance().getDatabase().child("post");
+        postDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                PostVo post = UserSession.getInstance().viewPost(postKey);
+                updateUI(post);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }

@@ -54,7 +54,7 @@
             android:text="Activity" />
     </LinearLayout>
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/editTextLocation"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -64,21 +64,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayoutTags"
-        app:layout_constraintVertical_bias="0.0"
-        tools:visibility="visible" />
+        app:layout_constraintVertical_bias="0.0" />
 
-    <EditText
-        android:id="@+id/editTextActivity"
+    <AutoCompleteTextView
+        android:id="@+id/editTextTag"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="15dp"
-        android:hint="Enter activity"
+        android:hint="Enter tag"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextLocation"
-        app:layout_constraintVertical_bias="0.0"
-        tools:visibility="visible" />
+        app:layout_constraintVertical_bias="0.0" />
 
 
     <EditText
@@ -94,7 +92,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editTextActivity"
+        app:layout_constraintTop_toBottomOf="@id/editTextTag"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button

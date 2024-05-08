@@ -1,25 +1,20 @@
 package com.anu.gp24s1.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /** Implements a tokenizer which extracts tokens
  * pertaining to Posts, distinguishing between:
  * - '@'
  * - '#'
- * - alphanumeric
- * - non-alphanumeric
- * tokens.
+ * - alpha (anything contiguous that isn't '@' or '#'
  *
  * @author  u7284324    Lachlan Stewart
  * */
-public class PostTokenizer {
+public class SearchTokenizer {
 
     private final CharSequence content;
     private int idx;
-    public Token curToken;
+    private Token curToken;
 
-    public PostTokenizer(CharSequence content) {
+    public SearchTokenizer(CharSequence content) {
         this.content = content;
         curToken = getNext();
     }
@@ -52,6 +47,13 @@ public class PostTokenizer {
      * @author  u7284324    Lachlan Stewart
      * */
     private Token getNext() {
+
+        // advance idx past whitespace:
+        while (idx < content.length() && content.charAt(idx) == ' ') {
+            idx++;
+        }
+
+        // check if we are at the end of the string
         if (idx >= content.length()) {
             return null;
         }
@@ -61,42 +63,26 @@ public class PostTokenizer {
         if (curChar == '@') {
             // 'at' symbol
             idx++;
-            return new Token(idx - 1, idx, "@", TokenType.At);
+            return new Token("@", TokenType.At);
         } else if (curChar == '#') {
             // 'hashtag' symbol
             idx++;
-            return new Token(idx - 1, idx, "#", TokenType.Hashtag);
-        } else if (curChar == ' ') {
-            int start = idx;
-            while (idx < content.length() && content.charAt(idx) == ' ') {
-                idx++;
-            }
-            return new Token(start, idx, content.subSequence(start, idx), TokenType.WhiteSpace);
-        } else if (Character.isLetterOrDigit(curChar)) {
-            // alphanumeric
-            int start = idx;
-            while (idx < content.length() && Character.isLetterOrDigit(content.charAt(idx))) {
-                idx++;
-            }
-            if (idx > start) {
-                return new Token(start, idx, content.subSequence(start, idx), TokenType.Alpha);
-            }
+            return new Token("#", TokenType.Hashtag);
         } else {
-            // nonalphanumeric (punctuation etc.)
+            // other
             int start = idx;
             while (idx < content.length()
-                    && !Character.isLetterOrDigit(content.charAt(idx))
-                    && content.charAt(idx) != ' '
                     && content.charAt(idx) != '@'
-                    && content.charAt(idx) != '#') {
+                    && content.charAt(idx) != '#'
+                    && content.charAt(idx) != ' ') {
                 idx++;
             }
-            if (idx > start) {
-                return new Token(start, idx, content.subSequence(start, idx), TokenType.NonAlpha);
-            }
+            return new Token(content.subSequence(start, idx), TokenType.Alpha);
         }
+    }
 
-        return null;
+    public Token curToken() {
+        return curToken;
     }
 
 }
