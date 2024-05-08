@@ -77,9 +77,38 @@ public class CommentDaoImpl implements CommentDao{
         return instance;
     }
 
+    /**
+     * Returns a list of CommentVo view objects for a specified post
+     *
+     * @param   postKey     The key of the post
+     *
+     * @author  Lachlan Stewart     u7284324
+     * */
     @Override
     public List<CommentVo> viewComments(String postKey) {
-        return null;
+
+        List<Comment> postComments = comments.get(postKey);
+        List<CommentVo> commentVos = new ArrayList<CommentVo>();
+
+        if (postComments == null) { return commentVos; } // return empty list if null comments
+
+        // construct VOs:
+        for (Comment comment : postComments) {
+            CommentVo commentVo = new CommentVo();
+
+            String authorKey = comment.getAuthorKey();
+
+            UserDaoImpl userDao = UserDaoImpl.getInstance();
+
+            commentVo.setUsername(userDao.getUsername(authorKey));
+            commentVo.setUserAvatar(userDao.getAvatar(authorKey));
+            commentVo.setCommentTime(comment.getCommentTime());
+            commentVo.setContent(comment.getContent());
+
+            commentVos.add(commentVo);
+        }
+
+        return commentVos;
     }
 
     @Override
