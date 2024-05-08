@@ -107,7 +107,7 @@ public class AccountInfoFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Setup the button click listener, open search page when click to search bar
+        // Setup the button click listener, back to profile page
         binding.backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
