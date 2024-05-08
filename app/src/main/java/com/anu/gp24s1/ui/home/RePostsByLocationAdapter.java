@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anu.gp24s1.R;
+import com.anu.gp24s1.pojo.vo.PostVo;
+import com.anu.gp24s1.ui.post.PostListAdapter;
 import com.google.android.material.chip.Chip;
 import com.squareup.picasso.Picasso;
 
@@ -23,10 +25,22 @@ public class RePostsByLocationAdapter extends RecyclerView.Adapter<RePostsByLoca
 
     Context context;
     ArrayList<RePostsByLocationModel> rePostsByLocationModel;
+    private RePostsByLocationAdapter.OnItemClickListener listener;
+
+    public interface OnItemClickListener {
+        void onItemClick(RePostsByLocationModel post);
+    }
+
+    // TODO: check it to set data
+
+    public void setOnItemClickListener(RePostsByLocationAdapter.OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
     public RePostsByLocationAdapter (Context context, ArrayList<RePostsByLocationModel> rePostsByLocationModel) {
         this.context = context;
         this.rePostsByLocationModel = rePostsByLocationModel;
+        this.listener = listener;
     }
     @NonNull
     @Override
