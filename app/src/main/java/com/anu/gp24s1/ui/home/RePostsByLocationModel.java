@@ -1,6 +1,7 @@
 package com.anu.gp24s1.ui.home;
 
 public class RePostsByLocationModel {
+    String postKey;
     String userAva;
     String userName;
     String location;
@@ -9,8 +10,9 @@ public class RePostsByLocationModel {
     int numberOfFollowing;
     int numberOfComments;
 
-    public RePostsByLocationModel(String userAva, String userName, String location, String activity,
+    public RePostsByLocationModel(String postKey,String userAva, String userName, String location, String activity,
                                   String postTitle, int numberOfFollowing, int numberOfComments) {
+        this.postKey = postKey;
         this.userAva = userAva;
         this.userName = userName;
         this.location = location;
@@ -20,6 +22,9 @@ public class RePostsByLocationModel {
         this.numberOfComments = numberOfComments;
     }
 
+    public String getPostKey() {
+        return postKey;
+    }
 
     public String getUserAva() {
         return userAva;
