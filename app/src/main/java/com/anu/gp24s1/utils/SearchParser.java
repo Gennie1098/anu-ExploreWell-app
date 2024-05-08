@@ -13,6 +13,11 @@ import java.util.Set;
  *     <Y> ::= <Z> | <Z> whitespace <Y>
  *     <Z> ::= hashtag alpha | at alpha
  *
+ *     <X> ::= <T> | <T> <Y> | <Y>
+ *     <T> ::= alpha | alpha whitespace <T>
+ *     <Y> ::= <Z> | <Z> whitespace <Y>
+ *     <Z> ::= hashtag alpha | at alpha
+ *
  * Calling parseX() will return true if the content tokenized by the
  * provided tokenizer is valid. As the content is parsed, fields are updated
  * in this object which contain the information that the user has entered
