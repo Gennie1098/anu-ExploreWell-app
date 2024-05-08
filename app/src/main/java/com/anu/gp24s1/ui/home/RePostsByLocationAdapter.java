@@ -25,7 +25,7 @@ public class RePostsByLocationAdapter extends RecyclerView.Adapter<RePostsByLoca
 
     Context context;
     ArrayList<RePostsByLocationModel> rePostsByLocationModel;
-    private RePostsByLocationAdapter.OnItemClickListener listener;
+    private OnItemClickListener listener;
 
     public interface OnItemClickListener {
         void onItemClick(RePostsByLocationModel post);
@@ -33,7 +33,7 @@ public class RePostsByLocationAdapter extends RecyclerView.Adapter<RePostsByLoca
 
     // TODO: check it to set data
 
-    public void setOnItemClickListener(RePostsByLocationAdapter.OnItemClickListener listener) {
+    public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 
@@ -57,6 +57,10 @@ public class RePostsByLocationAdapter extends RecyclerView.Adapter<RePostsByLoca
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         //assigning values to the views created in following_groups_list_row layout file
         //base on the position of the recycler view
+        RePostsByLocationModel item = rePostsByLocationModel.get(position);
+        if (listener != null) {
+            holder.itemView.setOnClickListener(v -> listener.onItemClick(item));
+        }
         Uri imageUrl = Uri.parse(rePostsByLocationModel.get(position).getUserAva());
         Picasso.get().load(imageUrl)
                 .error(R.drawable.default_avatar_profile)
@@ -95,7 +99,6 @@ public class RePostsByLocationAdapter extends RecyclerView.Adapter<RePostsByLoca
             postTitle = itemView.findViewById(R.id.postTitle);
             numberOfFollowing = itemView.findViewById(R.id.numberFollowing);
             numberOfComments = itemView.findViewById(R.id.numberComments);
-
         }
     }
 }
