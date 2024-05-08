@@ -377,7 +377,7 @@ public class PostDaoImpl implements PostDao {
         // reflect these changes in the database for the post only
         DatabaseReference dbReference = DBConnector.getInstance().getDatabase();
         HashMap<String, Object> childUpdates = new HashMap<String, Object>();
-        childUpdates.put("/post/" + postKey + "/commments/" + commentKey, true);
+        childUpdates.put("/post/" + postKey + "/comments/" + commentKey, true);
         childUpdates.put("/post/" + postKey + "/commentsNumber", newCommentNumber);
 
         dbReference.updateChildren(childUpdates);

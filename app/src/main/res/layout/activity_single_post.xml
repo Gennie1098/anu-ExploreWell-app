@@ -230,10 +230,10 @@
             android:layout_weight="1"
             android:background="@color/backgroundGreen"
             android:ems="10"
+            android:hint="Add new comment"
             android:inputType="text"
             android:padding="7dp"
             android:shadowRadius="20"
-            android:text="Add new comment"
             android:textSize="16sp" />
 
         <Button

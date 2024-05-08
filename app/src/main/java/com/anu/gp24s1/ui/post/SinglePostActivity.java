@@ -61,7 +61,7 @@ public class SinglePostActivity extends AppCompatActivity {
         addCommentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserSession.getInstance().addComment(post.getPostKey(), addCommentText.toString());
+                UserSession.getInstance().addComment(post.getPostKey(), addCommentText.getText().toString());
             }
         });
 
