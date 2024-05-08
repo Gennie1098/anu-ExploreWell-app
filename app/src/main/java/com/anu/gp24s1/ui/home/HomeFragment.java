@@ -64,7 +64,8 @@ public class HomeFragment extends Fragment {
         recyclerViewPopular.setAdapter(adapterPopular);
         recyclerViewPopular.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
 
-        updateData();
+        updateByTag();
+        updateByLocation();
 
         View root = binding.getRoot();
 
@@ -117,15 +118,29 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private void updateData() {
-        DatabaseReference postDatabase = DBConnector.getInstance().getDatabase().child("post");
+    private void updateByTag() {
+        DatabaseReference postDatabase = DBConnector.getInstance().getDatabase().child("tag");
+        postDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                setUpRePostsByPopularModel();
+                recyclerViewPopular.getAdapter().notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void updateByLocation() {
+        DatabaseReference postDatabase = DBConnector.getInstance().getDatabase().child("location");
         postDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 setUpRePostsByLocationModel();
-                setUpRePostsByPopularModel();
                 recyclerViewLocation.getAdapter().notifyDataSetChanged();
-                recyclerViewPopular.getAdapter().notifyDataSetChanged();
             }
 
             @Override
