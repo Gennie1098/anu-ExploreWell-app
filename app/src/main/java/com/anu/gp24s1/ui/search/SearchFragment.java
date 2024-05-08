@@ -123,23 +123,7 @@ public class SearchFragment extends Fragment {
             @Override
             public CharSequence terminateToken(CharSequence inputText) {
                 return inputText;
-//                int idx = inputText.length();
-//
-//                while (idx > 0 && inputText.charAt(idx - 1) == ' ') {
-//                    idx--;
-//                }
-//                if (idx > 0 && inputText.charAt(idx - 1) == ' ') {
-//                    return inputText;
-//                } else {
-//                    if (inputText instanceof Spanned) {
-//                        SpannableString sp = new SpannableString(inputText + " ");
-//                        TextUtils.copySpansFrom((Spanned) inputText, 0, inputText.length(),
-//                                Object.class, sp, 0);
-//                        return sp;
-//                    } else {
-//                        return inputText + " ";
-//                    }
-//                }
+
             }
         });
 
