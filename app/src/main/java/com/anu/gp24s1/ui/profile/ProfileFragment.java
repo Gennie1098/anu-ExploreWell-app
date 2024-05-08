@@ -63,7 +63,7 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Setup the button click listener, open search page when click to search bar
+        // Setup the button click listener, open account info page
         binding.accountInfo.setOnClickListener(v -> {
             // Ensure the activity is correctly cast to MainActivity
             if (getActivity() instanceof MainActivity) {
