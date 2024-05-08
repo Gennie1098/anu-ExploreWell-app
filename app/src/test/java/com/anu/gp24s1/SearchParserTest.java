@@ -1,12 +1,11 @@
 package com.anu.gp24s1;
 
-import com.anu.gp24s1.utils.PostTokenizer;
+import com.anu.gp24s1.utils.SearchTokenizer;
 import com.anu.gp24s1.utils.SearchParser;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import java.util.HashSet;
 import java.util.Set;
 
 public class SearchParserTest {
@@ -15,30 +14,14 @@ public class SearchParserTest {
     public void testBasicTitle() {
         String content = "MyTitle";
 
-        PostTokenizer tokenizer = new PostTokenizer(content);
+        SearchTokenizer tokenizer = new SearchTokenizer(content);
         SearchParser parser = new SearchParser(tokenizer);
 
         assertTrue(parser.parseX());
-        assertEquals(parser.getTitle(), "MyTitle");
-    }
+        assertEquals("MyTitle", parser.getTitle());
+        assertTrue(parser.getTags().isEmpty());
+        assertTrue(parser.getLocations().isEmpty());
 
-    @Test
-    public void testQuotationTitles() {
-        String content = "\"MyTitle\"";
-
-        PostTokenizer tokenizer = new PostTokenizer(content);
-        SearchParser parser = new SearchParser(tokenizer);
-
-        assertTrue(parser.parseX());
-        assertEquals(parser.getTitle(), "MyTitle");
-
-        content = "\"MyTitle Is This\"";
-
-        tokenizer = new PostTokenizer(content);
-        parser = new SearchParser(tokenizer);
-
-        assertTrue(parser.parseX());
-        assertEquals(parser.getTitle(), "MyTitle Is This");
     }
 
     @Test
@@ -46,73 +29,81 @@ public class SearchParserTest {
         // tag first
         String content = "#camping @act #climbing @nsw";
 
-        PostTokenizer tokenizer = new PostTokenizer(content);
+        SearchTokenizer tokenizer = new SearchTokenizer(content);
         SearchParser parser = new SearchParser(tokenizer);
 
         assertTrue(parser.parseX());
-        assertEquals(parser.getTitle(), "");
-        assertEquals(parser.getTags(), Set.of("camping", "climbing"));
-        assertEquals(parser.getLocations(), Set.of("act", "nsw"));
+        assertEquals("", parser.getTitle());
+        assertEquals(Set.of("camping", "climbing"), parser.getTags());
+        assertEquals(Set.of("act", "nsw"), parser.getLocations());
 
         // location first
         content = "@tas #skiing @vic @sa #hiking";
 
-        tokenizer = new PostTokenizer(content);
+        tokenizer = new SearchTokenizer(content);
         parser = new SearchParser(tokenizer);
 
         assertTrue(parser.parseX());
-        assertEquals(parser.getTitle(), "");
-        assertEquals(parser.getTags(), Set.of("skiing", "hiking"));
-        assertEquals(parser.getLocations(), Set.of("tas", "vic", "sa"));
+        assertEquals("", parser.getTitle());
+        assertEquals(Set.of("skiing", "hiking"), parser.getTags());
+        assertEquals(Set.of("tas", "vic", "sa"), parser.getLocations());
     }
 
-    @Test
-    public void testComplexValid() {
-        // Normal title + tags and locations
-        String content = "Coree #camping @act #climbing @nsw";
+    // TODO: Add a partially correct title test, and check that the returned title is blank
 
-        PostTokenizer tokenizer = new PostTokenizer(content);
+    @Test
+    public void testPunctuatedTitle() {
+        // This title has some non alphanumeric characters
+        String content = "Visit Mt. Majura";
+
+        SearchTokenizer tokenizer = new SearchTokenizer(content);
         SearchParser parser = new SearchParser(tokenizer);
 
         assertTrue(parser.parseX());
-        assertEquals(parser.getTitle(), "Coree");
-        assertEquals(parser.getTags(), Set.of("camping", "climbing"));
-        assertEquals(parser.getLocations(), Set.of("act", "nsw"));
+        assertEquals("Visit Mt. Majura", parser.getTitle());
+    }
+
+
+    @Test
+    public void testComplexValid() {
+        // Complex title + tags and locations
+        String content = "Cotter Dam #camping @act #climbing @nsw";
+
+        SearchTokenizer tokenizer = new SearchTokenizer(content);
+        SearchParser parser = new SearchParser(tokenizer);
+
+        assertTrue(parser.parseX());
+        assertEquals("Cotter Dam", parser.getTitle());
+        assertEquals(Set.of("camping", "climbing"), parser.getTags());
+        assertEquals(Set.of("act", "nsw"), parser.getLocations());
 
         // Complex title + tags and locations
-        content = "\"Mt Amos\" @tas #skiing @vic @sa #hiking";
+        content = "Mt Amos Tasmania @tas #skiing @vic @sa #hiking";
 
-        tokenizer = new PostTokenizer(content);
+        tokenizer = new SearchTokenizer(content);
         parser = new SearchParser(tokenizer);
 
         assertTrue(parser.parseX());
-        assertEquals(parser.getTitle(), "Mt Amos");
-        assertEquals(parser.getTags(), Set.of("skiing", "hiking"));
-        assertEquals(parser.getLocations(), Set.of("tas", "vic", "sa"));
+        assertEquals( "Mt Amos Tasmania", parser.getTitle());
+        assertEquals(Set.of("skiing", "hiking"), parser.getTags());
+        assertEquals(Set.of("tas", "vic", "sa"), parser.getLocations());
     }
 
     @Test
     public void testComplexInvalid() {
-        // invalid complex title
-        String content = "\"Mt. Amos\" #camping @act #climbing @nsw";
 
-        PostTokenizer tokenizer = new PostTokenizer(content);
+        // valid title, bad formatting of locations and tags
+        String content = "Lake Ginninderra @tas #skiing @#vic @sa #hiking";
+
+        SearchTokenizer tokenizer = new SearchTokenizer(content);
         SearchParser parser = new SearchParser(tokenizer);
 
         assertFalse(parser.parseX());
 
-        // valid title, invalid second location
-        content = "\"Lake Ginninderra\" @tas #skiing @#vic @sa #hiking";
+        // valid complex title, valid tags, invalid unannotated tag, more valid tags
+        content = "Lake Burley Griffin @tas #skiing lake @#vic @sa #hiking";
 
-        tokenizer = new PostTokenizer(content);
-        parser = new SearchParser(tokenizer);
-
-        assertFalse(parser.parseX());
-
-        // valid complex title, valid tags, invalid unannoted tag, valid tags
-        content = "\"Lake Burley Griffin\" @tas #skiing lake @#vic @sa #hiking";
-
-        tokenizer = new PostTokenizer(content);
+        tokenizer = new SearchTokenizer(content);
         parser = new SearchParser(tokenizer);
 
         assertFalse(parser.parseX());
@@ -122,34 +113,31 @@ public class SearchParserTest {
     public void testEmpty() {
         String content = "";
 
-        PostTokenizer tokenizer = new PostTokenizer(content);
+        SearchTokenizer tokenizer = new SearchTokenizer(content);
         SearchParser parser = new SearchParser(tokenizer);
 
         assertFalse(parser.parseX());
     }
 
     @Test
-    public void testBadWhitespace() {
+    public void testWhitespace() {
         String content = "  MyTitle";
 
-        PostTokenizer tokenizer = new PostTokenizer(content);
+        SearchTokenizer tokenizer = new SearchTokenizer(content);
         SearchParser parser = new SearchParser(tokenizer);
 
-        assertFalse(parser.parseX());
+        assertTrue(parser.parseX());
+        assertEquals("MyTitle", parser.getTitle());
 
-        content = "MyTitle ";
+        content = "MyTitle #camping     @ACT   ";
 
-        tokenizer = new PostTokenizer(content);
+        tokenizer = new SearchTokenizer(content);
         parser = new SearchParser(tokenizer);
 
-        assertFalse(parser.parseX());
-
-        content = "MyTitle #camping @ACT   ";
-
-        tokenizer = new PostTokenizer(content);
-        parser = new SearchParser(tokenizer);
-
-        assertFalse(parser.parseX());
+        assertTrue(parser.parseX());
+        assertEquals("MyTitle", parser.getTitle());
+        assertEquals(Set.of("camping"), parser.getTags());
+        assertEquals(Set.of("ACT"), parser.getLocations());
     }
 
 

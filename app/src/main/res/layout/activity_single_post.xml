@@ -242,7 +242,7 @@
         app:layout_constraintTop_toBottomOf="@+id/scrollView2">
 
         <EditText
-            android:id="@+id/editTextText"
+            android:id="@+id/addCommentText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
@@ -256,7 +256,7 @@
             android:textSize="16sp" />
 
         <Button
-            android:id="@+id/postButton"
+            android:id="@+id/addCommentButton"
             android:layout_width="20dp"
             android:layout_height="44dp"
             android:layout_weight="1"

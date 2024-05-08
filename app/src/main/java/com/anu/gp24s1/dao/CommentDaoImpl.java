@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 public class CommentDaoImpl implements CommentDao{
 
@@ -77,9 +78,20 @@ public class CommentDaoImpl implements CommentDao{
         return instance;
     }
 
+    /**
+     * Returns a list of CommentVo view objects for a specified post
+     *
+     * @param   postKey     The key of the post
+     *
+     * @author  Lachlan Stewart     u7284324
+     * */
     @Override
     public List<CommentVo> viewComments(String postKey) {
-        return null;
+
+        List<Comment> postComments = comments.get(postKey);
+        if (postComments == null) { return new ArrayList<>(); }
+
+        return postComments.stream().map(Comment::toCommentVo).collect(Collectors.toList());
     }
 
     @Override

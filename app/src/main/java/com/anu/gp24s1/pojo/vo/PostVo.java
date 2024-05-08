@@ -11,6 +11,8 @@ import java.util.List;
  */
 public class PostVo implements Serializable {
 
+    private String postKey;
+
     private String title;
 
     private String content;
@@ -34,6 +36,14 @@ public class PostVo implements Serializable {
     private List<CommentVo> comments;
 
     public PostVo() {
+    }
+
+    public String getPostKey() {
+        return postKey;
+    }
+
+    public void setPostKey(String postKey) {
+        this.postKey = postKey;
     }
 
     public String getTitle() {
