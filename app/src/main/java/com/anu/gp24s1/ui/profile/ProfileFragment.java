@@ -24,6 +24,7 @@ import com.anu.gp24s1.pojo.vo.UserVo;
 import com.anu.gp24s1.state.UserSession;
 import com.anu.gp24s1.state.LogoutSession;
 
+import com.anu.gp24s1.ui.search.SearchFragment;
 import com.squareup.picasso.Picasso;
 
 
@@ -64,6 +65,13 @@ public class ProfileFragment extends Fragment {
             if (getActivity() instanceof MainActivity) {
                 ((MainActivity) getActivity()).replaceFragment(new AccountInfoFragment());
                 ((MainActivity) getActivity()).binding.bottomNavigationBar.getMenu().getItem(4).setChecked(true);
+            }
+        });
+
+        binding.yourPosts.setOnClickListener(v -> {
+            if (getActivity() instanceof MainActivity) {
+                ((MainActivity) getActivity()).replaceFragment(new YourPostFragment());
+                ((MainActivity) getActivity()).binding.bottomNavigationBar.getMenu().getItem(1).setChecked(true);
             }
         });
 
