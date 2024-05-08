@@ -1,5 +1,6 @@
 package com.anu.gp24s1.ui.post;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,7 +18,12 @@ import com.anu.gp24s1.dao.CommentDaoImpl;
 import com.anu.gp24s1.pojo.vo.CommentVo;
 import com.anu.gp24s1.pojo.vo.PostVo;
 import com.anu.gp24s1.state.UserSession;
+import com.anu.gp24s1.utils.DBConnector;
 import com.google.android.material.chip.Chip;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -40,6 +46,8 @@ public class SinglePostActivity extends AppCompatActivity {
         if (post != null) {
             updateUI(post);
             setUpCommentModels (post);
+
+            updatePost(post.getPostKey());
         }
 
         CommentAdapter adapter = new CommentAdapter(this, commentModels);
@@ -106,5 +114,21 @@ public class SinglePostActivity extends AppCompatActivity {
         postContent.setText(post.getContent());
         numberFollowing.setText(String.valueOf(post.getFollowerNumber()));
         numberComments.setText(String.valueOf(post.getCommentsNumber()));
+    }
+
+    private void updatePost(String postKey) {
+        DatabaseReference postDatabase = DBConnector.getInstance().getDatabase().child("post");
+        postDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                PostVo post = UserSession.getInstance().viewPost(postKey);
+                updateUI(post);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }

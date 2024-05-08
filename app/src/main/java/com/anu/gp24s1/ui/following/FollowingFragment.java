@@ -25,6 +25,11 @@ import com.anu.gp24s1.databinding.FragmentFollowingBinding;
 import com.anu.gp24s1.pojo.Post;
 import com.anu.gp24s1.pojo.vo.PostVo;
 import com.anu.gp24s1.state.UserSession;
+import com.anu.gp24s1.utils.DBConnector;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -35,6 +40,8 @@ public class FollowingFragment extends Fragment {
 
     private FragmentFollowingBinding binding;
 
+    RecyclerView recyclerView;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         FollowingViewModel dashboardViewModel =
@@ -43,14 +50,13 @@ public class FollowingFragment extends Fragment {
         binding = FragmentFollowingBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        RecyclerView recyclerView = binding.followingGroupsList;
-
+        recyclerView = binding.followingGroupsList;
         setUpFollowingModel();
         followingListAdapter adapter = new followingListAdapter(getActivity(), followingModels);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        
+        updateFollowingGroups();
 
         return root;
     }
@@ -63,6 +69,7 @@ public class FollowingFragment extends Fragment {
      * @author Qinjue Wu
      */
     private void setUpFollowingModel() {
+        followingModels.clear();
         List<String> groups = UserSession.getInstance().viewFollowingGroups();
         if(groups == null || groups.size() == 0) {
             Toast.makeText(getContext(),"No following posts!", Toast.LENGTH_LONG).show();
@@ -79,6 +86,22 @@ public class FollowingFragment extends Fragment {
                 }
             }
         }
+    }
+
+    private void updateFollowingGroups() {
+        DatabaseReference followingDatabase = DBConnector.getInstance().getDatabase().child("user");
+        followingDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                setUpFollowingModel();
+                recyclerView.getAdapter().notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     @Override
