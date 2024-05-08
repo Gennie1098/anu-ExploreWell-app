@@ -193,8 +193,9 @@ public class UserDaoImpl implements UserDao {
     public boolean addFollowingPost(String userKey, String postKey) {
         User user = users.get(userKey);
         assert user != null;
-        List<String> followingPosts = user.getFollowingPosts();
 
+
+        List<String> followingPosts = user.getFollowingPosts();
         // Reflect in database
         DatabaseReference dbReference = DBConnector.getInstance().getDatabase();
         HashMap<String, Object> childUpdates = new HashMap<String, Object>();
@@ -206,7 +207,12 @@ public class UserDaoImpl implements UserDao {
             return true;
         } else {
             //Add the post to the user's following list
-            return followingPosts.add(postKey);
+            //Update database data
+            DatabaseReference userReference = DBConnector.getInstance().getDatabase().child("user");
+            HashMap<String, Object> childUpdates = new HashMap<>();
+            childUpdates.put(postKey, true);
+            userReference.child(userKey).child("followingPosts").updateChildren(childUpdates);
+            return followingPosts.add(postKey);// TODO: need consider
         }
     }
 
