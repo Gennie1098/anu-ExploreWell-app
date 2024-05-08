@@ -35,6 +35,7 @@ public class SinglePostActivity extends AppCompatActivity {
 
     EditText addCommentText;
     Button addCommentButton;
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,16 +51,11 @@ public class SinglePostActivity extends AppCompatActivity {
             }
         });
 
-        RecyclerView recyclerView = findViewById(R.id.commentSection);
+        recyclerView = findViewById(R.id.commentSection);
 
         // Retrieve the data from intent
-        PostVo post = (PostVo) getIntent().getSerializableExtra("post_details");
-        if (post != null) {
-            updateUI(post);
-            setUpCommentModels (post);
-
-            updatePost(post.getPostKey());
-        }
+        String postKey = getIntent().getStringExtra("post_details");
+        updatePost(postKey);
 
         CommentAdapter adapter = new CommentAdapter(this, commentModels);
         recyclerView.setAdapter(adapter);
@@ -72,7 +68,7 @@ public class SinglePostActivity extends AppCompatActivity {
         addCommentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserSession.getInstance().addComment(post.getPostKey(), addCommentText.getText().toString());
+                UserSession.getInstance().addComment(postKey, addCommentText.getText().toString());
             }
         });
 
@@ -97,22 +93,14 @@ public class SinglePostActivity extends AppCompatActivity {
      */
     private void setUpCommentModels (PostVo post) {
         commentModels.clear();
-        //TODO remove test data
-        CommentVo commentVo = new CommentVo();
-        commentVo.setUsername("test!");
-        commentVo.setContent("for test");
-        commentVo.setCommentTime(new Date(System.currentTimeMillis()));
-        commentVo.setUserAvatar("https://robohash.org/numquamquoscorporis.png?size=50x50&set=set1");
-        commentModels.add(commentVo);
-//        if(post.getComments() == null || post.getComments().size() ==0)
-//        {
-//            commentModels.addAll(post.getComments());
-//        }
+        if(post.getComments() != null && post.getComments().size() !=0)
+        {
+            commentModels.addAll(post.getComments());
+        }
     }
 
     private void updateUI(PostVo post) {
         // Assuming you have these views in your layout
-        // TODO: update UI with data of post
         ImageView userImg = findViewById(R.id.userImg);
         TextView UserName = findViewById(R.id.UserName);
         TextView time = findViewById(R.id.time);
@@ -144,6 +132,8 @@ public class SinglePostActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 PostVo post = UserSession.getInstance().viewPost(postKey);
                 updateUI(post);
+                setUpCommentModels(post);
+                recyclerView.getAdapter().notifyDataSetChanged();
             }
 
             @Override

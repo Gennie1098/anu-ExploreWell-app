@@ -1,5 +1,6 @@
 package com.anu.gp24s1.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -20,7 +21,8 @@ import com.anu.gp24s1.MainActivity;
 import com.anu.gp24s1.databinding.FragmentHomeBinding;
 import com.anu.gp24s1.pojo.vo.PostVo;
 import com.anu.gp24s1.state.UserSession;
-
+import com.anu.gp24s1.ui.following.FollowingModel;
+import com.anu.gp24s1.ui.post.SinglePostActivity;
 import com.anu.gp24s1.ui.search.SearchFragment;
 import com.anu.gp24s1.utils.DBConnector;
 import com.google.firebase.database.DataSnapshot;
@@ -51,6 +53,11 @@ public class HomeFragment extends Fragment {
         recyclerViewLocation = binding.postListLocation;
         setUpRePostsByLocationModel();
         RePostsByLocationAdapter adapterLocation = new RePostsByLocationAdapter(getActivity(), rePostsByLocationModels);
+
+        // TODO: set up data to change to single post here
+        adapterLocation.setOnItemClickListener(this::handleItemClick);
+
+
         recyclerViewLocation.setAdapter(adapterLocation);
         recyclerViewLocation.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
 
@@ -58,6 +65,10 @@ public class HomeFragment extends Fragment {
         recyclerViewPopular = binding.postListPopular;
         setUpRePostsByPopularModel();
         RePostsByLocationAdapter adapterPopular = new RePostsByLocationAdapter(getActivity(), rePostsByTagModels);
+
+        // TODO: set up data to change to single post here
+        adapterPopular.setOnItemClickListener(this::handleItemClick);
+
         recyclerViewPopular.setAdapter(adapterPopular);
         recyclerViewPopular.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
 
@@ -79,6 +90,13 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
+    // TODO: check this for set up post data
+    private void handleItemClick(RePostsByLocationModel item) {
+        Intent intent = new Intent(getActivity(), SinglePostActivity.class);
+        intent.putExtra("post_details", item.getPostKey());
+        startActivity(intent);
+    }
+
     ArrayList<RePostsByLocationModel> rePostsByLocationModels = new ArrayList<>();
 
     /**
@@ -93,7 +111,7 @@ public class HomeFragment extends Fragment {
             Toast.makeText(getContext(), "Get Recommended posts by location failed!", Toast.LENGTH_LONG).show();
         } else {
             for (int i = 0; i < recommendationByLocation.size(); i++) { // arrays should be equal length
-                rePostsByLocationModels.add(new RePostsByLocationModel(recommendationByLocation.get(i).getAuthorAvatar(), recommendationByLocation.get(i).getAuthorName(), recommendationByLocation.get(i).getLocation(), recommendationByLocation.get(i).getTag(), recommendationByLocation.get(i).getTitle(), recommendationByLocation.get(i).getFollowerNumber(), recommendationByLocation.get(i).getCommentsNumber()));
+                rePostsByLocationModels.add(new RePostsByLocationModel(recommendationByLocation.get(i).getPostKey(),recommendationByLocation.get(i).getAuthorAvatar(), recommendationByLocation.get(i).getAuthorName(), recommendationByLocation.get(i).getLocation(), recommendationByLocation.get(i).getTag(), recommendationByLocation.get(i).getTitle(), recommendationByLocation.get(i).getFollowerNumber(), recommendationByLocation.get(i).getCommentsNumber()));
             }
         }
     }
@@ -112,7 +130,7 @@ public class HomeFragment extends Fragment {
             Toast.makeText(getContext(), "Get Recommended posts by tag failed!", Toast.LENGTH_LONG).show();
         } else {
             for (int i = 0; i < recommendationByTag.size(); i++) { // arrays should be equal length
-                rePostsByTagModels.add(new RePostsByLocationModel(recommendationByTag.get(i).getAuthorAvatar(), recommendationByTag.get(i).getAuthorName(), recommendationByTag.get(i).getLocation(), recommendationByTag.get(i).getTag(), recommendationByTag.get(i).getTitle(), recommendationByTag.get(i).getFollowerNumber(), recommendationByTag.get(i).getCommentsNumber()));
+                rePostsByTagModels.add(new RePostsByLocationModel(recommendationByTag.get(i).getPostKey(),recommendationByTag.get(i).getAuthorAvatar(), recommendationByTag.get(i).getAuthorName(), recommendationByTag.get(i).getLocation(), recommendationByTag.get(i).getTag(), recommendationByTag.get(i).getTitle(), recommendationByTag.get(i).getFollowerNumber(), recommendationByTag.get(i).getCommentsNumber()));
             }
         }
     }

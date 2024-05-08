@@ -58,7 +58,6 @@ public class CommentDaoImpl implements CommentDao{
                         if(comments.containsKey(postKey)) {
                             List<Comment> commentsList = comments.get(postKey);
                             commentsList.add(comment);
-                            comments.put(postKey,commentsList);
                         }
                         else {
                             List<Comment> commentList = new ArrayList<>();
@@ -134,7 +133,6 @@ public class CommentDaoImpl implements CommentDao{
         if(comments.containsKey(postKey)) {
             List<Comment> commentsList = comments.get(postKey);
             commentsList.add(newComment);
-            comments.put(postKey,commentsList);
         }
         else {
             List<Comment> commentList = new ArrayList<>();
