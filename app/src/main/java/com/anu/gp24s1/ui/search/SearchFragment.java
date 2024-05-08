@@ -36,18 +36,7 @@ public class SearchFragment extends Fragment {
         return new SearchFragment();
     }
 
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-
-        searchViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
-
-        searchBinding = FragmentSearchBinding.inflate(inflater, container, false);
-
-        View view = inflater.inflate(R.layout.fragment_search, container, false);
-
-
-
+    public String[] getAutocompletionHints() {
         // get existing tags and locations:
         Set<String> tagsSet = PostDaoImpl.getInstance().getAllTags();
         Set<String> locationsSet = PostDaoImpl.getInstance().getAllLocations();
@@ -66,17 +55,22 @@ public class SearchFragment extends Fragment {
         }
 
         // make autocompletions
-        String[] allAutocompletions = new String[tags.length + locations.length];
-        System.arraycopy(tags, 0, allAutocompletions, 0, tags.length);
-        System.arraycopy(locations, 0, allAutocompletions, tags.length, locations.length);
+        String[] autoCompletionHints = new String[tags.length + locations.length];
+        System.arraycopy(tags, 0, autoCompletionHints, 0, tags.length);
+        System.arraycopy(locations, 0, autoCompletionHints, tags.length, locations.length);
+
+        return autoCompletionHints;
+    }
+
+    public void initialiseSearchBar(MultiAutoCompleteTextView searchContent) {
+
+        String[] autoCompletionHints = getAutocompletionHints();
 
         // adapter
-        ArrayAdapter<String> autoCompletionArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, allAutocompletions);
-
-        MultiAutoCompleteTextView searchContent = (MultiAutoCompleteTextView) view.findViewById(R.id.searchContent);
-
+        ArrayAdapter<String> autoCompletionArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, autoCompletionHints);
         searchContent.setThreshold(1);
         searchContent.setAdapter(autoCompletionArrayAdapter);
+
         searchContent.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -123,9 +117,23 @@ public class SearchFragment extends Fragment {
             @Override
             public CharSequence terminateToken(CharSequence inputText) {
                 return inputText;
-
             }
         });
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
+        searchViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
+
+        searchBinding = FragmentSearchBinding.inflate(inflater, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_search, container, false);
+
+        // initialise the search bar
+        MultiAutoCompleteTextView searchContent = (MultiAutoCompleteTextView) view.findViewById(R.id.searchContent);
+        initialiseSearchBar(searchContent);
 
         return view;
     }

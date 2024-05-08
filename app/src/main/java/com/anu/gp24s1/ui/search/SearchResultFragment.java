@@ -64,7 +64,6 @@ public class SearchResultFragment extends Fragment {
         }
 
         // Add listeners to the searchViewModel data:
-        // TODO: Should these listeners be in the SearchResultFragment?
         searchViewModel.getTitleState().observe(getViewLifecycleOwner(), title -> {
             // TODO: update the result based on the title:
             // NOTE: title is a String
