@@ -72,6 +72,16 @@ public class SinglePostActivity extends AppCompatActivity {
             }
         });
 
+        // follow
+        ImageButton followingButton = findViewById(R.id.followingButton);
+        followingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean result = UserSession.getInstance().followPost(post.getPostKey());
+                System.out.println("add follow result: "+result);
+            }
+        });
+
     }
 
     ArrayList<CommentVo> commentModels = new ArrayList<>();

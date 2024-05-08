@@ -77,6 +77,7 @@ public class AuthRepository {
     public void logout() {
         firebaseAuth.signOut();
         userLiveData.postValue(null);
+        loginResult.setValue(null);
     }
 
     public MutableLiveData<FirebaseUser> getUserLiveData() {
