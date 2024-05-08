@@ -1,18 +1,13 @@
 package com.anu.gp24s1.ui.search;
 
-import android.util.SparseArray;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.anu.gp24s1.pojo.Post;
-import com.anu.gp24s1.utils.PostTokenizer;
+import com.anu.gp24s1.utils.SearchTokenizer;
 import com.anu.gp24s1.utils.SearchParser;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class SearchViewModel extends ViewModel {
@@ -34,7 +29,7 @@ public class SearchViewModel extends ViewModel {
     }
 
     public void updateSearch(String searchString) {
-        PostTokenizer tokenizer = new PostTokenizer(searchString);
+        SearchTokenizer tokenizer = new SearchTokenizer(searchString);
         SearchParser parser = new SearchParser(tokenizer);
         boolean valid = parser.parseX();
         if (Boolean.logicalXor(valid, Boolean.TRUE.equals(validState.getValue()))) {

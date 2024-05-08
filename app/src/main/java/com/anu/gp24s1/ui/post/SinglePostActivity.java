@@ -6,10 +6,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.anu.gp24s1.R;
+import com.anu.gp24s1.dao.CommentDaoImpl;
 import com.anu.gp24s1.pojo.vo.CommentVo;
 import com.anu.gp24s1.pojo.vo.PostVo;
 import com.anu.gp24s1.state.UserSession;
@@ -20,6 +24,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class SinglePostActivity extends AppCompatActivity {
+
+    EditText addCommentText;
+    Button addCommentButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +45,18 @@ public class SinglePostActivity extends AppCompatActivity {
         CommentAdapter adapter = new CommentAdapter(this, commentModels);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Add comment:
+        addCommentText = findViewById(R.id.addCommentText);
+        addCommentButton = findViewById(R.id.addCommentButton);
+
+        addCommentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // UserSession.getInstance().addComment(post.ge
+            }
+        });
+
     }
 
     ArrayList<CommentVo> commentModels = new ArrayList<>();
