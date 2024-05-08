@@ -89,17 +89,23 @@ public class AddNewPostActivity extends AppCompatActivity {
         Set<String> tags = PostDaoImpl.getInstance().getAllTags();
         Set<String> locations = PostDaoImpl.getInstance().getAllLocations();
 
-        boolean validTagAndLocation = true;
+        boolean valid = true;
         if (!tags.contains(tag)) {
-            validTagAndLocation = false;
+            valid = false;
             editTextTag.setError("Please choose an existing tag");
         }
         if (!locations.contains(location)) {
-            validTagAndLocation = false;
+            valid = false;
             editTextLocation.setError("Please choose an existing location");
         }
 
-        if (validTagAndLocation) { return; }
+        // Add error message for invalid title:
+        if (title.contains("#") || title.contains("@")) {
+            valid = false;
+            editTextTitle.setError("Title cannot contain the characters '#' or '@'");
+        }
+
+        if (!valid) { return; }
 
         // create the new post
         UserSession.getInstance().createPost(title, content, tag, location);
