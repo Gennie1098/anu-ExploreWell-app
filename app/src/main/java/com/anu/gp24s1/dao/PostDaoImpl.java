@@ -250,7 +250,6 @@ public class PostDaoImpl implements PostDao {
         // Update in database
         HashMap<String, Object> childUpdates = new HashMap<String, Object>();
         childUpdates.put("/post/" + postKey, postValues);
-        childUpdates.put("/user/" + userKey + "/ownPosts/" + postKey, true);
 
         dbReference.updateChildren(childUpdates);
 

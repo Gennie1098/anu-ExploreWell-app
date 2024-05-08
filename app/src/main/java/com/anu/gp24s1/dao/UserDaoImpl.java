@@ -168,7 +168,18 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean addOwnPost(String userKey, String postKey) {
-        return false;
+        User user = users.get(userKey);
+        assert user != null;
+        user.getOwnPosts().add(postKey);
+
+        // Reflect in database
+        DatabaseReference dbReference = DBConnector.getInstance().getDatabase();
+        HashMap<String, Object> childUpdates = new HashMap<String, Object>();
+        childUpdates.put("/user/" + userKey + "/ownPosts/" + postKey, true);
+
+        dbReference.updateChildren(childUpdates);
+
+        return true;
     }
 
     /**
@@ -183,7 +194,14 @@ public class UserDaoImpl implements UserDao {
         User user = users.get(userKey);
         assert user != null;
 
+
         List<String> followingPosts = user.getFollowingPosts();
+        // Reflect in database
+        DatabaseReference dbReference = DBConnector.getInstance().getDatabase();
+        HashMap<String, Object> childUpdates = new HashMap<String, Object>();
+        childUpdates.put("/user/" + userKey + "/followingPosts/" + postKey, true);
+        dbReference.updateChildren(childUpdates);
+
         // already followed
         if (followingPosts.contains(postKey)) {
             return true;
