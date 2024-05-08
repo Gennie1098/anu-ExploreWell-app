@@ -63,11 +63,11 @@ public class SearchTokenizer {
         if (curChar == '@') {
             // 'at' symbol
             idx++;
-            return new Token(idx - 1, idx, "@", TokenType.At);
+            return new Token("@", TokenType.At);
         } else if (curChar == '#') {
             // 'hashtag' symbol
             idx++;
-            return new Token(idx - 1, idx, "#", TokenType.Hashtag);
+            return new Token("#", TokenType.Hashtag);
         } else {
             // other
             int start = idx;
@@ -77,7 +77,7 @@ public class SearchTokenizer {
                     && content.charAt(idx) != ' ') {
                 idx++;
             }
-            return new Token(start, idx, content.subSequence(start, idx), TokenType.Alpha);
+            return new Token(content.subSequence(start, idx), TokenType.Alpha);
         }
     }
 
