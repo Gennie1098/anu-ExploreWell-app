@@ -56,8 +56,10 @@ public class CommentDaoImpl implements CommentDao{
                         comment.setCommentTime(TypeConvert.strToDate(snapshot.child("commentTime").getValue(String.class)));
                         String postKey = comment.getPostKey();
                         if(comments.containsKey(postKey)) {
-                            List<Comment> commentsList = comments.get(postKey);
-                            commentsList.add(comment);
+                            List<Comment> commentsList = comments.get(postKey);if(!commentsList.stream().anyMatch(item-> item.getCommentKey().equals(comment.getCommentKey())))
+                            {
+                                commentsList.add(comment);
+                            }
                         }
                         else {
                             List<Comment> commentList = new ArrayList<>();

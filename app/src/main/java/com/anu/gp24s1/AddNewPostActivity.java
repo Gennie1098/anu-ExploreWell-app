@@ -2,6 +2,7 @@ package com.anu.gp24s1;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -10,9 +11,11 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.Toast;
 
 import com.anu.gp24s1.dao.PostDaoImpl;
 import com.anu.gp24s1.state.UserSession;
+import com.anu.gp24s1.ui.post.SinglePostActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,13 +76,20 @@ public class AddNewPostActivity extends AppCompatActivity {
         buttonPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                submitPost();
+                String postKey = submitPost();
+                if(postKey != null) {
+                    Intent intent = new Intent(getApplicationContext(), SinglePostActivity.class);
+                    intent.putExtra("post_details", postKey);
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(getApplicationContext(), "Post failed", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
     }
 
-    private void submitPost() {
+    private String submitPost() {
         String title = editTextTitle.getText().toString();
         String location = editTextLocation.getText().toString();
         String tag = editTextTag.getText().toString();
@@ -105,9 +115,9 @@ public class AddNewPostActivity extends AppCompatActivity {
             editTextTitle.setError("Title cannot contain the characters '#' or '@'");
         }
 
-        if (!valid) { return; }
+        if (!valid) { return null; }
 
         // create the new post
-        UserSession.getInstance().createPost(title, content, tag, location);
+        return UserSession.getInstance().createPost(title, content, tag, location);
     }
 }
