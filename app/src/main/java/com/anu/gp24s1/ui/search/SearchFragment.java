@@ -1,5 +1,9 @@
 package com.anu.gp24s1.ui.search;
 
+import androidx.compose.ui.tooling.animation.AnimationSearch;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -14,6 +18,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
@@ -23,6 +28,7 @@ import com.anu.gp24s1.R;
 import com.anu.gp24s1.dao.PostDaoImpl;
 import com.anu.gp24s1.databinding.FragmentHomeBinding;
 import com.anu.gp24s1.databinding.FragmentSearchBinding;
+import com.anu.gp24s1.ui.following.FollowingPostFragment;
 
 import java.util.Set;
 
@@ -73,13 +79,19 @@ public class SearchFragment extends Fragment {
 
         searchContent.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                    if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-                        searchViewModel.updateSearch(textView.toString());
-                    }
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (actionId == EditorInfo.IME_ACTION_GO) {
+                    searchViewModel.updateSearch(textView.getText().toString());
+
+                    SearchResultFragment searchResultFragment = new SearchResultFragment();
+
+                    FragmentManager fragmentManager = ((FragmentActivity) getActivity()).getSupportFragmentManager();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.frameLayout, searchResultFragment);
+                    transaction.addToBackStack("SearchFragment");
+                    transaction.commit();
                 }
-                return false;
+                return true;
             }
         });
 

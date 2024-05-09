@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,28 +64,6 @@ public class SearchResultFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        // Add listeners to the searchViewModel data:
-        searchViewModel.getTitleState().observe(getViewLifecycleOwner(), title -> {
-            // TODO: update the result based on the title:
-            // NOTE: title is a String
-
-
-        });
-
-        // Add listeners to the searchViewModel data:
-        searchViewModel.getLocationsState().observe(getViewLifecycleOwner(), locations -> {
-            // TODO: update the result based on the locations:
-            // NOTE: locations is a set
-
-        });
-
-        // Add listeners to the searchViewModel data:
-        searchViewModel.getTagsState().observe(getViewLifecycleOwner(), tags -> {
-            // TODO: update the result based on the locations:
-            // NOTE: tags is a set
-
-        });
-
     }
 
     @Override
@@ -100,6 +79,30 @@ public class SearchResultFragment extends Fragment {
                     .add(R.id.searchResult, postListFragment)
                     .commit();
         }
+
+        // Add listeners to the searchViewModel data:
+
+        searchViewModel.getTitleState().observe(getViewLifecycleOwner(), title -> {
+            // TODO: update the result based on the title:
+            // NOTE: title is a String
+            Log.d("Debugging", title);
+
+        });
+
+        // Add listeners to the searchViewModel data:
+        searchViewModel.getLocationsState().observe(getViewLifecycleOwner(), locations -> {
+            // TODO: update the result based on the locations:
+            // NOTE: locations is a set
+            Log.d("Debugging", Integer.toString(locations.size()));
+
+        });
+
+        // Add listeners to the searchViewModel data:
+        searchViewModel.getTagsState().observe(getViewLifecycleOwner(), tags -> {
+            // TODO: update the result based on the locations:
+            // NOTE: tags is a set
+            Log.d("Debugging", Integer.toString(tags.size()));
+        });
 
         return view;
     }
