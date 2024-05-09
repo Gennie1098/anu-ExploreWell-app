@@ -77,7 +77,7 @@ public class SinglePostActivity extends AppCompatActivity {
         followingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean result = UserSession.getInstance().followPost(post.getPostKey());
+                boolean result = UserSession.getInstance().followPost(postKey);
                 System.out.println("add follow result: "+result);
             }
         });
