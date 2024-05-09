@@ -97,7 +97,7 @@ public class UserSession {
      * @return  true if successful
      * @see     UserState#createPost
      * */
-    public boolean createPost(String title, String content, String tag, String location)  {
+    public String createPost(String title, String content, String tag, String location)  {
         return userState.createPost(title, content, tag, location);
     }
 

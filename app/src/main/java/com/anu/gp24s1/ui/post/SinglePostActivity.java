@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.anu.gp24s1.R;
 import com.anu.gp24s1.dao.CommentDaoImpl;
@@ -30,6 +31,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class SinglePostActivity extends AppCompatActivity {
 
@@ -96,6 +99,9 @@ public class SinglePostActivity extends AppCompatActivity {
         if(post.getComments() != null && post.getComments().size() !=0)
         {
             commentModels.addAll(post.getComments());
+        } else if(post.getCommentsNumber() != 0)
+        {
+            Toast.makeText(this, "Get comments failed", Toast.LENGTH_SHORT).show();
         }
     }
 

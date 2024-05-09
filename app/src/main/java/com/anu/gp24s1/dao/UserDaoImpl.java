@@ -194,14 +194,7 @@ public class UserDaoImpl implements UserDao {
         User user = users.get(userKey);
         assert user != null;
 
-
         List<String> followingPosts = user.getFollowingPosts();
-        // Reflect in database
-//        DatabaseReference dbReference = DBConnector.getInstance().getDatabase();
-//        HashMap<String, Object> childUpdates = new HashMap<String, Object>();
-//        childUpdates.put("/user/" + userKey + "/followingPosts/" + postKey, true);
-//        dbReference.updateChildren(childUpdates);
-
         // already followed
         if (followingPosts.contains(postKey)) {
             return true;
