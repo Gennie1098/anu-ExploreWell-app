@@ -29,6 +29,8 @@ import com.anu.gp24s1.dao.PostDaoImpl;
 import com.anu.gp24s1.databinding.FragmentHomeBinding;
 import com.anu.gp24s1.databinding.FragmentSearchBinding;
 import com.anu.gp24s1.ui.following.FollowingPostFragment;
+import com.anu.gp24s1.utils.SearchParser;
+import com.anu.gp24s1.utils.SearchTokenizer;
 
 import java.util.Set;
 
@@ -81,11 +83,22 @@ public class SearchFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                 if (actionId == EditorInfo.IME_ACTION_GO) {
-                    searchViewModel.updateSearch(textView.getText().toString());
+                    // check if valid
+                    String searchWords = searchContent.getText().toString();
 
-
+                    SearchTokenizer tokenizer = new SearchTokenizer(searchWords);
+                    SearchParser parser = new SearchParser(tokenizer);
+                    boolean valid = parser.parseX();
+                    if (!valid) {
+                        searchContent.setError("Invalid Search");
+                        return false;
+                    }
 
                     SearchResultFragment searchResultFragment = new SearchResultFragment();
+
+                    Bundle args = new Bundle();
+                    args.putString("searchWords", searchWords);
+                    searchResultFragment.setArguments(args);
 
                     FragmentManager fragmentManager = ((FragmentActivity) getActivity()).getSupportFragmentManager();
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
