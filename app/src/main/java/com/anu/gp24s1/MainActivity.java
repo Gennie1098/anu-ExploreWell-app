@@ -35,9 +35,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class  MainActivity extends AppCompatActivity {
 
-//    private FloatingActionButton fab;
-//    private NavController navController;
-
     public ActivityMainBinding binding;
 
     @Override
@@ -45,8 +42,11 @@ public class  MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // Start with HomeFragment()
         replaceFragment(new HomeFragment());
 
+        // Update displayed Fragment based on the navigation click
         binding.bottomNavigationBar.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.navigation_home) {
@@ -66,6 +66,14 @@ public class  MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Function to replace layout of Main activity (frameLayout) to the new fragment
+     * for navigation interaction or page transition
+     * fragment only, not available to transit to activity
+     * @param fragment
+     * author: Gennie
+     */
+
     public void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -74,7 +82,12 @@ public class  MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-    // Update the title of the activity
+    /**
+     * Update the title of the main activity
+     * base on custom
+     * @param title
+     * author: Gennie
+     */
     public void updateTitle(String title) {
         setTitle(title);
     }
