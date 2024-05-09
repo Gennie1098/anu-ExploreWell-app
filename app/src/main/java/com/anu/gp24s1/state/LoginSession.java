@@ -144,8 +144,6 @@ public class LoginSession extends UserState{
 
     @Override
     public List<PostVo> searchPosts(String searchWords) {
-        String userKey = userSession.getUserKey();
-        List<Post> posts = postDao.searchPosts(searchWords);
-        return postDao.viewListOfPosts(posts,userKey);
+        return null;
     }
 }

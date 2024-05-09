@@ -149,6 +149,6 @@ public class UserSession {
     }
 
     public List<PostVo> searchPosts(String searchWords){
-        return userState.searchPosts(searchWords);
+        return null;
     }
 }

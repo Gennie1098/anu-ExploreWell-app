@@ -62,16 +62,16 @@ public class YourPostFragment extends Fragment {
         ownPostViewModel = new ViewModelProvider(requireActivity()).get(PostListViewModel.class);
         setOwnPostViewModel();
 
-        ImageView backButton = view.findViewById(R.id.backButton);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Use getParentFragmentManager() instead of the deprecated getFragmentManager()
-                if (getParentFragmentManager().getBackStackEntryCount() > 0) {
-                    getParentFragmentManager().popBackStack();
-                }
-            }
-        });
+//        ImageView backButton = view.findViewById(R.id.backButton);
+//        backButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // Use getParentFragmentManager() instead of the deprecated getFragmentManager()
+//                if (getParentFragmentManager().getBackStackEntryCount() > 0) {
+//                    getParentFragmentManager().popBackStack();
+//                }
+//            }
+//        });
 
         // Check if the fragment is already added, to avoid overlapping fragments on re-creating the view
         if (getChildFragmentManager().findFragmentById(R.id.your_post_container) == null) {
