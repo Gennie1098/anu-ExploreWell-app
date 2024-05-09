@@ -43,6 +43,9 @@ public class FollowingPostFragment extends Fragment {
         // Check if the fragment is already added, to avoid overlapping fragments on re-creating the view
         if (getChildFragmentManager().findFragmentById(R.id.following_post_container) == null) {
             PostListFragment postListFragment = PostListFragment.newInstance();
+//            Bundle bundle = new Bundle();
+//            bundle.putSerializable("postVoList",(Serializable) postVos);
+//            postListFragment.setArguments(bundle);
             getChildFragmentManager().beginTransaction()
                     .add(R.id.following_post_container, postListFragment)
                     .commit();
