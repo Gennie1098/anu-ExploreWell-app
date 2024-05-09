@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <uses-permission android:name="android.permission.INTERNET" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
         android:allowBackup="true"
@@ -11,42 +8,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!-- StartScreen is the launcher activity; it's the entry point of the app. -->
-         <activity
-         android:name=".StartScreen"
-         android:label="Start"
-         android:exported="true">
-         <intent-filter>
-         <action android:name="android.intent.action.MAIN"/>
-         <category android:name="android.intent.category.LAUNCHER"/>
-         </intent-filter>
-         </activity>
+        <activity android:name=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-        <!-- LoginActivity is where users log in. -->
-        <activity
-            android:name=".ui.login.LoginActivity"
-            android:exported="false"
-            android:label="Login"
-            android:parentActivityName=".StartScreen"> <!-- Set to false if not intended to be accessed directly from outside the app. -->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-
-         <!-- Main Activity  is the main activity after login. -->
-         <activity
-         android:name=".MainActivity"
-         android:label="Home"
-         android:exported="true">  <!-- Set to true to potentially allow navigation from other apps or components. -->
-         </activity>
-        <activity
-            android:name=".AddNewPostActivity"
-            android:exported="false"
-            android:label="New post"
-            android:parentActivityName=".MainActivity">
-        </activity>
-
-        <activity
-            android:name=".ui.post.SinglePostActivity"
-            android:exported="false" />
-
     </application>
 
 </manifest>

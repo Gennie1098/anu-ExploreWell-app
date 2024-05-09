@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primaryGreen">#043F2E</color>
-    <color name="highlightGreen">#C7F169</color>
-    <color name="backgroundGreen">#EEF2E3</color>
-    <color name="lighGreen">#CBF0C7</color>
+    <color name="colorPrimary">#039BE5</color>
+    <color name="colorPrimaryDark">#0288D1</color>
+    <color name="colorAccent">#FFA000</color>
 
-    <color name="primary_text">#1f1f1f</color>
-    <color name="secondary_text">#043F2E</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#727272</color>
     <color name="icons">#212121</color>
-    <color name="divider">#DBDBDB</color>
+    <color name="divider">#B6B6B6</color>
 </resources>
