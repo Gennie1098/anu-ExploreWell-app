@@ -94,6 +94,10 @@ public class SearchFragment extends Fragment {
                         return false;
                     }
 
+                    // this hides the keyboard
+                    searchContent.setEnabled(false);
+                    searchContent.setEnabled(true);
+
                     SearchResultFragment searchResultFragment = new SearchResultFragment();
 
                     Bundle args = new Bundle();
