@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 public class PostDaoImpl implements PostDao {
 
@@ -421,8 +422,36 @@ public class PostDaoImpl implements PostDao {
     }
 
     @Override
-    public List<Post> searchPosts(String searchWords) {
-        return null;
+    public List<Post> searchPosts(String title, List<String> tags, List<String> locations) {
+
+        List<Post> searchResults = new ArrayList<Post>();
+
+        // by title
+        Post titleResult = rootPost.search(title);
+        if (titleResult != null) { searchResults.add(titleResult); }
+
+        // by tag
+        for (String tag : tags) {
+            List<String> keysByTag = postsGroupByTag.get(tag);
+            List<Post> postsByTag = new ArrayList<Post>();
+            if (keysByTag != null) {
+                postsByTag = keysByTag.stream().map(key -> posts.get(key)).collect(Collectors.toList());
+            }
+
+            searchResults.addAll(postsByTag);
+        }
+
+        // by location
+        for (String tag : tags) {
+            List<String> keysByLocation = postsGroupByLocation.get(tag);
+            List<Post> postsByLocation = new ArrayList<Post>();
+            if (keysByLocation != null) {
+                postsByLocation = keysByLocation.stream().map(key -> posts.get(key)).collect(Collectors.toList());
+            }
+            searchResults.addAll(postsByLocation);
+        }
+
+        return searchResults;
     }
 
     /**
