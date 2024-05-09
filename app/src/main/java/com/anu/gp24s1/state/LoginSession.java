@@ -63,17 +63,16 @@ public class LoginSession extends UserState{
     }
 
     @Override
-    public boolean createPost(String title, String content, String tag, String location) {
+    public String createPost(String title, String content, String tag, String location) {
         String postKey = "";
         try {
             String userKey = super.userSession.getUserKey();
             postKey = PostDaoImpl.getInstance().createPost(title, content, tag, location, userKey);
             UserDaoImpl.getInstance().addOwnPost(userKey, postKey);
+            return postKey;
         } catch (Exception e) {
-            return false;
+            return postKey;
         }
-
-        return true;
     }
 
     /**
@@ -101,7 +100,6 @@ public class LoginSession extends UserState{
     @Override
     public PostVo viewPost(String postKey) {
         PostDao postDao = PostDaoImpl.getInstance();
-        UserDao userDao = UserDaoImpl.getInstance();
         String userKey = userSession.getUserKey();
         return postDao.viewPost(postKey, userKey);
     }
