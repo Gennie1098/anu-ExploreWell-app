@@ -71,7 +71,7 @@ public class PostListFragment extends Fragment {
 
     private void handleItemClick(PostVo item) {
         Intent intent = new Intent(getActivity(), SinglePostActivity.class);
-        intent.putExtra("post_details", item);
+        intent.putExtra("post_details", item.getPostKey());
         startActivity(intent);
     }
 
@@ -79,8 +79,10 @@ public class PostListFragment extends Fragment {
 //    int[] userAva = {R.drawable.ic_outline_account_circle_24, R.drawable.ic_outline_account_circle_24, R.drawable.ic_outline_account_circle_24};
 
     private void setUpPostListModels(List<PostVo> postsVoList) {
-        postListModels.clear();
-        postListModels.addAll(postsVoList);
+        if(postsVoList != null && postsVoList.size() != 0){
+            postListModels.clear();
+            postListModels.addAll(postsVoList);
+        }
     }
 
 

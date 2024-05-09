@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anu.gp24s1.R;
+import com.anu.gp24s1.pojo.vo.PostVo;
+import com.anu.gp24s1.ui.post.PostListAdapter;
 import com.google.android.material.chip.Chip;
 import com.squareup.picasso.Picasso;
 
@@ -23,10 +25,22 @@ public class RePostsByLocationAdapter extends RecyclerView.Adapter<RePostsByLoca
 
     Context context;
     ArrayList<RePostsByLocationModel> rePostsByLocationModel;
+    private OnItemClickListener listener;
+
+    public interface OnItemClickListener {
+        void onItemClick(RePostsByLocationModel post);
+    }
+
+    // TODO: check it to set data
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
     public RePostsByLocationAdapter (Context context, ArrayList<RePostsByLocationModel> rePostsByLocationModel) {
         this.context = context;
         this.rePostsByLocationModel = rePostsByLocationModel;
+        this.listener = listener;
     }
     @NonNull
     @Override
@@ -43,6 +57,10 @@ public class RePostsByLocationAdapter extends RecyclerView.Adapter<RePostsByLoca
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         //assigning values to the views created in following_groups_list_row layout file
         //base on the position of the recycler view
+        RePostsByLocationModel item = rePostsByLocationModel.get(position);
+        if (listener != null) {
+            holder.itemView.setOnClickListener(v -> listener.onItemClick(item));
+        }
         Uri imageUrl = Uri.parse(rePostsByLocationModel.get(position).getUserAva());
         Picasso.get().load(imageUrl)
                 .error(R.drawable.default_avatar_profile)
@@ -81,7 +99,6 @@ public class RePostsByLocationAdapter extends RecyclerView.Adapter<RePostsByLoca
             postTitle = itemView.findViewById(R.id.postTitle);
             numberOfFollowing = itemView.findViewById(R.id.numberFollowing);
             numberOfComments = itemView.findViewById(R.id.numberComments);
-
         }
     }
 }

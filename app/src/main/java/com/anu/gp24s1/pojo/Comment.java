@@ -1,5 +1,7 @@
 package com.anu.gp24s1.pojo;
 
+import com.anu.gp24s1.dao.UserDao;
+import com.anu.gp24s1.dao.UserDaoImpl;
 import com.anu.gp24s1.pojo.vo.CommentVo;
 
 import java.util.Date;
@@ -62,6 +64,12 @@ public class Comment {
     }
 
     public CommentVo toCommentVo(){
-        return null;
+        CommentVo commentVo = new CommentVo();
+        UserDao userDao = UserDaoImpl.getInstance();
+        commentVo.setUserAvatar(userDao.getAvatar(authorKey));
+        commentVo.setUsername(userDao.getUsername(authorKey));
+        commentVo.setCommentTime(commentTime);
+        commentVo.setContent(content);
+        return commentVo;
     }
 }

@@ -1,12 +1,12 @@
 package com.anu.gp24s1.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,12 +18,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anu.gp24s1.MainActivity;
-import com.anu.gp24s1.R;
-import com.anu.gp24s1.dao.PostDaoImpl;
 import com.anu.gp24s1.databinding.FragmentHomeBinding;
 import com.anu.gp24s1.pojo.vo.PostVo;
 import com.anu.gp24s1.state.UserSession;
 import com.anu.gp24s1.ui.following.FollowingModel;
+import com.anu.gp24s1.ui.post.SinglePostActivity;
 import com.anu.gp24s1.ui.search.SearchFragment;
 import com.anu.gp24s1.utils.DBConnector;
 import com.google.firebase.database.DataSnapshot;
@@ -54,6 +53,11 @@ public class HomeFragment extends Fragment {
         recyclerViewLocation = binding.postListLocation;
         setUpRePostsByLocationModel();
         RePostsByLocationAdapter adapterLocation = new RePostsByLocationAdapter(getActivity(), rePostsByLocationModels);
+
+        // TODO: set up data to change to single post here
+        adapterLocation.setOnItemClickListener(this::handleItemClick);
+
+
         recyclerViewLocation.setAdapter(adapterLocation);
         recyclerViewLocation.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
 
@@ -61,6 +65,10 @@ public class HomeFragment extends Fragment {
         recyclerViewPopular = binding.postListPopular;
         setUpRePostsByPopularModel();
         RePostsByLocationAdapter adapterPopular = new RePostsByLocationAdapter(getActivity(), rePostsByTagModels);
+
+        // TODO: set up data to change to single post here
+        adapterPopular.setOnItemClickListener(this::handleItemClick);
+
         recyclerViewPopular.setAdapter(adapterPopular);
         recyclerViewPopular.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
 
@@ -82,10 +90,18 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
+    // TODO: check this for set up post data
+    private void handleItemClick(RePostsByLocationModel item) {
+        Intent intent = new Intent(getActivity(), SinglePostActivity.class);
+        intent.putExtra("post_details", item.getPostKey());
+        startActivity(intent);
+    }
+
     ArrayList<RePostsByLocationModel> rePostsByLocationModels = new ArrayList<>();
 
     /**
      * set recommendations by location to the list
+     *
      * @author Qinjue Wu
      */
     private void setUpRePostsByLocationModel() {
@@ -95,7 +111,7 @@ public class HomeFragment extends Fragment {
             Toast.makeText(getContext(), "Get Recommended posts by location failed!", Toast.LENGTH_LONG).show();
         } else {
             for (int i = 0; i < recommendationByLocation.size(); i++) { // arrays should be equal length
-                rePostsByLocationModels.add(new RePostsByLocationModel(recommendationByLocation.get(i).getAuthorAvatar(), recommendationByLocation.get(i).getAuthorName(), recommendationByLocation.get(i).getLocation(), recommendationByLocation.get(i).getTag(), recommendationByLocation.get(i).getTitle(), recommendationByLocation.get(i).getFollowerNumber(), recommendationByLocation.get(i).getCommentsNumber()));
+                rePostsByLocationModels.add(new RePostsByLocationModel(recommendationByLocation.get(i).getPostKey(),recommendationByLocation.get(i).getAuthorAvatar(), recommendationByLocation.get(i).getAuthorName(), recommendationByLocation.get(i).getLocation(), recommendationByLocation.get(i).getTag(), recommendationByLocation.get(i).getTitle(), recommendationByLocation.get(i).getFollowerNumber(), recommendationByLocation.get(i).getCommentsNumber()));
             }
         }
     }
@@ -104,6 +120,7 @@ public class HomeFragment extends Fragment {
 
     /**
      * Set recommendations by tag to the list
+     *
      * @author Qinjue Wu
      */
     private void setUpRePostsByPopularModel() {
@@ -113,7 +130,7 @@ public class HomeFragment extends Fragment {
             Toast.makeText(getContext(), "Get Recommended posts by tag failed!", Toast.LENGTH_LONG).show();
         } else {
             for (int i = 0; i < recommendationByTag.size(); i++) { // arrays should be equal length
-                rePostsByTagModels.add(new RePostsByLocationModel(recommendationByTag.get(i).getAuthorAvatar(), recommendationByTag.get(i).getAuthorName(), recommendationByTag.get(i).getLocation(), recommendationByTag.get(i).getTag(), recommendationByTag.get(i).getTitle(), recommendationByTag.get(i).getFollowerNumber(), recommendationByTag.get(i).getCommentsNumber()));
+                rePostsByTagModels.add(new RePostsByLocationModel(recommendationByTag.get(i).getPostKey(),recommendationByTag.get(i).getAuthorAvatar(), recommendationByTag.get(i).getAuthorName(), recommendationByTag.get(i).getLocation(), recommendationByTag.get(i).getTag(), recommendationByTag.get(i).getTitle(), recommendationByTag.get(i).getFollowerNumber(), recommendationByTag.get(i).getCommentsNumber()));
             }
         }
     }
@@ -178,11 +195,117 @@ public class HomeFragment extends Fragment {
     }
 
     private void dataStream() {
-        if (getRePostsByLocationModels().size() > 0) {
-            RePostsByLocationModel model = rePostsByLocationModels.get(0);
-            model.setNumberOfFollowing(model.getNumberOfFollowing() + random.nextInt(4) - 1); // randomly add -1 to 2
-            rePostsByLocationModels.set(0, model);
-            recyclerViewLocation.getAdapter().notifyItemChanged(0);
+        int randomEventNumber = random.nextInt(10);
+        switch (randomEventNumber) {
+            case 0:
+                if (rePostsByTagModels.size() > 0) {
+                    // recommend posts by tag
+                    RePostsByLocationModel rePostsByTagModel = rePostsByTagModels.get(0);
+                    if (rePostsByTagModel.getNumberOfFollowing() < 27) {
+                        rePostsByTagModel.setNumberOfFollowing(rePostsByTagModel.getNumberOfFollowing() + random.nextInt(3)); // randomly add 0 to 2
+                        rePostsByTagModels.set(0, rePostsByTagModel);
+                        recyclerViewPopular.getAdapter().notifyItemChanged(0);
+                    }
+                }
+                break;
+            case 1:
+                if (rePostsByTagModels.size() > 0) {
+                    // recommend posts by tag
+                    RePostsByLocationModel rePostsByTagModel = rePostsByTagModels.get(1);
+                    if (rePostsByTagModel.getNumberOfFollowing() < 27) {
+                        rePostsByTagModel.setNumberOfFollowing(rePostsByTagModel.getNumberOfFollowing() + random.nextInt(3)); // randomly add 0 to 2
+                        rePostsByTagModels.set(1, rePostsByTagModel);
+                        recyclerViewPopular.getAdapter().notifyItemChanged(0);
+                    }
+                }
+                break;
+            case 2:
+                if (rePostsByTagModels.size() > 0) {
+                    // recommend posts by tag
+                    RePostsByLocationModel rePostsByTagModel = rePostsByTagModels.get(2);
+                    if (rePostsByTagModel.getNumberOfFollowing() < 27) {
+                        rePostsByTagModel.setNumberOfFollowing(rePostsByTagModel.getNumberOfFollowing() + random.nextInt(3)); // randomly add 0 to 2
+                        rePostsByTagModels.set(2, rePostsByTagModel);
+                        recyclerViewPopular.getAdapter().notifyItemChanged(0);
+                    }
+                }
+                break;
+            case 3:
+                if (rePostsByTagModels.size() > 0) {
+                    // recommend posts by tag
+                    RePostsByLocationModel rePostsByTagModel = rePostsByTagModels.get(3);
+                    if (rePostsByTagModel.getNumberOfFollowing() < 27) {
+                        rePostsByTagModel.setNumberOfFollowing(rePostsByTagModel.getNumberOfFollowing() + random.nextInt(3)); // randomly add 0 to 2
+                        rePostsByTagModels.set(3, rePostsByTagModel);
+                        recyclerViewPopular.getAdapter().notifyItemChanged(0);
+                    }
+                }
+                break;
+            case 4:
+                if (rePostsByTagModels.size() > 0) {
+                    // recommend posts by tag
+                    RePostsByLocationModel rePostsByTagModel = rePostsByTagModels.get(4);
+                    if (rePostsByTagModel.getNumberOfFollowing() < 27) {
+                        rePostsByTagModel.setNumberOfFollowing(rePostsByTagModel.getNumberOfFollowing() + random.nextInt(3)); // randomly add 0 to 2
+                        rePostsByTagModels.set(4, rePostsByTagModel);
+                        recyclerViewPopular.getAdapter().notifyItemChanged(0);
+                    }
+                }
+                break;
+            case 6:
+                if (getRePostsByLocationModels().size() > 0) {
+                    // recommend posts by location
+                    RePostsByLocationModel rePostsByLocationModel = rePostsByLocationModels.get(1);
+                    if (rePostsByLocationModel.getNumberOfFollowing() < 27) {
+                        rePostsByLocationModel.setNumberOfFollowing(rePostsByLocationModel.getNumberOfFollowing() + random.nextInt(3)); // randomly add 0 to 2
+                        rePostsByLocationModels.set(1, rePostsByLocationModel);
+                        recyclerViewLocation.getAdapter().notifyItemChanged(0);
+                    }
+                }
+                break;
+            case 7:
+                if (getRePostsByLocationModels().size() > 0) {
+                    // recommend posts by location
+                    RePostsByLocationModel rePostsByLocationModel = rePostsByLocationModels.get(2);
+                    if (rePostsByLocationModel.getNumberOfFollowing() < 27) {
+                        rePostsByLocationModel.setNumberOfFollowing(rePostsByLocationModel.getNumberOfFollowing() + random.nextInt(3)); // randomly add 0 to 2
+                        rePostsByLocationModels.set(2, rePostsByLocationModel);
+                        recyclerViewLocation.getAdapter().notifyItemChanged(0);
+                    }
+                }
+                break;
+            case 8:
+                if (getRePostsByLocationModels().size() > 0) {
+                    // recommend posts by location
+                    RePostsByLocationModel rePostsByLocationModel = rePostsByLocationModels.get(3);
+                    if (rePostsByLocationModel.getNumberOfFollowing() < 27) {
+                        rePostsByLocationModel.setNumberOfFollowing(rePostsByLocationModel.getNumberOfFollowing() + random.nextInt(3)); // randomly add 0 to 2
+                        rePostsByLocationModels.set(3, rePostsByLocationModel);
+                        recyclerViewLocation.getAdapter().notifyItemChanged(0);
+                    }
+                }
+                break;
+            case 9:
+                if (getRePostsByLocationModels().size() > 0) {
+                    // recommend posts by location
+                    RePostsByLocationModel rePostsByLocationModel = rePostsByLocationModels.get(4);
+                    if (rePostsByLocationModel.getNumberOfFollowing() < 27) {
+                        rePostsByLocationModel.setNumberOfFollowing(rePostsByLocationModel.getNumberOfFollowing() + random.nextInt(3)); // randomly add 0 to 2
+                        rePostsByLocationModels.set(4, rePostsByLocationModel);
+                        recyclerViewLocation.getAdapter().notifyItemChanged(0);
+                    }
+                }
+                break;
+            default:
+                if (getRePostsByLocationModels().size() > 0) {
+                    // recommend posts by location
+                    RePostsByLocationModel rePostsByLocationModel = rePostsByLocationModels.get(0);
+                    if (rePostsByLocationModel.getNumberOfFollowing() < 27) {
+                        rePostsByLocationModel.setNumberOfFollowing(rePostsByLocationModel.getNumberOfFollowing() + random.nextInt(3)); // randomly add 0 to 2
+                        rePostsByLocationModels.set(0, rePostsByLocationModel);
+                        recyclerViewLocation.getAdapter().notifyItemChanged(0);
+                    }
+                }
         }
     }
 }
