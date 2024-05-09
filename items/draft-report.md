@@ -43,6 +43,8 @@ The key area(s) of responsibilities for each member
     - Data Instances - [Data File](items/final_data.json)
     - Codebase -
 
+
+
 - **Code and App Design**
     - [What design patterns, data structures, did the involved member propose?]*
     - [UI Design. Specify what design did the involved member propose? What tools were used for the design?]* <br><br>
@@ -51,8 +53,21 @@ The key area(s) of responsibilities for each member
     - [Report Writing?] [Slides preparation?]*
     - [You are welcome to provide anything that you consider as a contribution to the project or team.] e.g., APK, setups, firebase* <br><br>
 
-2. **UID2, Name2**  I have xx% contribution, as follows: <br>
-- ...
+2. **u7284324, Lachlan Stewart** 20% Contribution as follows: <br>
+    - Creation of posts (add class)
+    - Organisation of posts in an AVL tree
+    - Tokenizer (add class)
+    - Parser (add class)
+    - Tokenizer and Parser Unit Tests (add class)
+    - Creation of Comments (add classe)
+
+- **Code and App Design**
+    - I suggested the use of the AVL tree for storing the posts for retrieval by title
+    - I proposed and implemented the user of AutoCompletion in relevant text fields to help the user write compliant posts and searches
+
+- **Others**: (only if significant and significantly different from an "average contribution")
+    - [Report Writing?] [Slides preparation?]*
+    - [You are welcome to provide anything that you consider as a contribution to the project or team.] e.g., APK, setups, firebase* <br><br>
 
 
 
@@ -107,6 +122,8 @@ With ExploreWell, you're not just embarking on another outdoor journey; you're j
 
 In the UI, we used MultiAutoCompleteTextView and AutoCompleteTextViews to assist the user in writing search strings and posts which are compliant with the grammar. 
 
+We used Fragments to structure the application in a modular, scaleable and modern fashion.
+
 <hr>
 
 ### Data Structures
@@ -117,13 +134,11 @@ Here is a partial (short) example for the subsection `Data Structures`:*
 
 *I used the following data structures in my project:*
 
-1. *LinkedList*
-    * *Objective: used for storing xxxx for xxx feature.*
-    * *Code Locations: defined in [Class X, methods Z, Y](https://gitlab.cecs.anu.edu.au/comp2100/group-project/ga-23s2/-/blob/main/items/media/_examples/Dummy.java#L22-43) and [class AnotherClass, lines l1-l2](url); processed using [dataStructureHandlerMethod](url) and ...
+1. *AVL Tree*
+    * *Objective: used for storing posts by title*
+    * *Code Locations: TODO*
     * *Reasons:*
-        * *It is more efficient than Arraylist for insertion with a time complexity O(1)*
-        * *We don't need to access the item by index for xxx feature because...*
-        * For the (part), the data ... (characteristics) ...
+        * Allows for efficient retrieval *
 
 2. ...
 
@@ -145,21 +160,6 @@ Here is a partial (short) example for the subsection `Data Structures`:*
 ### Parser
 
 ### <u>Grammar(s)</u>
-*[How do you design the grammar? What are the advantages of your designs?]*
-*If there are several grammars, list them all under this section and what they relate to.*
-
-Production Rules:
-
-    <Non-Terminal> ::= <some output>
-    <Non-Terminal> ::= <some output>
-
-
-### <u>Tokenizers and Parsers</u>
-
-We use a Tokenizer and Parser for the search bar where the user can enter a title followed by one or more tags '#...' or locations '@...'. These must come after the title, and the grammar is set up to ensure that. 
-
-Originally, it was decided to make the tokenizer only accept alphanumeric titles, but this was changed to allow titles which do not contain the # or @ symbols. For example, the user might want to input the title "Mt. Majura", which uses the '.' symbol.
-
 The grammar is intended to be simple and user friendly:
 
 Tokens:
@@ -172,6 +172,18 @@ Formal Grammar:
 - \<T\> ::= alpha | alpha \<T\>
 - \<Y\> ::= \<Z\> | \<Z\> \<Y\>
 - \<Z\> ::= hashtag alpha | at alpha
+
+This grammar was the result of several iterations. Initially we considered whitespace to be more important and had a special token for it, but removing the whitespace as done in labs in the course was a better way to go and left us with a simpler grammar to implement. It also gives the user room for error in case they accidentally add some whitespace. 
+
+The development of the tokenizer was test-driven, it was not added to the app until it passed all tests.
+
+We also intended to have the user input complex titles (any title with more than one word and/or non-alphanumeric punctuation) within double quotes, but we decided this would also be too complex.
+
+Originally, it was decided to make the tokenizer only accept alphanumeric titles, but this was changed to allow titles which do not contain the # or @ symbols. For example, the user might want to input the title "Mt. Majura", which uses the '.' symbol.
+
+### <u>Tokenizers and Parsers</u>
+The Tokenizer and Parser is used to ensure that the user provides a valid search string and to parse a valid search query. 
+Whitespace separates tokens.
 
 <hr>
 
@@ -200,21 +212,15 @@ Formal Grammar:
    <br>
 
 ### Custom Features
-Feature Category: Privacy <br>
-1. [Privacy-Request]. Description of the feature  (easy)
-    * Code: [Class X, methods Z, Y](https://gitlab.cecs.anu.edu.au/comp2100/group-project/ga-23s2/-/blob/main/items/media/_examples/Dummy.java#L22-43) and Class Y, ...
-    * Description of your implementation: ... <br>
-      <br>
-
-2. [Privacy-Block]. Description ... ... (medium)
-   ... ...
-   <br><br>
-
 Feature Category: Firebase Integration <br>
-3. [FB-Auth] Description of the feature (easy)
+1. [FB-Auth] Description of the feature (easy)
     * Code: [Class X, entire file](https://gitlab.cecs.anu.edu.au/comp2100/group-project/ga-23s2/-/blob/main/items/media/_examples/Dummy.java#L22-43) and Class Y, ...
     * [Class B](../src/path/to/class/file.java#L30-85): methods A, B, C, lines of code: 30 to 85
     * Description of your implementation: ... <br>
+
+2. [FB-persist-extension]
+
+3. []
 
 <hr>
 
