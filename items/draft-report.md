@@ -212,21 +212,15 @@ Whitespace separates tokens.
    <br>
 
 ### Custom Features
-Feature Category: Privacy <br>
-1. [Privacy-Request]. Description of the feature  (easy)
-    * Code: [Class X, methods Z, Y](https://gitlab.cecs.anu.edu.au/comp2100/group-project/ga-23s2/-/blob/main/items/media/_examples/Dummy.java#L22-43) and Class Y, ...
-    * Description of your implementation: ... <br>
-      <br>
-
-2. [Privacy-Block]. Description ... ... (medium)
-   ... ...
-   <br><br>
-
 Feature Category: Firebase Integration <br>
-3. [FB-Auth] Description of the feature (easy)
+1. [FB-Auth] Description of the feature (easy)
     * Code: [Class X, entire file](https://gitlab.cecs.anu.edu.au/comp2100/group-project/ga-23s2/-/blob/main/items/media/_examples/Dummy.java#L22-43) and Class Y, ...
     * [Class B](../src/path/to/class/file.java#L30-85): methods A, B, C, lines of code: 30 to 85
     * Description of your implementation: ... <br>
+
+2. [FB-persist-extension]
+
+3. []
 
 <hr>
 
