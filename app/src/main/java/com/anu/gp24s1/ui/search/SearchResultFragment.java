@@ -80,30 +80,6 @@ public class SearchResultFragment extends Fragment {
                     .commit();
         }
 
-        // Add listeners to the searchViewModel data:
-
-        searchViewModel.getTitleState().observe(getViewLifecycleOwner(), title -> {
-            // TODO: update the result based on the title:
-            // NOTE: title is a String
-            Log.d("Debugging", title);
-
-        });
-
-        // Add listeners to the searchViewModel data:
-        searchViewModel.getLocationsState().observe(getViewLifecycleOwner(), locations -> {
-            // TODO: update the result based on the locations:
-            // NOTE: locations is a set
-            Log.d("Debugging", Integer.toString(locations.size()));
-
-        });
-
-        // Add listeners to the searchViewModel data:
-        searchViewModel.getTagsState().observe(getViewLifecycleOwner(), tags -> {
-            // TODO: update the result based on the locations:
-            // NOTE: tags is a set
-            Log.d("Debugging", Integer.toString(tags.size()));
-        });
-
         return view;
     }
 }
