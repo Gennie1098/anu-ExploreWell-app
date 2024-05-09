@@ -319,7 +319,7 @@ public class Post {
             return this.leftNode == null ? null : leftNode.search(title);
         } else {
             // title > this.title
-            return this.leftNode == null ? null : leftNode.search(title);
+            return this.rightNode == null ? null : rightNode.search(title);
         }
     }
 }
