@@ -111,15 +111,15 @@ With ExploreWell, you're not just embarking on another outdoor journey; you're j
 
 <hr> 
 
-### Application UML ---- TODO
+### Application UML
 
-![ClassDiagramExample](media/_examples/ClassDiagramExample.png) <br>
-*[Replace the above with a class diagram. You can look at how we have linked an image here as an example of how you can do it too.]*
+![ClassDiagramExample](items/media/diagrams/class_uml.png) <br>
 
 <hr>
 
 ## Code Design and Decisions
 
+### AutoCompletion
 In the UI, we used MultiAutoCompleteTextView and AutoCompleteTextViews to assist the user in writing search strings and posts which are compliant with the grammar. 
 
 We used Fragments to structure the application in a modular, scaleable and modern fashion.
@@ -128,19 +128,16 @@ We used Fragments to structure the application in a modular, scaleable and moder
 
 ### Data Structures
 
-*[What data structures did your team utilise? Where and why?]*
-
-Here is a partial (short) example for the subsection `Data Structures`:*
-
-*I used the following data structures in my project:*
-
 1. *AVL Tree*
-    * *Objective: used for storing posts by title*
-    * *Code Locations: TODO*
-    * *Reasons:*
-        * Allows for efficient retrieval *
+    * **Objective:** used for storing posts by title
+    * **Code Locations:** [Post.java](https://gitlab.cecs.anu.edu.au/u7616055/gp-24s1/-/blob/main/app/src/main/java/com/anu/gp24s1/pojo/Post.java)
+    * **Reasons:**
+        * Efficient $\log(n)$ retrieval
+        * The user will search using a title, which makes a title string a good candidate for a key in a datastructure. Because strings can be ordered lexicographically, it is possible to use a binary tree.
+        * AVL balancing is good because the titles of locations may not be uniformly distributed. There may be very few titles that start with "X" for example. Using an AVL tree ensures that the tree is balanced despite this possibility.
 
-2. ...
+2. *HashMap(s)*
+    * *Objective:*
 
 3. ...
 
@@ -208,8 +205,13 @@ Whitespace separates tokens.
     * Code to the Data File [users_interaction.json](link-to-file), [search-queries.xml](link-to-file), ...
     * Link to the Firebase repo: ...
 
-3. ...
-   <br>
+3. [LoadShowData]. 
+
+4. [DataStream]. 
+
+5. [Search]. Allows the user to search for posts (easy)
+    * Code: 
+   
 
 ### Custom Features
 Feature Category: Firebase Integration <br>
