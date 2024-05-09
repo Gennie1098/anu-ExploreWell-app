@@ -57,7 +57,6 @@ public class HomeFragment extends Fragment {
         setUpRePostsByLocationModel();
         RePostsByLocationAdapter adapterLocation = new RePostsByLocationAdapter(getActivity(), rePostsByLocationModels);
 
-        // TODO: set up data to change to single post here
         adapterLocation.setOnItemClickListener(this::handleItemClick);
 
 
@@ -69,7 +68,6 @@ public class HomeFragment extends Fragment {
         setUpRePostsByPopularModel();
         RePostsByLocationAdapter adapterPopular = new RePostsByLocationAdapter(getActivity(), rePostsByTagModels);
 
-        // TODO: set up data to change to single post here
         adapterPopular.setOnItemClickListener(this::handleItemClick);
 
         recyclerViewPopular.setAdapter(adapterPopular);

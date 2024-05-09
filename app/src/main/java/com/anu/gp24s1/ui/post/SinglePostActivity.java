@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,10 +20,13 @@ import android.widget.Toast;
 
 import com.anu.gp24s1.R;
 import com.anu.gp24s1.dao.CommentDaoImpl;
+import com.anu.gp24s1.dao.UserDao;
+import com.anu.gp24s1.dao.UserDaoImpl;
 import com.anu.gp24s1.pojo.vo.CommentVo;
 import com.anu.gp24s1.pojo.vo.PostVo;
 import com.anu.gp24s1.state.UserSession;
 import com.anu.gp24s1.utils.DBConnector;
+import com.anu.gp24s1.utils.TypeConvert;
 import com.google.android.material.chip.Chip;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,6 +37,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class SinglePostActivity extends AppCompatActivity {
@@ -39,6 +45,9 @@ public class SinglePostActivity extends AppCompatActivity {
     EditText addCommentText;
     Button addCommentButton;
     RecyclerView recyclerView;
+    private Handler handler;
+    private Runnable updateRunnable;
+    Random random = new Random();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +93,16 @@ public class SinglePostActivity extends AppCompatActivity {
                 System.out.println("add follow result: "+result);
             }
         });
+
+        handler = new Handler(Looper.getMainLooper());
+        updateRunnable = new Runnable() {
+            @Override
+            public void run() {
+                dataStream();
+                handler.postDelayed(this, random.nextInt(6000) + 5000); // update interval: 5-10 second
+            }
+        };
+        handler.post(updateRunnable);
 
     }
 
@@ -147,5 +166,81 @@ public class SinglePostActivity extends AppCompatActivity {
 
             }
         });
+    }
+    private void dataStream() {
+        int randomEventNumber = random.nextInt(6);
+        CommentVo commentVo = new CommentVo();
+        UserDao userDao = UserDaoImpl.getInstance();
+        String authorKey;
+        Date commentTime;
+        String content;
+        switch (randomEventNumber){
+            case 0:
+                authorKey = "V2yM7qlwl2fflsIfe3QyIWN1L6I3";
+                commentVo.setUserAvatar(userDao.getAvatar(authorKey));
+                commentVo.setUsername(userDao.getUsername(authorKey));
+                // TODO: compare the publish time of post, or add random number to publish time
+                commentTime = TypeConvert.strToDate("2024-03-31 04:16:51");
+                commentVo.setCommentTime(commentTime);
+                content = "yay, wonderful!";
+                commentVo.setContent(content);
+                commentModels.add(commentVo);
+                recyclerView.getAdapter().notifyDataSetChanged();
+                break;
+            case 1:
+                authorKey = "H6QJlwBBAkgFUpyObrP3qvlaYEm1";
+                commentVo.setUserAvatar(userDao.getAvatar(authorKey));
+                commentVo.setUsername(userDao.getUsername(authorKey));
+                commentTime = TypeConvert.strToDate("2024-03-31 05:16:51");
+                commentVo.setCommentTime(commentTime);
+                content = "hey, how to join?";
+                commentVo.setContent(content);
+                commentModels.add(commentVo);
+                recyclerView.getAdapter().notifyDataSetChanged();
+                break;
+            case 2:
+                authorKey = "rlaE4R4eIcY9q069R8TOfQ7NsMT2";
+                commentVo.setUserAvatar(userDao.getAvatar(authorKey));
+                commentVo.setUsername(userDao.getUsername(authorKey));
+                commentTime = TypeConvert.strToDate("2024-03-31 06:16:51");
+                commentVo.setCommentTime(commentTime);
+                content = "hey guys, looking forward to it!";
+                commentVo.setContent(content);
+                commentModels.add(commentVo);
+                recyclerView.getAdapter().notifyDataSetChanged();
+                break;
+            case 3:
+                authorKey = "P0YdlraCILgsYAD0LIOnvkW9NFM2";
+                commentVo.setUserAvatar(userDao.getAvatar(authorKey));
+                commentVo.setUsername(userDao.getUsername(authorKey));
+                commentTime = TypeConvert.strToDate("2024-03-31 07:16:51");
+                commentVo.setCommentTime(commentTime);
+                content = "cannot wait!";
+                commentVo.setContent(content);
+                commentModels.add(commentVo);
+                recyclerView.getAdapter().notifyDataSetChanged();
+                break;
+            case 4:
+                authorKey = "GISNjyDr7gaH4JL2aoqqpVQfG2I3";
+                commentVo.setUserAvatar(userDao.getAvatar(authorKey));
+                commentVo.setUsername(userDao.getUsername(authorKey));
+                commentTime = TypeConvert.strToDate("2024-03-31 08:16:51");
+                commentVo.setCommentTime(commentTime);
+                content = "sounds interesting.";
+                commentVo.setContent(content);
+                commentModels.add(commentVo);
+                recyclerView.getAdapter().notifyDataSetChanged();
+                break;
+            default:
+                authorKey = "XI2MKDy4zwVpNqQjJLHe1GsbfJq2";
+                commentVo.setUserAvatar(userDao.getAvatar(authorKey));
+                commentVo.setUsername(userDao.getUsername(authorKey));
+                commentTime = TypeConvert.strToDate("2024-03-31 09:16:51");
+                commentVo.setCommentTime(commentTime);
+                content = "looks great!";
+                commentVo.setContent(content);
+                commentModels.add(commentVo);
+                recyclerView.getAdapter().notifyDataSetChanged();
+        }
     }
 }
