@@ -5,6 +5,8 @@ import androidx.annotation.NonNull;
 import com.anu.gp24s1.pojo.Post;
 import com.anu.gp24s1.pojo.vo.PostVo;
 import com.anu.gp24s1.utils.DBConnector;
+import com.anu.gp24s1.utils.SearchParser;
+import com.anu.gp24s1.utils.SearchTokenizer;
 import com.anu.gp24s1.utils.TypeConvert;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -421,8 +423,25 @@ public class PostDaoImpl implements PostDao {
         return null;
     }
 
+    /**
+     * Given a search query, tokenizes and parses the query and
+     * returns a list of posts which match the search
+     * @author  u7284324    Lachlan Stewart
+     *
+     * @param   searchWords The user's search query
+     * @return  List<Post>  null if the search query is invalid, otherwise a List of matching posts
+     * */
     @Override
-    public List<Post> searchPosts(String title, List<String> tags, List<String> locations) {
+    public List<Post> searchPosts(String searchWords) {
+
+        SearchTokenizer tokenizer = new SearchTokenizer(searchWords);
+        SearchParser parser = new SearchParser(tokenizer);
+        boolean valid = parser.parseX();
+        if (!valid) { return null; }
+
+        String title = parser.getTitle();
+        Set<String> tags = parser.getTags();
+        Set<String> locations = parser.getLocations();
 
         List<Post> searchResults = new ArrayList<Post>();
 
@@ -442,8 +461,8 @@ public class PostDaoImpl implements PostDao {
         }
 
         // by location
-        for (String tag : tags) {
-            List<String> keysByLocation = postsGroupByLocation.get(tag);
+        for (String location : locations) {
+            List<String> keysByLocation = postsGroupByLocation.get(location);
             List<Post> postsByLocation = new ArrayList<Post>();
             if (keysByLocation != null) {
                 postsByLocation = keysByLocation.stream().map(key -> posts.get(key)).collect(Collectors.toList());

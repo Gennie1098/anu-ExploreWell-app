@@ -83,6 +83,8 @@ public class SearchFragment extends Fragment {
                 if (actionId == EditorInfo.IME_ACTION_GO) {
                     searchViewModel.updateSearch(textView.getText().toString());
 
+
+
                     SearchResultFragment searchResultFragment = new SearchResultFragment();
 
                     FragmentManager fragmentManager = ((FragmentActivity) getActivity()).getSupportFragmentManager();

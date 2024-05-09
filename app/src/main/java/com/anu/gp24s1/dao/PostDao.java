@@ -36,7 +36,7 @@ public interface PostDao {
 
     public List<Post> getFollowingPostsByGroup(String group, List<String> postKeyList);
 
-    public List<Post> searchPosts(String title, List<String> tags, List<String> locations);
+    public List<Post> searchPosts(String searchWords);
 
     /**
      * Convert a list of Post objects to PostVo objects.
