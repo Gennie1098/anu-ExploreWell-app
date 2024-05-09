@@ -105,15 +105,7 @@ With ExploreWell, you're not just embarking on another outdoor journey; you're j
 
 ## Code Design and Decisions
 
-This is an important section of your report and should include all technical decisions made. Well-written justifications will increase your marks for both the report as well as for the relevant parts (e.g., data structure). This includes, for example,
-
-- Details about the parser (describe the formal grammar and language used)
-
-- Decisions made (e.g., explain why you chose one or another data structure, why you used a specific data model, etc.)
-
-- Details about the design patterns used (where in the code, justification of the choice, etc)
-
-*Please give clear and concise descriptions for each subsections of this part. It would be better to list all the concrete items for each subsection and give no more than `5` concise, crucial reasons of your design.
+In the UI, we used MultiAutoCompleteTextView and AutoCompleteTextViews to assist the user in writing search strings and posts which are compliant with the grammar. 
 
 <hr>
 
@@ -164,7 +156,22 @@ Production Rules:
 
 ### <u>Tokenizers and Parsers</u>
 
-*[Where do you use tokenisers and parsers? How are they built? What are the advantages of the designs?]*
+We use a Tokenizer and Parser for the search bar where the user can enter a title followed by one or more tags '#...' or locations '@...'. These must come after the title, and the grammar is set up to ensure that. 
+
+Originally, it was decided to make the tokenizer only accept alphanumeric titles, but this was changed to allow titles which do not contain the # or @ symbols. For example, the user might want to input the title "Mt. Majura", which uses the '.' symbol.
+
+The grammar is intended to be simple and user friendly:
+
+Tokens:
+- Alpha
+- At
+- Hashtag
+
+Formal Grammar:
+- \<X\> ::= \<T\> | \<T\> \<Y\> | \<Y\>
+- \<T\> ::= alpha | alpha \<T\>
+- \<Y\> ::= \<Z\> | \<Z\> \<Y\>
+- \<Z\> ::= hashtag alpha | at alpha
 
 <hr>
 
