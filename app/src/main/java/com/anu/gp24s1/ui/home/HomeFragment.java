@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anu.gp24s1.MainActivity;
+import com.anu.gp24s1.R;
+import com.anu.gp24s1.dao.PostDaoImpl;
 import com.anu.gp24s1.databinding.FragmentHomeBinding;
 import com.anu.gp24s1.pojo.vo.PostVo;
 import com.anu.gp24s1.state.UserSession;
@@ -54,7 +57,6 @@ public class HomeFragment extends Fragment {
         setUpRePostsByLocationModel();
         RePostsByLocationAdapter adapterLocation = new RePostsByLocationAdapter(getActivity(), rePostsByLocationModels);
 
-        // TODO: set up data to change to single post here
         adapterLocation.setOnItemClickListener(this::handleItemClick);
 
 
@@ -66,7 +68,6 @@ public class HomeFragment extends Fragment {
         setUpRePostsByPopularModel();
         RePostsByLocationAdapter adapterPopular = new RePostsByLocationAdapter(getActivity(), rePostsByTagModels);
 
-        // TODO: set up data to change to single post here
         adapterPopular.setOnItemClickListener(this::handleItemClick);
 
         recyclerViewPopular.setAdapter(adapterPopular);
@@ -101,7 +102,6 @@ public class HomeFragment extends Fragment {
 
     /**
      * set recommendations by location to the list
-     *
      * @author Qinjue Wu
      */
     private void setUpRePostsByLocationModel() {
@@ -120,7 +120,6 @@ public class HomeFragment extends Fragment {
 
     /**
      * Set recommendations by tag to the list
-     *
      * @author Qinjue Wu
      */
     private void setUpRePostsByPopularModel() {
