@@ -32,7 +32,7 @@ public abstract class UserState {
 
     public abstract UserVo getProfile();
 
-    public abstract boolean createPost(String title, String content, String tag, String location);
+    public abstract String createPost(String title, String content, String tag, String location);
 
     public abstract boolean followPost(String postKey);
 

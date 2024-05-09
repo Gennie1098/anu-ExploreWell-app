@@ -39,7 +39,7 @@ public class LogoutSession extends UserState{
     }
 
     @Override
-    public boolean createPost(String title, String content, String tag, String location) { return false; }
+    public String createPost(String title, String content, String tag, String location) { return null; }
 
     @Override
     public boolean followPost(String postKey) {
